@@ -4,6 +4,13 @@ import 'package:path_provider/path_provider.dart';
 
 class CounterStorage {
   Future<String> get _localPath async {
+    if (Platform.isAndroid) {
+      final directory = await getExternalStorageDirectory();
+      if (directory != null) {
+        return directory.path;
+      }
+    }
+
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
   }
