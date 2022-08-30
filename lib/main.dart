@@ -34,24 +34,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final _textController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    widget.storage.readCounter().then((value) {
+    widget.storage.readFile().then((value) {
       setState(() {
-        _counter = value;
+        _textController.text = value;
       });
     });
   }
 
-  Future<File> _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-
-    return widget.storage.writeCounter(_counter);
+  Future<File> _updateStorage() {
+    return widget.storage.writeFile(_textController.text);
   }
 
   @override
@@ -64,15 +60,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            TextField(
+              controller: _textController,
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
             ),
             ElevatedButton(
-                onPressed: _incrementCounter, child: const Text("Submit"))
+                onPressed: _updateStorage, child: const Text("Submit"))
           ],
         ),
       ),

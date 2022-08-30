@@ -20,24 +20,18 @@ class CounterStorage {
     return File('$path/counter.txt');
   }
 
-  Future<int> readCounter() async {
+  Future<String> readFile() async {
     try {
       final file = await _localFile;
-
-      // Read the file
       final contents = await file.readAsString();
-
-      return int.parse(contents);
-    } catch (e) {
-      // If encountering an error, return 0
-      return 0;
+      return contents;
+    } catch (error) {
+      return "";
     }
   }
 
-  Future<File> writeCounter(int counter) async {
+  Future<File> writeFile(String counter) async {
     final file = await _localFile;
-
-    // Write the file
-    return file.writeAsString('$counter');
+    return file.writeAsString(counter);
   }
 }
