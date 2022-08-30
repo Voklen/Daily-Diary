@@ -56,20 +56,16 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Daily Diary'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              controller: _textController,
-              decoration: const InputDecoration(border: OutlineInputBorder()),
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-            ),
-            ElevatedButton(
-                onPressed: _updateStorage, child: const Text("Submit"))
-          ],
-        ),
+      body: TextField(
+        controller: _textController,
+        minLines: 6,
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _updateStorage,
+        tooltip: 'Save',
+        child: const Icon(Icons.save),
       ),
     );
   }
