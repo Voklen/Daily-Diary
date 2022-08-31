@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.daily_diary">
+    package="com.voklen.daily_diary">
    <application
-        android:label="daily_diary"
+        android:label="Daily Diary"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
