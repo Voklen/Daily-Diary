@@ -56,11 +56,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Daily Diary'),
       ),
-      body: TextField(
-        controller: _textController,
-        minLines: 6,
-        maxLines: null,
-        keyboardType: TextInputType.multiline,
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: TextField(
+          controller: _textController,
+          expands: true,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          textCapitalization: TextCapitalization.sentences,
+          decoration:
+              const InputDecoration.collapsed(hintText: "Start typing…"),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _updateStorage,
