@@ -16,8 +16,10 @@ class CounterStorage {
   }
 
   Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
+    String path = await _localPath;
+    DateTime date = DateTime.now();
+    String isoDate = date.toIso8601String().substring(0, 10);
+    return File('$path/$isoDate.txt');
   }
 
   Future<String> readFile() async {
