@@ -1,9 +1,9 @@
 import 'dart:io';
-
-import 'package:daily_diary/themes.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/settings.dart';
+import 'package:daily_diary/themes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,17 +11,24 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.system);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Daily Diary',
-      theme: Themes.lightTheme,
-      darkTheme: Themes.darkTheme,
-      home: MyHomePage(
-        storage: CounterStorage(),
-      ),
-    );
+    return ValueListenableBuilder<ThemeMode>(
+        valueListenable: themeNotifier,
+        builder: (_, ThemeMode currentMode, __) {
+          return MaterialApp(
+            title: 'Daily Diary',
+            theme: Themes.lightTheme,
+            darkTheme: Themes.darkTheme,
+            themeMode: currentMode,
+            home: MyHomePage(
+              storage: CounterStorage(),
+            ),
+          );
+        });
   }
 }
 
@@ -51,11 +58,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return widget.storage.writeFile(_textController.text);
   }
 
+  void _openSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Daily Diary'),
+        actions: <Widget>[
+          IconButton(
+              onPressed: _openSettings,
+              icon: const Icon(
+                Icons.settings,
+              ))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
