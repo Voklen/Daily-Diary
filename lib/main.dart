@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:daily_diary/themes.dart';
 import 'package:flutter/material.dart';
+
 import 'package:daily_diary/storage.dart';
 
 void main() {
@@ -14,9 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Daily Diary',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-      ),
+      theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
       home: MyHomePage(
         storage: CounterStorage(),
       ),
