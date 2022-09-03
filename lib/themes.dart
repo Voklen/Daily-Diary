@@ -6,6 +6,8 @@ class Themes {
     brightness: Brightness.light,
   );
 
-  static final darkTheme =
-      ThemeData(colorSchemeSeed: Colors.amber, brightness: Brightness.dark);
+  static final darkTheme = ThemeData(
+    colorSchemeSeed: Colors.amber,
+    brightness: Brightness.dark,
+  );
 }
