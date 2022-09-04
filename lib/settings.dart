@@ -38,6 +38,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _selections[index] = true;
               _setTheme(index);
             },
+            renderBorder: false,
+            borderRadius: BorderRadius.circular(30),
             children: const [
               Text('Light'),
               Text('System'),
