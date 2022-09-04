@@ -1,4 +1,5 @@
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -9,7 +10,20 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  List<bool> _selections = [false, true, false];
+  final settings = SettingsStorage();
+
+  List<bool> _selections = _getTheme();
+
+  static List<bool> _getTheme() {
+    switch (MyApp.themeNotifier.value) {
+      case ThemeMode.light:
+        return [true, false, false];
+      case ThemeMode.system:
+        return [false, true, false];
+      case ThemeMode.dark:
+        return [false, false, true];
+    }
+  }
 
   void _setTheme(int index) {
     switch (index) {

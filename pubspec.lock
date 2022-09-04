@@ -172,6 +172,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+  petitparser:
+    dependency: transitive
+    description:
+      name: petitparser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0"
   platform:
     dependency: transitive
     description:
@@ -240,6 +247,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+  toml:
+    dependency: "direct main"
+    description:
+      name: toml
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.1"
   vector_math:
     dependency: transitive
     description:

@@ -5,7 +5,10 @@ import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/themes.dart';
 
-void main() {
+void main() async {
+  final settings = SettingsStorage();
+  MyApp.themeNotifier.value =
+      await settings.getKey('theme') ?? ThemeMode.system;
   runApp(const MyApp());
 }
 
@@ -25,7 +28,7 @@ class MyApp extends StatelessWidget {
             darkTheme: Themes.darkTheme,
             themeMode: currentMode,
             home: MyHomePage(
-              storage: CounterStorage(),
+              storage: DiaryStorage(),
             ),
           );
         });
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.storage}) : super(key: key);
 
-  final CounterStorage storage;
+  final DiaryStorage storage;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
