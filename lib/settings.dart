@@ -15,7 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   List<bool> _selections = _getTheme();
 
   static List<bool> _getTheme() {
-    switch (MyApp.themeNotifier.value) {
+    switch (App.themeNotifier.value) {
       case ThemeMode.light:
         return [true, false, false];
       case ThemeMode.system:
@@ -28,16 +28,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _setTheme(int index) {
     switch (index) {
       case 0:
-        MyApp.themeNotifier.value = ThemeMode.light;
+        App.themeNotifier.value = ThemeMode.light;
         break;
       case 1:
-        MyApp.themeNotifier.value = ThemeMode.system;
+        App.themeNotifier.value = ThemeMode.system;
         break;
       case 2:
-        MyApp.themeNotifier.value = ThemeMode.dark;
+        App.themeNotifier.value = ThemeMode.dark;
         break;
     }
-    settings.setTheme(MyApp.themeNotifier.value);
+    settings.setTheme(App.themeNotifier.value);
   }
 
   @override

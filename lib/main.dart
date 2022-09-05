@@ -7,12 +7,12 @@ import 'package:daily_diary/themes.dart';
 
 void main() async {
   final settings = SettingsStorage();
-  MyApp.themeNotifier.value = await settings.getTheme();
-  runApp(const MyApp());
+  App.themeNotifier.value = await settings.getTheme();
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.system);
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
             theme: Themes.lightTheme,
             darkTheme: Themes.darkTheme,
             themeMode: currentMode,
-            home: MyHomePage(
+            home: HomePage(
               storage: DiaryStorage(),
             ),
           );
@@ -34,16 +34,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.storage}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.storage}) : super(key: key);
 
   final DiaryStorage storage;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   final _textController = TextEditingController();
 
   @override
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _openSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SettingsScreen()),
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
     );
   }
 
