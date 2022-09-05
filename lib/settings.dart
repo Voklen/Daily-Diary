@@ -37,6 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         MyApp.themeNotifier.value = ThemeMode.dark;
         break;
     }
+    settings.setTheme(MyApp.themeNotifier.value);
   }
 
   @override

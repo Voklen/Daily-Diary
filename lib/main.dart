@@ -7,8 +7,7 @@ import 'package:daily_diary/themes.dart';
 
 void main() async {
   final settings = SettingsStorage();
-  MyApp.themeNotifier.value =
-      await settings.getKey('theme') ?? ThemeMode.system;
+  MyApp.themeNotifier.value = await settings.getTheme();
   runApp(const MyApp());
 }
 

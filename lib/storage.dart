@@ -29,13 +29,40 @@ class DiaryStorage extends Storage {
 }
 
 class SettingsStorage extends Storage {
+  Future<ThemeMode> getTheme() async {
+    switch (await _getFromFile('theme')) {
+      case 'light':
+        return ThemeMode.light;
+      case 'system':
+        return ThemeMode.system;
+      case 'dark':
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.system;
+    }
+  }
+
+  setTheme(ThemeMode theme) {
+    switch (theme) {
+      case ThemeMode.light:
+        _writeToFile('theme', 'light');
+        break;
+      case ThemeMode.system:
+        _writeToFile('theme', 'system');
+        break;
+      case ThemeMode.dark:
+        _writeToFile('theme', 'dark');
+        break;
+    }
+  }
+
   Future<TomlDocument> get _localFile async {
     WidgetsFlutterBinding.ensureInitialized();
     String path = await _localPath;
     return TomlDocument.load('$path/config.toml');
   }
 
-  Future<dynamic> getKey(key) async {
+  Future<dynamic> _getFromFile(key) async {
     try {
       final file = await _localFile;
       final config = file.toMap();
@@ -45,7 +72,7 @@ class SettingsStorage extends Storage {
     }
   }
 
-  Future<void> writeFile(key, value) async {
+  Future<void> _writeToFile(key, value) async {
     String path = await _localPath;
     var document = TomlDocument.fromMap({key: value});
     File('$path/config.toml').writeAsString(document.toString());
