@@ -56,10 +56,14 @@ class SettingsStorage extends Storage {
     }
   }
 
-  Future<TomlDocument> get _localFile async {
-    WidgetsFlutterBinding.ensureInitialized();
+  Future<String> get _fileName async {
     String path = await _localPath;
-    return TomlDocument.load('$path/config.toml');
+    return '$path/config.toml';
+  }
+
+  Future<TomlDocument> get _localFile async {
+    final file = await _fileName;
+    return TomlDocument.load(file);
   }
 
   Future<dynamic> _getFromFile(key) async {
@@ -73,14 +77,15 @@ class SettingsStorage extends Storage {
   }
 
   Future<void> _writeToFile(key, value) async {
-    String path = await _localPath;
+    final file = await _fileName;
     var document = TomlDocument.fromMap({key: value});
-    File('$path/config.toml').writeAsString(document.toString());
+    File(file).writeAsString(document.toString());
   }
 }
 
 class Storage {
   Future<String> get _localPath async {
+    WidgetsFlutterBinding.ensureInitialized();
     if (Platform.isAndroid) {
       final directory = await getExternalStorageDirectory();
       if (directory != null) {
