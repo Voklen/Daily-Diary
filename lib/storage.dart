@@ -5,6 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage extends Storage {
+  const DiaryStorage();
   Future<File> get _localFile async {
     String path = await _localPath;
     DateTime date = DateTime.now();
@@ -29,6 +30,7 @@ class DiaryStorage extends Storage {
 }
 
 class SettingsStorage extends Storage {
+  const SettingsStorage();
   Future<ThemeMode> getTheme() async {
     switch (await _getFromFile('theme')) {
       case 'light':
@@ -84,6 +86,7 @@ class SettingsStorage extends Storage {
 }
 
 class Storage {
+  const Storage();
   Future<String> get _localPath async {
     WidgetsFlutterBinding.ensureInitialized();
     if (Platform.isAndroid) {

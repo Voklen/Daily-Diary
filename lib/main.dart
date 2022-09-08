@@ -6,7 +6,7 @@ import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/themes.dart';
 
 void main() async {
-  final settings = SettingsStorage();
+  const settings = SettingsStorage();
   App.themeNotifier.value = await settings.getTheme();
   runApp(const App());
 }
@@ -19,18 +19,19 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeNotifier,
-        builder: (_, ThemeMode currentMode, __) {
-          return MaterialApp(
-            title: 'Daily Diary',
-            theme: Themes.lightTheme,
-            darkTheme: Themes.darkTheme,
-            themeMode: currentMode,
-            home: HomePage(
-              storage: DiaryStorage(),
-            ),
-          );
-        });
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return MaterialApp(
+          title: 'Daily Diary',
+          theme: Themes.lightTheme,
+          darkTheme: Themes.darkTheme,
+          themeMode: currentMode,
+          home: const HomePage(
+            storage: DiaryStorage(),
+          ),
+        );
+      },
+    );
   }
 }
 

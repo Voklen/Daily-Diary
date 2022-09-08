@@ -10,7 +10,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final settings = SettingsStorage();
+  final settings = const SettingsStorage();
 
   List<bool> _selections = _getTheme();
 
@@ -43,24 +43,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Settings')),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ToggleButtons(
-            isSelected: _selections,
-            onPressed: (int index) {
-              _selections = [false, false, false];
-              _selections[index] = true;
-              _setTheme(index);
-            },
-            renderBorder: false,
-            borderRadius: BorderRadius.circular(30),
-            children: const [
-              Text('Light'),
-              Text('System'),
-              Text('Dark'),
-            ],
-          ),
-        ));
+      appBar: AppBar(title: const Text('Settings')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ToggleButtons(
+          isSelected: _selections,
+          onPressed: (int index) {
+            _selections = [false, false, false];
+            _selections[index] = true;
+            _setTheme(index);
+          },
+          renderBorder: false,
+          borderRadius: BorderRadius.circular(30),
+          children: const [
+            Text('Light'),
+            Text('System'),
+            Text('Dark'),
+          ],
+        ),
+      ),
+    );
   }
 }
