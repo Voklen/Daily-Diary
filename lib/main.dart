@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/themes.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   const settings = SettingsStorage();
@@ -88,6 +89,7 @@ class _HomePageState extends State<HomePage> {
           expands: true,
           maxLines: null,
           keyboardType: TextInputType.multiline,
+          spellCheckConfiguration: const SpellCheckConfiguration(),
           textCapitalization: TextCapitalization.sentences,
           decoration:
               const InputDecoration.collapsed(hintText: "Start typing…"),
