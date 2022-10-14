@@ -50,7 +50,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           isSelected: _selections,
           onPressed: (int index) {
             _selections = [false, false, false];
-            _selections[index] = true;
+            setState(() {
+              _selections[index] = true;
+            });
             _setTheme(index);
           },
           renderBorder: false,
