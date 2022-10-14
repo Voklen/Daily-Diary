@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/themes.dart';
-import 'package:flutter/services.dart';
 
 void main() async {
   const settings = SettingsStorage();
@@ -80,7 +79,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void _openSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
+      ),
     );
   }
 
@@ -91,10 +92,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         title: const Text('Daily Diary'),
         actions: <Widget>[
           IconButton(
-              onPressed: _openSettings,
-              icon: const Icon(
-                Icons.settings,
-              ))
+            onPressed: _openSettings,
+            icon: const Icon(
+              Icons.settings,
+            ),
+          )
         ],
       ),
       body: Padding(

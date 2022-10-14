@@ -6,6 +6,7 @@ import 'package:toml/toml.dart';
 
 class DiaryStorage extends Storage {
   const DiaryStorage();
+
   Future<File> get _localFile async {
     String path = await _localPath;
     DateTime date = DateTime.now();
@@ -31,6 +32,7 @@ class DiaryStorage extends Storage {
 
 class SettingsStorage extends Storage {
   const SettingsStorage();
+
   Future<ThemeMode> getTheme() async {
     switch (await _getFromFile('theme')) {
       case 'light':
@@ -74,7 +76,10 @@ class SettingsStorage extends Storage {
       final config = file.toMap();
       return config[key];
     } catch (error) {
-      print('ERROR: $error');
+      // Toml file has not been created or is corrupt
+      // Ignoring error because:
+      // If the file has not been made, we don't need to do anything
+      // If the file is corrupt, settings can be easily set again
     }
   }
 
@@ -87,6 +92,7 @@ class SettingsStorage extends Storage {
 
 class Storage {
   const Storage();
+
   Future<String> get _localPath async {
     WidgetsFlutterBinding.ensureInitialized();
     if (Platform.isAndroid) {
