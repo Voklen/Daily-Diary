@@ -112,11 +112,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               const InputDecoration.collapsed(hintText: "Start typing…"),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _updateStorage,
-        tooltip: 'Save',
-        child: const Icon(Icons.save),
-      ),
     );
   }
 }
