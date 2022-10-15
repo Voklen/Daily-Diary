@@ -38,6 +38,7 @@ class App extends StatelessWidget {
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.storage}) : super(key: key);
 
+  static final ValueNotifier<double> fontSizeNotifier = ValueNotifier(16);
   final DiaryStorage storage;
 
   @override
@@ -87,31 +88,37 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Daily Diary'),
-        actions: <Widget>[
-          IconButton(
-            onPressed: _openSettings,
-            icon: const Icon(
-              Icons.settings,
+    return ValueListenableBuilder<double>(
+      valueListenable: HomePage.fontSizeNotifier,
+      builder: (_, double fontSize, __) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Daily Diary'),
+            actions: <Widget>[
+              IconButton(
+                onPressed: _openSettings,
+                icon: const Icon(
+                  Icons.settings,
+                ),
+              )
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: TextField(
+              controller: _textController,
+              expands: true,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              spellCheckConfiguration: const SpellCheckConfiguration(),
+              textCapitalization: TextCapitalization.sentences,
+              style: TextStyle(fontSize: fontSize),
+              decoration:
+                  const InputDecoration.collapsed(hintText: "Start typing…"),
             ),
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: TextField(
-          controller: _textController,
-          expands: true,
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          spellCheckConfiguration: const SpellCheckConfiguration(),
-          textCapitalization: TextCapitalization.sentences,
-          decoration:
-              const InputDecoration.collapsed(hintText: "Start typing…"),
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
