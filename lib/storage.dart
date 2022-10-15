@@ -60,6 +60,11 @@ class SettingsStorage extends Storage {
     }
   }
 
+  Future<double> getFontSize() async {
+    final fontSize = await _getFromFile('font_size');
+    return fontSize is double ? fontSize : 16;
+  }
+
   Future<String> get _fileName async {
     String path = await _localPath;
     return '$path/config.toml';
@@ -76,10 +81,9 @@ class SettingsStorage extends Storage {
       final config = file.toMap();
       return config[key];
     } catch (error) {
-      // Toml file has not been created or is corrupt
       // Ignoring error because:
-      // If the file has not been made, we don't need to do anything
-      // If the file is corrupt, settings can be easily set again
+      // If the file/key has not been made, we don't need to do anything
+      // If the file/key is corrupt, settings can be easily set again
     }
   }
 
