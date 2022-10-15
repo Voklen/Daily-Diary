@@ -1,6 +1,7 @@
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -11,6 +12,9 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final settings = const SettingsStorage();
+  final _fontSizeController = TextEditingController(
+    text: _getFontSize().toString(),
+  );
 
   List<bool> _selections = _getTheme();
 
@@ -25,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  void _setTheme(int index) {
+  _setTheme(int index) {
     switch (index) {
       case 0:
         App.themeNotifier.value = ThemeMode.light;
@@ -40,27 +44,57 @@ class _SettingsScreenState extends State<SettingsScreen> {
     settings.setTheme(App.themeNotifier.value);
   }
 
+  static double _getFontSize() => HomePage.fontSizeNotifier.value;
+
+  _setFontSize(String sizeString) {
+    try {
+      final sizeDouble = double.parse(sizeString);
+      HomePage.fontSizeNotifier.value = sizeDouble;
+      settings.setFontSize(sizeDouble);
+    } catch (error) {
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ToggleButtons(
-          isSelected: _selections,
-          onPressed: (int index) {
-            _selections = [false, false, false];
-            setState(() {
-              _selections[index] = true;
-            });
-            _setTheme(index);
-          },
-          renderBorder: false,
-          borderRadius: BorderRadius.circular(30),
-          children: const [
-            Text('Light'),
-            Text('System'),
-            Text('Dark'),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Theme:",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            ToggleButtons(
+              isSelected: _selections,
+              onPressed: (int index) {
+                _selections = [false, false, false];
+                setState(() {
+                  _selections[index] = true;
+                });
+                _setTheme(index);
+              },
+              renderBorder: false,
+              borderRadius: BorderRadius.circular(30),
+              children: const [
+                Text('Light'),
+                Text('System'),
+                Text('Dark'),
+              ],
+            ),
+            Text(
+              "Font size:",
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            TextField(
+              controller: _fontSizeController,
+              onChanged: _setFontSize,
+              keyboardType: TextInputType.number,
+            )
           ],
         ),
       ),

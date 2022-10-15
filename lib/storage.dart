@@ -65,6 +65,10 @@ class SettingsStorage extends Storage {
     return fontSize is double ? fontSize : 16;
   }
 
+  setFontSize(double size) {
+    _writeToFile('font_size', size);
+  }
+
   Future<String> get _fileName async {
     String path = await _localPath;
     return '$path/config.toml';
