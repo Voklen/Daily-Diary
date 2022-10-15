@@ -1,7 +1,6 @@
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -11,7 +10,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final settings = const SettingsStorage();
+  final settings = SettingsStorage();
   final _fontSizeController = TextEditingController(
     text: _getFontSize().toString(),
   );
@@ -51,7 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final sizeDouble = double.parse(sizeString);
       HomePage.fontSizeNotifier.value = sizeDouble;
       settings.setFontSize(sizeDouble);
-    } catch (error) {
+    } on FormatException {
       return;
     }
   }

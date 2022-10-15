@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -31,7 +32,18 @@ class DiaryStorage extends Storage {
 }
 
 class SettingsStorage extends Storage {
-  const SettingsStorage();
+  SettingsStorage();
+
+  late var settingsMap = _getMap();
+
+  Future<Map<String, dynamic>> _getMap() async {
+    try {
+      final file = await _localFile;
+      return file.toMap();
+    } on FileSystemException {
+      return {};
+    }
+  }
 
   Future<ThemeMode> getTheme() async {
     switch (await _getFromFile('theme')) {
@@ -81,20 +93,23 @@ class SettingsStorage extends Storage {
 
   Future<dynamic> _getFromFile(key) async {
     try {
-      final file = await _localFile;
-      final config = file.toMap();
-      return config[key];
+      final map = await settingsMap;
+      return map[key];
     } catch (error) {
       // Ignoring error because:
-      // If the file/key has not been made, we don't need to do anything
+      // If the file/key has not been made, we just want the default
       // If the file/key is corrupt, settings can be easily set again
     }
   }
 
-  Future<void> _writeToFile(key, value) async {
+  _writeToFile(key, value) async {
+    var map = await settingsMap;
+    map[key] = value;
+    settingsMap = Future(() => map);
+
     final file = await _fileName;
-    var document = TomlDocument.fromMap({key: value});
-    File(file).writeAsString(document.toString());
+    TomlDocument asToml = TomlDocument.fromMap(map);
+    File(file).writeAsString(asToml.toString());
   }
 }
 

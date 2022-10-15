@@ -6,7 +6,7 @@ import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/themes.dart';
 
 void main() async {
-  const settings = SettingsStorage();
+  final settings = SettingsStorage();
   App.themeNotifier.value = await settings.getTheme();
   HomePage.fontSizeNotifier.value = await settings.getFontSize();
   runApp(const App());
