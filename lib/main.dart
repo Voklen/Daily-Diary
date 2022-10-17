@@ -111,7 +111,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               expands: true,
               maxLines: null,
               keyboardType: TextInputType.multiline,
-              spellCheckConfiguration: const SpellCheckConfiguration(),
+              spellCheckConfiguration:
+                  Platform.isLinux ? null : const SpellCheckConfiguration(),
               textCapitalization: TextCapitalization.sentences,
               style: TextStyle(fontSize: fontSize),
               decoration:
