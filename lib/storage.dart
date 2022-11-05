@@ -114,18 +114,13 @@ class SettingsStorage extends Storage {
 }
 
 class PreviousEntriesStorage extends Storage {
-  Future<List<Widget>> getFiles() async {
+  Future<List<String>> getFiles() async {
     final directory = await _directory;
     final stream = directory.list();
-    final streamAsStrings = stream.map(fileToWidget);
+    final streamAsStrings = stream.map((file) => file.toString());
     final list = await streamAsStrings.toList();
     return list;
   }
-}
-
-Widget fileToWidget(FileSystemEntity file) {
-  final filename = file.toString();
-  return Text(filename);
 }
 
 class Storage {

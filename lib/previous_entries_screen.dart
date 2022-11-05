@@ -14,10 +14,24 @@ class PreviousEntriesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
           future: entries.getFiles(),
-          builder: (context, AsyncSnapshot<List<Widget>> snapshot) {
-            List<Widget> fileList = snapshot.data ?? [];
-            return ListView(
-              children: fileList,
+          builder: (context, AsyncSnapshot<List<String>> snapshot) {
+            List<String> fileList = snapshot.data ?? [];
+            return ListView.builder(
+              itemCount: fileList.length,
+              itemBuilder: (context, index) {
+                String filename = fileList[index];
+                final format = Theme.of(context).textTheme.bodyMedium;
+                return ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.background),
+                  child: Text(
+                    filename,
+                    style: format,
+                  ),
+                );
+              },
             );
           },
         ),
