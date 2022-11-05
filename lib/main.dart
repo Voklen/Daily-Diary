@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/settings.dart';
+import 'package:daily_diary/previous_entries_screen.dart';
 import 'package:daily_diary/themes.dart';
 
 void main() async {
@@ -87,6 +88,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
+  void _openPreviousEntries() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PreviousEntriesScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<double>(
@@ -97,11 +107,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             title: const Text('Daily Diary'),
             actions: <Widget>[
               IconButton(
+                onPressed: _openPreviousEntries,
+                icon: const Icon(
+                  Icons.list_outlined,
+                ),
+              ),
+              IconButton(
                 onPressed: _openSettings,
                 icon: const Icon(
                   Icons.settings,
                 ),
-              )
+              ),
             ],
           ),
           body: Padding(

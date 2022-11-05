@@ -113,19 +113,39 @@ class SettingsStorage extends Storage {
   }
 }
 
+class PreviousEntriesStorage extends Storage {
+  Future<List<Widget>> getFiles() async {
+    final directory = await _directory;
+    final stream = directory.list();
+    final streamAsStrings = stream.map(fileToWidget);
+    final list = await streamAsStrings.toList();
+    return list;
+  }
+}
+
+Widget fileToWidget(FileSystemEntity file) {
+  final filename = file.toString();
+  return Text(filename);
+}
+
 class Storage {
   const Storage();
 
   Future<String> get _localPath async {
+    final directory = await _directory;
+    return directory.path;
+  }
+
+  Future<Directory> get _directory async {
     WidgetsFlutterBinding.ensureInitialized();
     if (Platform.isAndroid) {
       final directory = await getExternalStorageDirectory();
       if (directory != null) {
-        return directory.path;
+        return directory;
       }
     }
 
     final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
+    return directory;
   }
 }
