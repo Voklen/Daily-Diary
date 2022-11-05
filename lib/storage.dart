@@ -117,9 +117,15 @@ class PreviousEntriesStorage extends Storage {
   Future<List<String>> getFiles() async {
     final directory = await _directory;
     final stream = directory.list();
-    final streamAsStrings = stream.map((file) => file.toString());
+    final streamAsStrings = stream.map(toFilename);
     final list = await streamAsStrings.toList();
     return list;
+  }
+
+  String toFilename(FileSystemEntity file) {
+    String path = file.path;
+    int filenameStart = path.lastIndexOf('/') + 1;
+    return path.substring(filenameStart);
   }
 }
 
