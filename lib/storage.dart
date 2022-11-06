@@ -7,11 +7,33 @@ import 'package:toml/toml.dart';
 
 import 'package:intl/intl.dart';
 
+abstract class Storage {
+  const Storage();
+
+  Future<Directory> get _directory async {
+    WidgetsFlutterBinding.ensureInitialized();
+    if (Platform.isAndroid) {
+      final directory = await getExternalStorageDirectory();
+      if (directory != null) {
+        return directory;
+      }
+    }
+
+    final directory = await getApplicationDocumentsDirectory();
+    return directory;
+  }
+
+  Future<String> get _path async {
+    final directory = await _directory;
+    return directory.path;
+  }
+}
+
 class DiaryStorage extends Storage {
   const DiaryStorage();
 
   Future<File> get _localFile async {
-    String path = await _localPath;
+    String path = await _path;
     DateTime date = DateTime.now();
     String isoDate = date.toIso8601String().substring(0, 10);
     return File('$path/$isoDate.txt');
@@ -84,7 +106,7 @@ class SettingsStorage extends Storage {
   }
 
   Future<String> get _fileName async {
-    String path = await _localPath;
+    String path = await _path;
     return '$path/config.toml';
   }
 
@@ -138,27 +160,5 @@ class PreviousEntriesStorage extends Storage {
       // Empty strings will be filtered after this map
       return "";
     }
-  }
-}
-
-class Storage {
-  const Storage();
-
-  Future<String> get _localPath async {
-    final directory = await _directory;
-    return directory.path;
-  }
-
-  Future<Directory> get _directory async {
-    WidgetsFlutterBinding.ensureInitialized();
-    if (Platform.isAndroid) {
-      final directory = await getExternalStorageDirectory();
-      if (directory != null) {
-        return directory;
-      }
-    }
-
-    final directory = await getApplicationDocumentsDirectory();
-    return directory;
   }
 }
