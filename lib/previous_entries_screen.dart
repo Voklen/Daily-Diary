@@ -1,5 +1,8 @@
 import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/view_only.dart';
 import 'package:flutter/material.dart';
+
+import 'package:intl/intl.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
   const PreviousEntriesScreen({super.key});
@@ -14,24 +17,35 @@ class PreviousEntriesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
           future: entries.getFiles(),
-          builder: (context, AsyncSnapshot<List<String>> snapshot) {
-            List<String> fileList = snapshot.data ?? [];
+          builder: (context, AsyncSnapshot<List<DateTime>> snapshot) {
+            List<DateTime> datesList = snapshot.data ?? [];
             return ListView.builder(
-              itemCount: fileList.length,
+              itemCount: datesList.length,
               reverse: true,
               itemBuilder: (context, index) {
-                String filename = fileList[index];
-                final format = Theme.of(context).textTheme.bodyMedium;
+                DateTime date = datesList[index];
                 return ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          String filename =
+                              date.toIso8601String().substring(0, 10);
+                          final storage = PreviousEntryStorage(filename);
+                          return ViewOnlyScreen(storage: storage);
+                        },
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.background,
                   ),
                   child: SizedBox(
                     width: double.infinity,
                     child: Text(
-                      filename,
-                      style: format,
+                      humanDate(date),
+                      style: Theme.of(context).textTheme.bodyMedium,
                       textAlign: TextAlign.start,
                     ),
                   ),
@@ -44,3 +58,5 @@ class PreviousEntriesScreen extends StatelessWidget {
     );
   }
 }
+
+String humanDate(DateTime date) => DateFormat.yMMMd().format(date);

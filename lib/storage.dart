@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toml/toml.dart';
 
-import 'package:intl/intl.dart';
-
 abstract class Storage {
   const Storage();
 
@@ -140,24 +138,42 @@ class SettingsStorage extends Storage {
 class PreviousEntriesStorage extends Storage {
   const PreviousEntriesStorage();
 
-  Future<List<String>> getFiles() async {
+  Future<List<DateTime>> getFiles() async {
     final directory = await _directory;
-    final stream = directory.list();
-    final streamAsStrings = stream.map(toFilename).where((s) => s.isNotEmpty);
-    final list = await streamAsStrings.toList();
+    final files = directory.list();
+    final filesAsDateTime = files.map(toFilename);
+    final filesWithoutNull =
+        filesAsDateTime.where((s) => s != null).cast<DateTime>();
+    final list = await filesWithoutNull.toList();
     return list;
   }
 
-  String toFilename(FileSystemEntity file) {
+  DateTime? toFilename(FileSystemEntity file) {
     String path = file.path;
     int filenameStart = path.lastIndexOf('/') + 1;
     int filenameEnd = path.length - 4;
     String isoDate = path.substring(filenameStart, filenameEnd);
     try {
-      DateTime date = DateTime.parse(isoDate);
-      return DateFormat.yMMMMd().format(date);
+      return DateTime.parse(isoDate);
     } on FormatException {
       // Empty strings will be filtered after this map
+      return null;
+    }
+  }
+}
+
+class PreviousEntryStorage extends Storage {
+  const PreviousEntryStorage(this.filename);
+
+  final String filename;
+
+  Future<String> readFile() async {
+    try {
+      String path = await _path;
+      final file = File('$path/$filename.txt');
+      final contents = await file.readAsString();
+      return contents;
+    } catch (error) {
       return "";
     }
   }
