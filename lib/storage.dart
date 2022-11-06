@@ -116,6 +116,8 @@ class SettingsStorage extends Storage {
 }
 
 class PreviousEntriesStorage extends Storage {
+  const PreviousEntriesStorage();
+
   Future<List<String>> getFiles() async {
     final directory = await _directory;
     final stream = directory.list();

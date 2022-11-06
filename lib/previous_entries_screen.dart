@@ -2,9 +2,9 @@ import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
-  PreviousEntriesScreen({super.key});
+  const PreviousEntriesScreen({super.key});
 
-  final entries = PreviousEntriesStorage();
+  final entries = const PreviousEntriesStorage();
 
   @override
   Widget build(BuildContext context) {
