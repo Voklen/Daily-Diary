@@ -145,7 +145,7 @@ class PreviousEntriesStorage extends Storage {
     final filesWithoutNull =
         filesAsDateTime.where((s) => s != null).cast<DateTime>();
     final list = await filesWithoutNull.toList();
-    return list;
+    return list.reversed.toList();
   }
 
   DateTime? toFilename(FileSystemEntity file) {

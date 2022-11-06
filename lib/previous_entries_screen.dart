@@ -21,7 +21,6 @@ class PreviousEntriesScreen extends StatelessWidget {
             List<DateTime> datesList = snapshot.data ?? [];
             return ListView.builder(
               itemCount: datesList.length,
-              reverse: true,
               itemBuilder: (context, index) {
                 DateTime date = datesList[index];
                 return ElevatedButton(
@@ -46,7 +45,6 @@ class PreviousEntriesScreen extends StatelessWidget {
                     child: Text(
                       humanDate(date),
                       style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.start,
                     ),
                   ),
                 );
