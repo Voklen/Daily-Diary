@@ -24,11 +24,15 @@ class PreviousEntriesScreen extends StatelessWidget {
                 return ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.background),
-                  child: Text(
-                    filename,
-                    style: format,
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      filename,
+                      style: format,
+                      textAlign: TextAlign.start,
+                    ),
                   ),
                 );
               },

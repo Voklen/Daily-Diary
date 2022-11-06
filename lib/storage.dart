@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toml/toml.dart';
 
+import 'package:intl/intl.dart';
+
 class DiaryStorage extends Storage {
   const DiaryStorage();
 
@@ -117,7 +119,7 @@ class PreviousEntriesStorage extends Storage {
   Future<List<String>> getFiles() async {
     final directory = await _directory;
     final stream = directory.list();
-    final streamAsStrings = stream.map(toFilename);
+    final streamAsStrings = stream.map(toFilename).where((s) => s.isNotEmpty);
     final list = await streamAsStrings.toList();
     return list;
   }
@@ -125,7 +127,15 @@ class PreviousEntriesStorage extends Storage {
   String toFilename(FileSystemEntity file) {
     String path = file.path;
     int filenameStart = path.lastIndexOf('/') + 1;
-    return path.substring(filenameStart);
+    int filenameEnd = path.length - 4;
+    String isoDate = path.substring(filenameStart, filenameEnd);
+    try {
+      DateTime date = DateTime.parse(isoDate);
+      return DateFormat.yMMMMEEEEd().format(date);
+    } on FormatException {
+      // Empty strings will be filtered after this map
+      return "";
+    }
   }
 }
 

@@ -20,6 +20,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.11
   toml: ^0.13.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
