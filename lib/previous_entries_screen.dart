@@ -18,6 +18,7 @@ class PreviousEntriesScreen extends StatelessWidget {
             List<String> fileList = snapshot.data ?? [];
             return ListView.builder(
               itemCount: fileList.length,
+              reverse: true,
               itemBuilder: (context, index) {
                 String filename = fileList[index];
                 final format = Theme.of(context).textTheme.bodyMedium;

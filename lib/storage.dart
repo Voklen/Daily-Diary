@@ -131,7 +131,7 @@ class PreviousEntriesStorage extends Storage {
     String isoDate = path.substring(filenameStart, filenameEnd);
     try {
       DateTime date = DateTime.parse(isoDate);
-      return DateFormat.yMMMMEEEEd().format(date);
+      return DateFormat.yMMMMd().format(date);
     } on FormatException {
       // Empty strings will be filtered after this map
       return "";
