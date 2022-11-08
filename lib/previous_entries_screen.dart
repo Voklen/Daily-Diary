@@ -23,6 +23,7 @@ class PreviousEntriesScreen extends StatelessWidget {
               itemCount: datesList.length,
               itemBuilder: (context, index) {
                 DateTime date = datesList[index];
+                String humanDate = DateFormat.yMMMd().format(date);
                 return ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -32,7 +33,8 @@ class PreviousEntriesScreen extends StatelessWidget {
                           String filename =
                               date.toIso8601String().substring(0, 10);
                           final storage = PreviousEntryStorage(filename);
-                          return ViewOnlyScreen(storage: storage);
+                          return ViewOnlyScreen(
+                              title: humanDate, storage: storage);
                         },
                       ),
                     );
@@ -43,7 +45,7 @@ class PreviousEntriesScreen extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: Text(
-                      humanDate(date),
+                      humanDate,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -56,5 +58,3 @@ class PreviousEntriesScreen extends StatelessWidget {
     );
   }
 }
-
-String humanDate(DateTime date) => DateFormat.yMMMd().format(date);

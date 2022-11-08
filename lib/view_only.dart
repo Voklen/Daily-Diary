@@ -4,9 +4,11 @@ import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
 
 class ViewOnlyScreen extends StatefulWidget {
-  const ViewOnlyScreen({Key? key, required this.storage}) : super(key: key);
+  const ViewOnlyScreen({Key? key, required this.title, required this.storage})
+      : super(key: key);
 
   static final ValueNotifier<double> fontSizeNotifier = ValueNotifier(16);
+  final String title;
   final PreviousEntryStorage storage;
 
   @override
@@ -30,7 +32,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
       builder: (_, double fontSize, __) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Daily Diary'),
+            title: Text(widget.title),
             actions: <Widget>[
               IconButton(
                 onPressed: _openSettings,
