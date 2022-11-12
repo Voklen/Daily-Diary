@@ -9,7 +9,7 @@ import 'package:daily_diary/themes.dart';
 void main() async {
   final settings = SettingsStorage();
   App.themeNotifier.value = await settings.getTheme();
-  HomePage.fontSizeNotifier.value = await settings.getFontSize();
+  App.fontSizeNotifier.value = await settings.getFontSize();
   runApp(const App());
 }
 
@@ -17,6 +17,7 @@ class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.system);
+  static final ValueNotifier<double> fontSizeNotifier = ValueNotifier(16);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,6 @@ class App extends StatelessWidget {
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.storage}) : super(key: key);
 
-  static final ValueNotifier<double> fontSizeNotifier = ValueNotifier(16);
   final DiaryStorage storage;
 
   @override
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<double>(
-      valueListenable: HomePage.fontSizeNotifier,
+      valueListenable: App.fontSizeNotifier,
       builder: (_, double fontSize, __) {
         return Scaffold(
           appBar: AppBar(

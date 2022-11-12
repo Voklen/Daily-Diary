@@ -1,3 +1,4 @@
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/storage.dart';
 
@@ -7,7 +8,6 @@ class ViewOnlyScreen extends StatefulWidget {
   const ViewOnlyScreen({Key? key, required this.title, required this.storage})
       : super(key: key);
 
-  static final ValueNotifier<double> fontSizeNotifier = ValueNotifier(16);
   final String title;
   final PreviousEntryStorage storage;
 
@@ -28,7 +28,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<double>(
-      valueListenable: ViewOnlyScreen.fontSizeNotifier,
+      valueListenable: App.fontSizeNotifier,
       builder: (_, double fontSize, __) {
         return Scaffold(
           appBar: AppBar(

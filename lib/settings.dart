@@ -43,12 +43,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     settings.setTheme(App.themeNotifier.value);
   }
 
-  static double _getFontSize() => HomePage.fontSizeNotifier.value;
+  static double _getFontSize() => App.fontSizeNotifier.value;
 
   _setFontSize(String sizeString) {
     try {
       final sizeDouble = double.parse(sizeString);
-      HomePage.fontSizeNotifier.value = sizeDouble;
+      App.fontSizeNotifier.value = sizeDouble;
       settings.setFontSize(sizeDouble);
     } on FormatException {
       return;
