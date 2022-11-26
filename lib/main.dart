@@ -10,6 +10,7 @@ void main() async {
   final settings = SettingsStorage();
   App.settingsNotifier.setTheme(await settings.getTheme());
   App.settingsNotifier.setFontSize(await settings.getFontSize());
+  App.settingsNotifier.setColorSeed(await settings.getColorScheme());
   runApp(const App());
 }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:toml/toml.dart';
 
@@ -101,6 +102,16 @@ class SettingsStorage extends Storage {
 
   setFontSize(double size) {
     _writeToFile('font_size', size);
+  }
+
+  Future<Color> getColorScheme() async {
+    String hex = await _getFromFile('color_scheme') ?? "0xFFFFC107";
+    return colorFromHex(hex) ?? const Color.fromARGB(255, 255, 193, 7);
+  }
+
+  setColorScheme(Color color) async {
+    String hex = colorToHex(color);
+    _writeToFile('color_scheme', hex);
   }
 
   Future<String> get _fileName async {

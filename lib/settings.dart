@@ -82,6 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   _setColourSeed(Color seed) {
+    settings.setColorScheme(seed);
     App.settingsNotifier.setColorSeed(seed);
   }
 
