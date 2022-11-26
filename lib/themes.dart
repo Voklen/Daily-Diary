@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 class Themes {
-  static final lightTheme = ThemeData(
-    primarySwatch: Colors.amber,
-    brightness: Brightness.light,
-  );
+  Themes(this.colorSeed);
 
-  static final darkTheme = ThemeData(
-    colorSchemeSeed: Colors.amber,
-    brightness: Brightness.dark,
-  );
+  Color colorSeed;
+
+  ThemeData get lightTheme => ThemeData(
+        colorSchemeSeed: colorSeed,
+        brightness: Brightness.light,
+      );
+
+  ThemeData get darkTheme => ThemeData(
+        colorSchemeSeed: colorSeed,
+        brightness: Brightness.dark,
+      );
 }

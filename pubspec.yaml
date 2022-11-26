@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^2.0.11
   toml: ^0.13.1
   intl: ^0.17.0
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:

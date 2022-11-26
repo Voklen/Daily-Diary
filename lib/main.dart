@@ -21,10 +21,11 @@ class App extends StatelessWidget {
     return ValueListenableBuilder<Settings>(
       valueListenable: settingsNotifier,
       builder: (_, Settings currentSettings, __) {
+        final theme = Themes(currentSettings.colorSeed);
         return MaterialApp(
           title: 'Daily Diary',
-          theme: Themes.lightTheme,
-          darkTheme: Themes.darkTheme,
+          theme: theme.lightTheme,
+          darkTheme: theme.darkTheme,
           themeMode: currentSettings.theme,
           home: const HomePage(
             storage: DiaryStorage(),

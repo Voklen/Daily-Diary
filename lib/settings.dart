@@ -1,10 +1,12 @@
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
+  Color colorSeed = const Color.fromRGBO(255, 193, 7, 1);
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
@@ -17,6 +19,11 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   void setFontSize(double fontSize) {
     value.fontSize = fontSize;
+    notifyListeners();
+  }
+
+  void setColorSeed(Color seed) {
+    value.colorSeed = seed;
     notifyListeners();
   }
 }
@@ -74,6 +81,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  _setColourSeed(Color seed) {
+    App.settingsNotifier.setColorSeed(seed);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +123,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               controller: _fontSizeController,
               onChanged: _setFontSize,
               keyboardType: TextInputType.number,
+            ),
+            ColorPicker(
+              pickerColor: App.settingsNotifier.value.colorSeed,
+              onColorChanged: _setColourSeed,
             )
           ],
         ),
