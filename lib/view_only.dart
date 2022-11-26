@@ -27,9 +27,9 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<double>(
-      valueListenable: App.fontSizeNotifier,
-      builder: (_, double fontSize, __) {
+    return ValueListenableBuilder<Settings>(
+      valueListenable: App.settingsNotifier,
+      builder: (_, Settings currentSettings, __) {
         return Scaffold(
           appBar: AppBar(
             title: Text(widget.title),
@@ -50,7 +50,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
                 return Text(
                   snapshot.data ?? "",
                   maxLines: null,
-                  style: TextStyle(fontSize: fontSize),
+                  style: TextStyle(fontSize: currentSettings.fontSize),
                 );
               }),
             ),

@@ -2,6 +2,25 @@ import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:flutter/material.dart';
 
+class Settings {
+  ThemeMode theme = ThemeMode.system;
+  double fontSize = 16;
+}
+
+class SettingsNotifier extends ValueNotifier<Settings> {
+  SettingsNotifier(Settings value) : super(value);
+
+  void setTheme(ThemeMode theme) {
+    value.theme = theme;
+    notifyListeners();
+  }
+
+  void setFontSize(double fontSize) {
+    value.fontSize = fontSize;
+    notifyListeners();
+  }
+}
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -18,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   List<bool> _selections = _getTheme();
 
   static List<bool> _getTheme() {
-    switch (App.themeNotifier.value) {
+    switch (App.settingsNotifier.value.theme) {
       case ThemeMode.light:
         return [true, false, false];
       case ThemeMode.system:
@@ -31,25 +50,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _setTheme(int index) {
     switch (index) {
       case 0:
-        App.themeNotifier.value = ThemeMode.light;
+        App.settingsNotifier.setTheme(ThemeMode.light);
         break;
       case 1:
-        App.themeNotifier.value = ThemeMode.system;
+        App.settingsNotifier.setTheme(ThemeMode.system);
         break;
       case 2:
-        App.themeNotifier.value = ThemeMode.dark;
+        App.settingsNotifier.setTheme(ThemeMode.dark);
         break;
     }
-    settings.setTheme(App.themeNotifier.value);
+    settings.setTheme(App.settingsNotifier.value.theme);
   }
 
-  static double _getFontSize() => App.fontSizeNotifier.value;
+  static double _getFontSize() => App.settingsNotifier.value.fontSize;
 
-  _setFontSize(String sizeString) {
+  _setFontSize(String fontSizeString) {
     try {
-      final sizeDouble = double.parse(sizeString);
-      App.fontSizeNotifier.value = sizeDouble;
-      settings.setFontSize(sizeDouble);
+      final fontSize = double.parse(fontSizeString);
+      App.settingsNotifier.setFontSize(fontSize);
+      settings.setFontSize(fontSize);
     } on FormatException {
       return;
     }

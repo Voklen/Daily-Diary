@@ -8,27 +8,24 @@ import 'package:daily_diary/themes.dart';
 
 void main() async {
   final settings = SettingsStorage();
-  App.themeNotifier.value = await settings.getTheme();
-  App.fontSizeNotifier.value = await settings.getFontSize();
+  App.settingsNotifier.setTheme(await settings.getTheme());
+  App.settingsNotifier.setFontSize(await settings.getFontSize());
   runApp(const App());
 }
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
-  static final ValueNotifier<ThemeMode> themeNotifier =
-      ValueNotifier(ThemeMode.system);
-  static final ValueNotifier<double> fontSizeNotifier = ValueNotifier(16);
-
+  static final SettingsNotifier settingsNotifier = SettingsNotifier(Settings());
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeNotifier,
-      builder: (_, ThemeMode currentMode, __) {
+    return ValueListenableBuilder<Settings>(
+      valueListenable: settingsNotifier,
+      builder: (_, Settings currentSettings, __) {
         return MaterialApp(
           title: 'Daily Diary',
           theme: Themes.lightTheme,
           darkTheme: Themes.darkTheme,
-          themeMode: currentMode,
+          themeMode: currentSettings.theme,
           home: const HomePage(
             storage: DiaryStorage(),
           ),
@@ -99,9 +96,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<double>(
-      valueListenable: App.fontSizeNotifier,
-      builder: (_, double fontSize, __) {
+    return ValueListenableBuilder<Settings>(
+      valueListenable: App.settingsNotifier,
+      builder: (_, Settings currentSettings, __) {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Daily Diary'),
@@ -130,7 +127,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               spellCheckConfiguration:
                   Platform.isLinux ? null : const SpellCheckConfiguration(),
               textCapitalization: TextCapitalization.sentences,
-              style: TextStyle(fontSize: fontSize),
+              style: TextStyle(fontSize: currentSettings.fontSize),
               decoration:
                   const InputDecoration.collapsed(hintText: "Start typing…"),
             ),
