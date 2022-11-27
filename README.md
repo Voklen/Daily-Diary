@@ -7,7 +7,10 @@ Settings are stored in a config.toml file that can also be moved between devices
 ## Screenshots
 
 
-| ![Shakespeare's diary.png](readme%20images/Shakespeare's%20diary.png) | ![Sugar tracking.png](readme%20images/Sugar%20tracking.png) | ![Settings.png](readme%20images/Settings.png) |
+| ![Empty.png](readme%20images/Empty.png) | ![Settings.png](readme%20images/Settings.png) |
+|:---:|:---:|
+
+| ![Previous entries.png](readme%20images/Previous%20entries.png) | ![Sugar tracking.png](readme%20images/Sugar%20tracking.png) | ![Shakespeare's diary.png](readme%20images/Shakespeare's%20diary.png) |
 |:---:|:---:|:---:|
 
 ## Running
