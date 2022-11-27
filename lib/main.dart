@@ -6,17 +6,22 @@ import 'package:daily_diary/settings.dart';
 import 'package:daily_diary/previous_entries_screen.dart';
 import 'package:daily_diary/themes.dart';
 
+final settings = SettingsStorage();
+
 void main() async {
-  final settings = SettingsStorage();
+  // Color and theme are loaded before the app starts
+  // This is to make it not jarringly switch theme/color while loading
+  // Other settings are loaded it the initState of the home page
   App.settingsNotifier.setTheme(await settings.getTheme());
-  App.settingsNotifier.setFontSize(await settings.getFontSize());
   App.settingsNotifier.setColorScheme(await settings.getColorScheme());
   runApp(const App());
 }
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
+
   static final SettingsNotifier settingsNotifier = SettingsNotifier(Settings());
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Settings>(
@@ -52,6 +57,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+
+    _loadSettings();
     WidgetsBinding.instance.addObserver(this);
     widget.storage.readFile().then((value) {
       setState(() {
@@ -72,6 +79,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused) {
       _updateStorage();
     }
+  }
+
+  _loadSettings() async {
+    App.settingsNotifier.setFontSize(await settings.getFontSize());
   }
 
   Future<File> _updateStorage() {
