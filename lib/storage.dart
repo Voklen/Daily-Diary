@@ -68,7 +68,7 @@ class SettingsStorage extends Storage {
     }
   }
 
-  Future<ThemeMode> getTheme() async {
+  Future<ThemeMode?> getTheme() async {
     switch (await _getFromFile('theme')) {
       case 'light':
         return ThemeMode.light;
@@ -77,7 +77,7 @@ class SettingsStorage extends Storage {
       case 'dark':
         return ThemeMode.dark;
       default:
-        return ThemeMode.system;
+        return null;
     }
   }
 
@@ -95,18 +95,18 @@ class SettingsStorage extends Storage {
     }
   }
 
-  Future<double> getFontSize() async {
+  Future<double?> getFontSize() async {
     final fontSize = await _getFromFile('font_size');
-    return fontSize is double ? fontSize : 16;
+    return fontSize is double ? fontSize : null;
   }
 
   setFontSize(double size) {
     _writeToFile('font_size', size);
   }
 
-  Future<Color> getColorScheme() async {
-    String hex = await _getFromFile('color_scheme') ?? "0xFFFFC107";
-    return colorFromHex(hex) ?? const Color.fromARGB(255, 255, 193, 7);
+  Future<Color?> getColorScheme() async {
+    String hex = await _getFromFile('color_scheme') ?? "";
+    return colorFromHex(hex);
   }
 
   setColorScheme(Color color) async {

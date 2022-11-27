@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Themes {
   Themes(this.colorSeed);
 
-  Color colorSeed;
+  final Color colorSeed;
 
   ThemeData get lightTheme => ThemeData(
         colorSchemeSeed: colorSeed,

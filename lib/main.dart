@@ -10,7 +10,7 @@ void main() async {
   final settings = SettingsStorage();
   App.settingsNotifier.setTheme(await settings.getTheme());
   App.settingsNotifier.setFontSize(await settings.getFontSize());
-  App.settingsNotifier.setColorSeed(await settings.getColorScheme());
+  App.settingsNotifier.setColorScheme(await settings.getColorScheme());
   runApp(const App());
 }
 
@@ -22,7 +22,7 @@ class App extends StatelessWidget {
     return ValueListenableBuilder<Settings>(
       valueListenable: settingsNotifier,
       builder: (_, Settings currentSettings, __) {
-        final theme = Themes(currentSettings.colorSeed);
+        final theme = Themes(currentSettings.colorScheme);
         return MaterialApp(
           title: 'Daily Diary',
           theme: theme.lightTheme,

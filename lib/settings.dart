@@ -6,24 +6,33 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
-  Color colorSeed = const Color.fromRGBO(255, 193, 7, 1);
+  Color colorScheme = const Color.fromRGBO(255, 193, 7, 1);
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
   SettingsNotifier(Settings value) : super(value);
 
-  void setTheme(ThemeMode theme) {
+  void setTheme(ThemeMode? theme) {
+    if (theme == null) {
+      return;
+    }
     value.theme = theme;
     notifyListeners();
   }
 
-  void setFontSize(double fontSize) {
+  void setFontSize(double? fontSize) {
+    if (fontSize == null) {
+      return;
+    }
     value.fontSize = fontSize;
     notifyListeners();
   }
 
-  void setColorSeed(Color seed) {
-    value.colorSeed = seed;
+  void setColorScheme(Color? colorScheme) {
+    if (colorScheme == null) {
+      return;
+    }
+    value.colorScheme = colorScheme;
     notifyListeners();
   }
 }
@@ -81,9 +90,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  _setColourSeed(Color seed) {
-    settings.setColorScheme(seed);
-    App.settingsNotifier.setColorSeed(seed);
+  _setColourScheme(Color colorScheme) {
+    settings.setColorScheme(colorScheme);
+    App.settingsNotifier.setColorScheme(colorScheme);
   }
 
   @override
@@ -126,8 +135,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               keyboardType: TextInputType.number,
             ),
             ColorPicker(
-              pickerColor: App.settingsNotifier.value.colorSeed,
-              onColorChanged: _setColourSeed,
+              pickerColor: App.settingsNotifier.value.colorScheme,
+              onColorChanged: _setColourScheme,
             )
           ],
         ),
