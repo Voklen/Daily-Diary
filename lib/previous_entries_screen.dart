@@ -12,7 +12,7 @@ class PreviousEntriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: const Text('Previous Entries')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
