@@ -1,0 +1,3 @@
+Jot down whatever you want throughout the day and the app will reset the next morning. All previous days are stored in plaintext files which can be exported and moved to a different device.
+
+Settings are stored in a config.toml file that can also be moved between devices.
