@@ -1,0 +1,2 @@
+• Added android app icon
+• Fixed title on "Previous Settings" page as found by ben
