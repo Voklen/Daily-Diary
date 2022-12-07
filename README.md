@@ -4,6 +4,12 @@ Jot down whatever you want throughout the day and the app will reset the next mo
 
 Settings are stored in a config.toml file that can also be moved between devices.
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.voklen.daily_diary/)
+
+or get the APK from the [Releases Section](https://github.com/Voklen/Daily-Diary/releases/latest).
+
 ## Screenshots
 
 
