@@ -110,7 +110,7 @@ class SettingsStorage extends Storage {
   }
 
   setColorScheme(Color color) async {
-    String hex = colorToHex(color);
+    String hex = colorToHex(color, includeHashSign: true, enableAlpha: false);
     _writeToFile('color_scheme', hex);
   }
 

@@ -6,7 +6,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
-  Color colorScheme = const Color.fromRGBO(138, 111, 161, 255);
+  Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
