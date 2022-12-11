@@ -19,10 +19,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(
-          children: [
+          children: const [
             Padding(padding: padding, child: ThemeSetting()),
             Padding(padding: padding, child: FontSetting()),
-            const Padding(padding: padding, child: ColorSetting()),
+            Padding(padding: padding, child: ColorSetting()),
           ],
         ),
       ),
@@ -31,8 +31,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 class ThemeSetting extends StatefulWidget {
-  ThemeSetting({super.key});
+  const ThemeSetting({super.key});
 
+  @override
+  State<ThemeSetting> createState() => _ThemeSettingState();
+}
+
+class _ThemeSettingState extends State<ThemeSetting> {
   List<bool> _selections = _getTheme();
 
   static List<bool> _getTheme() {
@@ -46,11 +51,6 @@ class ThemeSetting extends StatefulWidget {
     }
   }
 
-  @override
-  State<ThemeSetting> createState() => _ThemeSettingState();
-}
-
-class _ThemeSettingState extends State<ThemeSetting> {
   _setTheme(int index) {
     switch (index) {
       case 0:
@@ -76,11 +76,11 @@ class _ThemeSettingState extends State<ThemeSetting> {
         ),
         const SizedBox(width: 5),
         ToggleButtons(
-          isSelected: widget._selections,
+          isSelected: _selections,
           onPressed: (int index) {
-            widget._selections = [false, false, false];
+            _selections = [false, false, false];
             setState(() {
-              widget._selections[index] = true;
+              _selections[index] = true;
             });
             _setTheme(index);
           },
@@ -98,9 +98,9 @@ class _ThemeSettingState extends State<ThemeSetting> {
 }
 
 class FontSetting extends StatelessWidget {
-  FontSetting({super.key});
+  const FontSetting({super.key});
 
-  final _fontSizeController = TextEditingController(
+  static final _fontSizeController = TextEditingController(
     text: App.settingsNotifier.value.fontSize.toString(),
   );
 
