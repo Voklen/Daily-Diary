@@ -1,6 +1,7 @@
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/settings.dart';
+import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/settings_notifier.dart';
 
 import 'package:flutter/material.dart';
 

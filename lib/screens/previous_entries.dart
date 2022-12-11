@@ -1,5 +1,5 @@
 import 'package:daily_diary/storage.dart';
-import 'package:daily_diary/view_only.dart';
+import 'package:daily_diary/screens/view_only.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
