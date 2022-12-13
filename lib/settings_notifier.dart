@@ -1,21 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'main.dart';
-
 class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
   Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
   String? savePath;
-
-  Settings() {
-    _loadSettings();
-  }
-
-  _loadSettings() async {
-    App.settingsNotifier.setFontSize(await App.settings.getFontSize());
-    App.settingsNotifier.setSavePath(await App.settings.getSavePath());
-  }
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {

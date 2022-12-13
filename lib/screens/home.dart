@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
 
+    _loadSettings();
     WidgetsBinding.instance.addObserver(this);
     widget.storage.readFile().then((value) {
       setState(() {
@@ -43,6 +44,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.paused) {
       _updateStorage();
     }
+  }
+
+  _loadSettings() async {
+    App.settingsNotifier.setFontSize(await App.settings.getFontSize());
+    App.settingsNotifier.setSavePath(await App.settings.getSavePath());
   }
 
   Future<File> _updateStorage() {
