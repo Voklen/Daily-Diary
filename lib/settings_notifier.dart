@@ -1,9 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+
+import 'main.dart';
 
 class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
   Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
+  String? linuxSaveLocation;
+  String? windowsSaveLocation;
+  String? macOSSaveLocation;
+
+  Settings() {
+    _loadSettings();
+  }
+
+  _loadSettings() async {
+    App.settingsNotifier.setFontSize(await App.settings.getFontSize());
+    App.settingsNotifier.setSaveLocation(await App.settings.getSavePath());
+  }
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
@@ -30,6 +46,22 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.colorScheme = colorScheme;
+    notifyListeners();
+  }
+
+  void setSaveLocation(String? path) {
+    if (path == null) {
+      return;
+    }
+    if (Platform.isLinux) {
+      value.linuxSaveLocation = path;
+    }
+    if (Platform.isWindows) {
+      value.windowsSaveLocation = path;
+    }
+    if (Platform.isMacOS) {
+      value.macOSSaveLocation = path;
+    }
     notifyListeners();
   }
 }
