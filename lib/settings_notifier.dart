@@ -4,7 +4,6 @@ class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
   Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
-  String? savePath;
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
@@ -31,14 +30,6 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.colorScheme = colorScheme;
-    notifyListeners();
-  }
-
-  void setSavePath(String? path) {
-    if (path == null) {
-      return;
-    }
-    value.savePath = path;
     notifyListeners();
   }
 }

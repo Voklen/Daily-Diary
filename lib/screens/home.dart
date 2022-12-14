@@ -48,7 +48,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   _loadSettings() async {
     App.settingsNotifier.setFontSize(await App.settings.getFontSize());
-    App.settingsNotifier.setSavePath(await App.settings.getSavePath());
   }
 
   Future<File> _updateStorage() {

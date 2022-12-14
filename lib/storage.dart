@@ -114,21 +114,6 @@ class SettingsStorage extends Storage {
     _writeToFile('color_scheme', hex);
   }
 
-  Future<String?> getSavePath() async {
-    final path = await _getDynamicSavePath();
-    return path is String ? path : null;
-  }
-
-  Future<dynamic> _getDynamicSavePath() async {
-    if (Platform.isLinux) {
-      return _getFromFile('linux_save_location');
-    } else if (Platform.isWindows) {
-      return _getFromFile('windows_save_location');
-    } else if (Platform.isMacOS) {
-      return _getFromFile('macos_save_location');
-    }
-  }
-
   Future<String> get _fileName async {
     String path = await _path;
     return '$path/config.toml';
