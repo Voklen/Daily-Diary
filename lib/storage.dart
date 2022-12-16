@@ -114,6 +114,15 @@ class SettingsStorage extends Storage {
     _writeToFile('color_scheme', hex);
   }
 
+  Future<bool?> getCheckSpelling() async {
+    final checkSpelling = await _getFromFile('check_spelling');
+    return checkSpelling is bool ? checkSpelling : null;
+  }
+
+  setCheckSpelling(bool checkSpelling) async {
+    _writeToFile('check_spelling', checkSpelling);
+  }
+
   Future<String> get _fileName async {
     String path = await _path;
     return '$path/config.toml';

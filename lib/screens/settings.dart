@@ -22,6 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: const [
             Padding(padding: padding, child: ThemeSetting()),
             Padding(padding: padding, child: FontSetting()),
+            Padding(padding: padding, child: SpellCheckToggle()),
             Padding(padding: padding, child: ColorSetting()),
           ],
         ),
@@ -91,6 +92,51 @@ class _ThemeSettingState extends State<ThemeSetting> {
             Text('System'),
             Text('Dark'),
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class SpellCheckToggle extends StatefulWidget {
+  const SpellCheckToggle({super.key});
+
+  @override
+  State<SpellCheckToggle> createState() => _SpellCheckToggleState();
+}
+
+class _SpellCheckToggleState extends State<SpellCheckToggle> {
+  _onChanged(bool checked) {
+    spellCheckHasChanged = !spellCheckHasChanged;
+    setState(() {
+      App.settingsNotifier.setCheckSpelling(checked);
+      App.settings.setCheckSpelling(checked);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              'Check spelling:',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(width: 5),
+            Switch(
+              value: App.settingsNotifier.value.checkSpelling,
+              onChanged: _onChanged,
+            )
+          ],
+        ),
+        Visibility(
+          visible: spellCheckHasChanged,
+          child: const Text(
+            'Restart app for changes to take effect',
+            style: TextStyle(color: Colors.red),
+          ),
         ),
       ],
     );

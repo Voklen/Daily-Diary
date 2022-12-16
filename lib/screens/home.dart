@@ -72,6 +72,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
+  SpellCheckConfiguration? _getSpellChecker(Settings currentSettings) {
+    if (Platform.isLinux) {
+      return null;
+    }
+    if (!currentSettings.checkSpelling) {
+      return null;
+    }
+    return const SpellCheckConfiguration();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Settings>(
@@ -102,8 +112,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               expands: true,
               maxLines: null,
               keyboardType: TextInputType.multiline,
-              spellCheckConfiguration:
-                  Platform.isLinux ? null : const SpellCheckConfiguration(),
+              spellCheckConfiguration: _getSpellChecker(currentSettings),
               textCapitalization: TextCapitalization.sentences,
               style: TextStyle(fontSize: currentSettings.fontSize),
               decoration:

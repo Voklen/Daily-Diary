@@ -4,6 +4,7 @@ class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
   Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
+  bool checkSpelling = true;
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
@@ -30,6 +31,14 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.colorScheme = colorScheme;
+    notifyListeners();
+  }
+
+  void setCheckSpelling(bool? checkSpelling) {
+    if (checkSpelling == null) {
+      return;
+    }
+    value.checkSpelling = checkSpelling;
     notifyListeners();
   }
 }
