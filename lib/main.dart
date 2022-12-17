@@ -8,7 +8,7 @@ import 'package:daily_diary/themes.dart';
 // This will be removed when widgets can react to spell check changes
 bool spellCheckHasChanged = false;
 
-void main() async {
+main() async {
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page

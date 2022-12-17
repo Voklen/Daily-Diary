@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final _textController = TextEditingController();
 
   @override
-  void initState() {
+  initState() {
     super.initState();
 
     _loadSettings();
@@ -33,13 +33,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   }
 
   @override
-  void dispose() {
+  dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
       _updateStorage();
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return widget.storage.writeFile(_textController.text);
   }
 
-  void _openSettings() {
+  _openSettings() {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  void _openPreviousEntries() {
+  _openPreviousEntries() {
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
-void main() {
+main() {
   testWidgets('Navigation', (WidgetTester tester) async {
     await tester.pumpWidget(const App());
 

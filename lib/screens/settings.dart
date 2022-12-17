@@ -64,7 +64,6 @@ class _ThemeSettingState extends State<ThemeSetting> {
         App.settingsNotifier.setTheme(ThemeMode.dark);
         break;
     }
-    App.settings.setTheme(App.settingsNotifier.value.theme);
   }
 
   @override
@@ -110,7 +109,6 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
     spellCheckHasChanged = !spellCheckHasChanged;
     setState(() {
       App.settingsNotifier.setCheckSpelling(checked);
-      App.settings.setCheckSpelling(checked);
     });
   }
 
@@ -154,7 +152,6 @@ class FontSetting extends StatelessWidget {
     try {
       final fontSize = double.parse(fontSizeString);
       App.settingsNotifier.setFontSize(fontSize);
-      App.settings.setFontSize(fontSize);
     } on FormatException {
       return;
     }
@@ -187,7 +184,6 @@ class ColorSetting extends StatelessWidget {
   const ColorSetting({super.key});
 
   _setColorScheme(Color colorScheme) {
-    App.settings.setColorScheme(colorScheme);
     App.settingsNotifier.setColorScheme(colorScheme);
   }
 

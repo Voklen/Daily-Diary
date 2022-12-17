@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 
 class Settings {
   ThemeMode theme = ThemeMode.system;
@@ -10,35 +11,39 @@ class Settings {
 class SettingsNotifier extends ValueNotifier<Settings> {
   SettingsNotifier(Settings value) : super(value);
 
-  void setTheme(ThemeMode? theme) {
+  setTheme(ThemeMode? theme) {
     if (theme == null) {
       return;
     }
     value.theme = theme;
+    App.settings.setTheme(theme);
     notifyListeners();
   }
 
-  void setFontSize(double? fontSize) {
+  setFontSize(double? fontSize) {
     if (fontSize == null) {
       return;
     }
     value.fontSize = fontSize;
+    App.settings.setFontSize(fontSize);
     notifyListeners();
   }
 
-  void setColorScheme(Color? colorScheme) {
+  setColorScheme(Color? colorScheme) {
     if (colorScheme == null) {
       return;
     }
     value.colorScheme = colorScheme;
+    App.settings.setColorScheme(colorScheme);
     notifyListeners();
   }
 
-  void setCheckSpelling(bool? checkSpelling) {
+  setCheckSpelling(bool? checkSpelling) {
     if (checkSpelling == null) {
       return;
     }
     value.checkSpelling = checkSpelling;
+    App.settings.setCheckSpelling(checkSpelling);
     notifyListeners();
   }
 }
