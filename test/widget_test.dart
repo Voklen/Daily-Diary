@@ -5,7 +5,25 @@ import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 void main() {
-  testWidgets('Appbar icons smoke test', (WidgetTester tester) async {
+  testWidgets('Navigation', (WidgetTester tester) async {
+    await tester.pumpWidget(const App());
+
+    expect(find.text('Daily Diary'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    expect(find.text('Settings'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+    expect(find.text('Daily Diary'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.list_outlined));
+    await tester.pumpAndSettle();
+    expect(find.text('Previous Entries'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+    expect(find.text('Daily Diary'), findsOneWidget);
+  });
+
+  testWidgets('Appbar icons', (WidgetTester tester) async {
     await tester.pumpWidget(const App());
 
     expect(find.text('Daily Diary'), findsOneWidget);
@@ -13,16 +31,33 @@ void main() {
     expect(find.byIcon(Icons.settings), findsOneWidget);
   });
 
-  testWidgets('Settings theme buttons', (WidgetTester tester) async {
-    await tester.pumpWidget(const MaterialApp(
-      home: SettingsScreen(),
-    ));
+  testWidgets('Theme setting', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: ThemeSetting(),
+      ),
+    );
 
     await tester.tap(find.text('Dark'));
-    await tester.pump();
+    expect(App.settingsNotifier.value.theme, ThemeMode.dark);
     await tester.tap(find.text('System'));
-    await tester.pump();
+    expect(App.settingsNotifier.value.theme, ThemeMode.system);
     await tester.tap(find.text('Light'));
-    await tester.pump();
+    expect(App.settingsNotifier.value.theme, ThemeMode.light);
+  });
+
+  testWidgets('Font setting', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: FontSetting(),
+        ),
+      ),
+    );
+
+    await tester.enterText(find.byType(TextField), '30');
+    expect(App.settingsNotifier.value.fontSize, 30);
+    await tester.enterText(find.byType(TextField), '2');
+    expect(App.settingsNotifier.value.fontSize, 2);
   });
 }
