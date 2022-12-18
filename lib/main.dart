@@ -12,17 +12,16 @@ main() async {
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page
-  App.settingsNotifier.setTheme(await App.settings.getTheme());
-  App.settingsNotifier.setColorScheme(await App.settings.getColorScheme());
+  App.settingsNotifier.setColorSchemeFromFile();
+  App.settingsNotifier.setThemeFromFile();
   // This will be moved to _loadSettings when spellCheckHasChanged is removed
-  App.settingsNotifier.setCheckSpelling(await App.settings.getCheckSpelling());
+  App.settingsNotifier.setCheckSpellingFromFile();
   runApp(const App());
 }
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  static final settings = SettingsStorage();
   static final SettingsNotifier settingsNotifier = SettingsNotifier(Settings());
 
   @override

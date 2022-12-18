@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
+
+import 'package:daily_diary/storage.dart';
 
 class Settings {
   ThemeMode theme = ThemeMode.system;
@@ -11,12 +12,21 @@ class Settings {
 class SettingsNotifier extends ValueNotifier<Settings> {
   SettingsNotifier(Settings value) : super(value);
 
+  final storage = SettingsStorage();
+
+  setThemeFromFile() async => setTheme(await storage.getTheme());
+  setFontSizeFromFile() async => setFontSize(await storage.getFontSize());
+  setColorSchemeFromFile() async =>
+      setColorScheme(await storage.getColorScheme());
+  setCheckSpellingFromFile() async =>
+      setCheckSpelling(await storage.getCheckSpelling());
+
   setTheme(ThemeMode? theme) {
     if (theme == null) {
       return;
     }
     value.theme = theme;
-    App.settings.setTheme(theme);
+    storage.setTheme(theme);
     notifyListeners();
   }
 
@@ -25,7 +35,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.fontSize = fontSize;
-    App.settings.setFontSize(fontSize);
+    storage.setFontSize(fontSize);
     notifyListeners();
   }
 
@@ -34,7 +44,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.colorScheme = colorScheme;
-    App.settings.setColorScheme(colorScheme);
+    storage.setColorScheme(colorScheme);
     notifyListeners();
   }
 
@@ -43,7 +53,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.checkSpelling = checkSpelling;
-    App.settings.setCheckSpelling(checkSpelling);
+    storage.setCheckSpelling(checkSpelling);
     notifyListeners();
   }
 }
