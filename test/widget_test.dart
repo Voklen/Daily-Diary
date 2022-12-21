@@ -23,14 +23,6 @@ main() {
     expect(find.text('Daily Diary'), findsOneWidget);
   });
 
-  testWidgets('Appbar icons', (WidgetTester tester) async {
-    await tester.pumpWidget(const App());
-
-    expect(find.text('Daily Diary'), findsOneWidget);
-    expect(find.byIcon(Icons.list_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.settings), findsOneWidget);
-  });
-
   testWidgets('Theme setting', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
@@ -54,6 +46,20 @@ main() {
         ),
       ),
     );
+
+    testWidgets('Spell check setting', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: SpellCheckToggle(),
+          ),
+        ),
+      );
+
+      expect(App.settingsNotifier.value.checkSpelling, true);
+      await tester.tap(find.byType(Switch));
+      expect(App.settingsNotifier.value.checkSpelling, false);
+    });
 
     await tester.enterText(find.byType(TextField), '30');
     expect(App.settingsNotifier.value.fontSize, 30);
