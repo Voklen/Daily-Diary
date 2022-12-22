@@ -47,23 +47,23 @@ main() {
       ),
     );
 
-    testWidgets('Spell check setting', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: SpellCheckToggle(),
-          ),
-        ),
-      );
-
-      expect(App.settingsNotifier.value.checkSpelling, true);
-      await tester.tap(find.byType(Switch));
-      expect(App.settingsNotifier.value.checkSpelling, false);
-    });
-
     await tester.enterText(find.byType(TextField), '30');
     expect(App.settingsNotifier.value.fontSize, 30);
     await tester.enterText(find.byType(TextField), '2');
     expect(App.settingsNotifier.value.fontSize, 2);
+  });
+
+  testWidgets('Spell check setting', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: SpellCheckToggle(),
+        ),
+      ),
+    );
+
+    expect(App.settingsNotifier.value.checkSpelling, true);
+    await tester.tap(find.byType(Switch));
+    expect(App.settingsNotifier.value.checkSpelling, false);
   });
 }
