@@ -28,11 +28,12 @@ abstract class Storage {
   }
 }
 
-class DiaryStorage extends Storage {
-  const DiaryStorage();
+class DiaryStorage {
+  const DiaryStorage(this.path);
 
-  Future<File> get _localFile async {
-    String path = await _path;
+  final String path;
+
+  File get file {
     DateTime date = DateTime.now();
     String isoDate = date.toIso8601String().substring(0, 10);
     return File('$path/$isoDate.txt');
@@ -40,31 +41,48 @@ class DiaryStorage extends Storage {
 
   Future<String> readFile() async {
     try {
-      final file = await _localFile;
-      final contents = await file.readAsString();
-      return contents;
+      return file.readAsString();
     } catch (error) {
-      return "";
+      return '';
     }
   }
 
   Future<File> writeFile(String counter) async {
-    final file = await _localFile;
     return file.writeAsString(counter);
   }
 }
 
-class SettingsStorage extends Storage {
-  SettingsStorage();
+class SettingsStorage {
+  SettingsStorage(this.path);
 
+  final String path;
   late var settingsMap = _getMap();
 
   Future<Map<String, dynamic>> _getMap() async {
     try {
-      final file = await _localFile;
+      final file = await _document;
       return file.toMap();
     } on FileSystemException {
       return {};
+    }
+  }
+
+  String get _file {
+    return '$path/config.toml';
+  }
+
+  Future<TomlDocument> get _document async {
+    return TomlDocument.load(_file);
+  }
+
+  Future<dynamic> _getFromFile(key) async {
+    try {
+      final map = await settingsMap;
+      return map[key];
+    } catch (error) {
+      // Ignoring error because:
+      // If the file/key has not been made, we just want the default
+      // If the file/key is corrupt, settings can be easily set again
     }
   }
 
@@ -123,35 +141,13 @@ class SettingsStorage extends Storage {
     _writeToFile('check_spelling', checkSpelling);
   }
 
-  Future<String> get _fileName async {
-    String path = await _path;
-    return '$path/config.toml';
-  }
-
-  Future<TomlDocument> get _localFile async {
-    final file = await _fileName;
-    return TomlDocument.load(file);
-  }
-
-  Future<dynamic> _getFromFile(key) async {
-    try {
-      final map = await settingsMap;
-      return map[key];
-    } catch (error) {
-      // Ignoring error because:
-      // If the file/key has not been made, we just want the default
-      // If the file/key is corrupt, settings can be easily set again
-    }
-  }
-
   _writeToFile(key, value) async {
     var map = await settingsMap;
     map[key] = value;
     settingsMap = Future(() => map);
 
-    final file = await _fileName;
     TomlDocument asToml = TomlDocument.fromMap(map);
-    File(file).writeAsString(asToml.toString());
+    File(_file).writeAsString(asToml.toString());
   }
 }
 

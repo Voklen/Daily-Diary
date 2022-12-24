@@ -10,9 +10,11 @@ class Settings {
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
-  SettingsNotifier(Settings value) : super(value);
+  SettingsNotifier(String savePath)
+      : storage = SettingsStorage(savePath),
+        super(Settings());
 
-  final storage = SettingsStorage();
+  final SettingsStorage storage;
 
   setThemeFromFile() async => setTheme(await storage.getTheme());
   setFontSizeFromFile() async => setFontSize(await storage.getFontSize());
