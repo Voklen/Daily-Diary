@@ -12,7 +12,7 @@ bool spellCheckHasChanged = false;
 String? path;
 
 main() async {
-  path = await getPath() ?? await defaultPath;
+  path = await getPath();
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page

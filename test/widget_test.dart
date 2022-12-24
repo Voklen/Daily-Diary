@@ -3,7 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
-import 'package:daily_diary/path.dart';
 
 main() {
   path = "";
