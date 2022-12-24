@@ -1,3 +1,4 @@
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
-  const PreviousEntriesScreen({super.key});
+  PreviousEntriesScreen({super.key});
 
-  final entries = const PreviousEntriesStorage();
+  final entries = PreviousEntriesStorage(path!);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +33,7 @@ class PreviousEntriesScreen extends StatelessWidget {
                         builder: (context) {
                           String filename =
                               date.toIso8601String().substring(0, 10);
-                          final storage = PreviousEntryStorage(filename);
+                          final storage = PreviousEntryStorage(filename, path!);
                           return ViewOnlyScreen(
                               title: humanDate, storage: storage);
                         },

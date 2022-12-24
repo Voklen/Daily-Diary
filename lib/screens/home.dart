@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const PreviousEntriesScreen(),
+        builder: (context) => PreviousEntriesScreen(),
       ),
     );
   }

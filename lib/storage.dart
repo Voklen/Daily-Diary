@@ -3,30 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:toml/toml.dart';
-
-abstract class Storage {
-  const Storage();
-
-  Future<Directory> get _directory async {
-    WidgetsFlutterBinding.ensureInitialized();
-    if (Platform.isAndroid) {
-      final directory = await getExternalStorageDirectory();
-      if (directory != null) {
-        return directory;
-      }
-    }
-
-    final directory = await getApplicationDocumentsDirectory();
-    return directory;
-  }
-
-  Future<String> get _path async {
-    final directory = await _directory;
-    return directory.path;
-  }
-}
 
 class DiaryStorage {
   const DiaryStorage(this.path);
@@ -151,11 +128,13 @@ class SettingsStorage {
   }
 }
 
-class PreviousEntriesStorage extends Storage {
-  const PreviousEntriesStorage();
+class PreviousEntriesStorage {
+  const PreviousEntriesStorage(this.path);
+
+  final String path;
 
   Future<List<DateTime>> getFiles() async {
-    final directory = await _directory;
+    final directory = Directory(path);
     final files = directory.list();
     final filesAsDateTime = files.map(toFilename);
     final filesWithoutNull =
@@ -178,14 +157,14 @@ class PreviousEntriesStorage extends Storage {
   }
 }
 
-class PreviousEntryStorage extends Storage {
-  const PreviousEntryStorage(this.filename);
+class PreviousEntryStorage {
+  const PreviousEntryStorage(this.filename, this.path);
 
   final String filename;
+  final String path;
 
   Future<String> readFile() async {
     try {
-      String path = await _path;
       final file = File('$path/$filename.txt');
       final contents = await file.readAsString();
       return contents;
