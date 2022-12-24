@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/path.dart';
 import 'package:daily_diary/screens/home.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/settings_notifier.dart';
@@ -8,7 +9,10 @@ import 'package:daily_diary/themes.dart';
 // This will be removed when widgets can react to spell check changes
 bool spellCheckHasChanged = false;
 
+String? path;
+
 main() async {
+  path = await getPath() ?? await defaultPath;
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page
@@ -22,7 +26,7 @@ main() async {
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  static final SettingsNotifier settingsNotifier = SettingsNotifier(Settings());
+  static final SettingsNotifier settingsNotifier = SettingsNotifier(path!);
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +39,8 @@ class App extends StatelessWidget {
           theme: theme.lightTheme,
           darkTheme: theme.darkTheme,
           themeMode: currentSettings.theme,
-          home: const HomePage(
-            storage: DiaryStorage(),
+          home: HomePage(
+            storage: DiaryStorage(path!),
           ),
         );
       },
