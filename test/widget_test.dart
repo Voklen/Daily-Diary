@@ -5,7 +5,7 @@ import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 main() {
-  path = "";
+  savePath = "";
   testWidgets('Navigation', (WidgetTester tester) async {
     await tester.pumpWidget(const App());
 

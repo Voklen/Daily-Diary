@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 class PreviousEntriesScreen extends StatelessWidget {
   PreviousEntriesScreen({super.key});
 
-  final entries = PreviousEntriesStorage(path!);
+  final entries = PreviousEntriesStorage(savePath!);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,8 @@ class PreviousEntriesScreen extends StatelessWidget {
                         builder: (context) {
                           String filename =
                               date.toIso8601String().substring(0, 10);
-                          final storage = PreviousEntryStorage(filename, path!);
+                          final storage =
+                              PreviousEntryStorage(filename, savePath!);
                           return ViewOnlyScreen(
                               title: humanDate, storage: storage);
                         },

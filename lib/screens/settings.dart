@@ -215,12 +215,15 @@ class ColorSetting extends StatelessWidget {
   }
 }
 
-class SavePathSetting extends StatelessWidget {
+class SavePathSetting extends StatefulWidget {
   const SavePathSetting({super.key});
 
-  bool _isDesktopOS() {
-    return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
-  }
+  @override
+  State<SavePathSetting> createState() => _SavePathSettingState();
+}
+
+class _SavePathSettingState extends State<SavePathSetting> {
+  bool savePathHasChanged = false;
 
   _selectNewPath() async {
     // Load SharedPreferences while user is picking a path
@@ -232,10 +235,40 @@ class SavePathSetting extends StatelessWidget {
       return;
     }
     preferences.setString('save_path', path);
+    setState(() {
+      savePath = path;
+    });
+    savePathHasChanged = true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: _selectNewPath, child: Text('Hello'));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: TextField(
+            controller: TextEditingController(text: savePath),
+            enabled: false,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+        SizedBox(
+          width: 125,
+          child: ElevatedButton(
+            onPressed: _selectNewPath,
+            child: const Text('Change folder'),
+          ),
+        ),
+        Visibility(
+          visible: savePathHasChanged,
+          child: const Text(
+            'Restart app for changes to take effect',
+            style: TextStyle(color: Colors.red),
+          ),
+        ),
+      ],
+    );
   }
 }
