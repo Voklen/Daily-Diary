@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:daily_diary/main.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -24,6 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Padding(padding: padding, child: FontSetting()),
             Padding(padding: padding, child: SpellCheckToggle()),
             Padding(padding: padding, child: ColorSetting()),
+            Padding(padding: padding, child: SavePathSetting()),
           ],
         ),
       ),
@@ -207,5 +212,30 @@ class ColorSetting extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class SavePathSetting extends StatelessWidget {
+  const SavePathSetting({super.key});
+
+  bool _isDesktopOS() {
+    return Platform.isMacOS || Platform.isLinux || Platform.isWindows;
+  }
+
+  _selectNewPath() async {
+    // Load SharedPreferences while user is picking a path
+    final preferencesFuture = SharedPreferences.getInstance();
+    final path = await FilePicker.platform.getDirectoryPath();
+    final preferences = await preferencesFuture;
+    if (path == null) {
+      // if the user aborted the dialog or if the folder path couldn't be resolved.
+      return;
+    }
+    preferences.setString('save_path', path);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(onPressed: _selectNewPath, child: Text('Hello'));
   }
 }
