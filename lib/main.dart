@@ -10,6 +10,7 @@ import 'package:daily_diary/themes.dart';
 bool spellCheckHasChanged = false;
 
 String? savePath;
+bool savePathHasChanged = false;
 
 main() async {
   savePath = await getPath();

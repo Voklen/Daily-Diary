@@ -223,8 +223,6 @@ class SavePathSetting extends StatefulWidget {
 }
 
 class _SavePathSettingState extends State<SavePathSetting> {
-  bool savePathHasChanged = false;
-
   _selectNewPath() async {
     // Load SharedPreferences while user is picking a path
     final preferencesFuture = SharedPreferences.getInstance();
@@ -237,8 +235,8 @@ class _SavePathSettingState extends State<SavePathSetting> {
     preferences.setString('save_path', path);
     setState(() {
       savePath = path;
+      savePathHasChanged = true;
     });
-    savePathHasChanged = true;
   }
 
   @override
