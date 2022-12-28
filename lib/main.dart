@@ -20,7 +20,7 @@ main() async {
   App.settingsNotifier.setColorSchemeFromFile();
   App.settingsNotifier.setThemeFromFile();
   // This will be moved to _loadSettings when spellCheckHasChanged is removed
-  App.settingsNotifier.setCheckSpellingFromFile();
+  await App.settingsNotifier.setCheckSpellingFromFile();
   runApp(const App());
 }
 

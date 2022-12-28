@@ -21,7 +21,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
   setColorSchemeFromFile() async =>
       setColorScheme(await storage.getColorScheme());
   setCheckSpellingFromFile() async =>
-      setCheckSpelling(await storage.getCheckSpelling());
+      await setCheckSpelling(await storage.getCheckSpelling());
 
   setTheme(ThemeMode? theme) {
     if (theme == null) {
@@ -50,12 +50,13 @@ class SettingsNotifier extends ValueNotifier<Settings> {
     notifyListeners();
   }
 
-  setCheckSpelling(bool? checkSpelling) {
+  Future<void> setCheckSpelling(bool? checkSpelling) {
     if (checkSpelling == null) {
-      return;
+      return Future(() => null);
     }
     value.checkSpelling = checkSpelling;
     storage.setCheckSpelling(checkSpelling);
     notifyListeners();
+    return Future(() => null);
   }
 }
