@@ -67,5 +67,8 @@ main() {
     await tester.tap(find.byType(Switch));
     await tester.pumpAndSettle();
     expect(App.settingsNotifier.value.checkSpelling, false);
+    await tester.tap(find.byType(Switch));
+    await tester.pumpAndSettle();
+    expect(App.settingsNotifier.value.checkSpelling, true);
   });
 }

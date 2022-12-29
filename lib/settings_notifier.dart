@@ -16,12 +16,21 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   final SettingsStorage storage;
 
-  setThemeFromFile() async => setTheme(await storage.getTheme());
-  setFontSizeFromFile() async => setFontSize(await storage.getFontSize());
-  setColorSchemeFromFile() async =>
-      setColorScheme(await storage.getColorScheme());
-  setCheckSpellingFromFile() async =>
-      await setCheckSpelling(await storage.getCheckSpelling());
+  setThemeFromFile() async {
+    setTheme(await storage.getTheme());
+  }
+
+  setFontSizeFromFile() async {
+    setFontSize(await storage.getFontSize());
+  }
+
+  setColorSchemeFromFile() async {
+    setColorScheme(await storage.getColorScheme());
+  }
+
+  setCheckSpellingFromFile() async {
+    setCheckSpelling(await storage.getCheckSpelling());
+  }
 
   setTheme(ThemeMode? theme) {
     if (theme == null) {
