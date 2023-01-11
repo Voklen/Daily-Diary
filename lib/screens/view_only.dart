@@ -1,6 +1,7 @@
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/settings.dart';
+import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/settings_notifier.dart';
 
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,7 @@ class ViewOnlyScreen extends StatefulWidget {
 }
 
 class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
-  void _openSettings() {
+  _openSettings() {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -46,10 +47,9 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
             padding: const EdgeInsets.all(12.0),
             child: FutureBuilder(
               future: widget.storage.readFile(),
-              builder: ((context, AsyncSnapshot<String> snapshot) {
+              builder: ((context, AsyncSnapshot<String> file) {
                 return Text(
-                  snapshot.data ?? "",
-                  maxLines: null,
+                  file.data ?? "",
                   style: TextStyle(fontSize: currentSettings.fontSize),
                 );
               }),

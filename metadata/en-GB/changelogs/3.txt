@@ -1,0 +1,3 @@
+‣ Fix color selection circle to display the color instead of being checkered
+‣ Added an option to disable spell checking. Thanks Victor4X
+‣ Added an option to change the save path (only works on rooted Android unfortunately). Thanks again Victor4X
