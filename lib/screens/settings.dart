@@ -36,6 +36,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
+const alertColor = Color.fromARGB(255, 240, 88, 50);
+
 class ThemeSetting extends StatefulWidget {
   const ThemeSetting({super.key});
 
@@ -138,7 +140,7 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
           visible: spellCheckHasChanged,
           child: const Text(
             'Restart app for changes to take effect',
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: alertColor),
           ),
         ),
       ],
@@ -244,6 +246,12 @@ class _SavePathSettingState extends State<SavePathSetting> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Visibility(
+            visible: Platform.isAndroid,
+            child: Text(
+              'Changing this setting will only work properly if the device is rooted:',
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            )),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: TextField(
@@ -263,7 +271,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
           visible: savePathHasChanged,
           child: const Text(
             'Restart app for changes to take effect',
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: alertColor),
           ),
         ),
       ],
