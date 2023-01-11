@@ -4,7 +4,7 @@ description: A diary that starts with a blank page every day (while saving the p
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.1+2
+version: 1.1.0+3
 
 environment:
   sdk: '>=2.19.0-374.1.beta <3.0.0'
@@ -19,7 +19,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.11
   toml: ^0.13.1
-  intl: ^0.17.0
+  intl: ^0.18.0
   flutter_colorpicker: ^1.0.3
   shared_preferences: ^2.0.15
   file_picker: ^5.2.4
