@@ -23,6 +23,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   shared_preferences: ^2.0.15
   file_picker: ^5.2.4
+  flutter_window_close: ^0.2.2
 
 dev_dependencies:
   flutter_test:
