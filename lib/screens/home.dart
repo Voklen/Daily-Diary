@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:daily_diary/quit_handler.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
@@ -6,7 +7,6 @@ import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
 import 'package:daily_diary/settings_notifier.dart';
-import 'package:flutter_window_close/flutter_window_close.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.storage}) : super(key: key);
@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   initState() {
     super.initState();
 
+    QuitHandler.disable();
     _loadSettings();
     WidgetsBinding.instance.addObserver(this);
     widget.storage.readFile().then((value) {
@@ -47,12 +48,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
-  _loadSettings() async {
+  _loadSettings() {
     App.settingsNotifier.setFontSizeFromFile();
   }
 
   Future<File> _updateStorage() {
+    QuitHandler.disable();
     return widget.storage.writeFile(_textController.text);
+  }
+
+  _textChanged(_) {
+    QuitHandler.enable(context);
   }
 
   _openSettings() {
@@ -85,7 +91,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    setUpQuitHandler(context);
     return ValueListenableBuilder<Settings>(
       valueListenable: App.settingsNotifier,
       builder: (_, Settings currentSettings, __) {
@@ -111,6 +116,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _textController,
+              onChanged: _textChanged,
               expands: true,
               maxLines: null,
               keyboardType: TextInputType.multiline,
@@ -125,23 +131,4 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       },
     );
   }
-}
-
-setUpQuitHandler(BuildContext context) {
-  FlutterWindowClose.setWindowShouldCloseHandler(() async {
-    return await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: const Text('Do you really want to quit?'),
-              actions: [
-                ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: const Text('Yes')),
-                ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text('No')),
-              ]);
-        });
-  });
 }
