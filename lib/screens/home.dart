@@ -57,8 +57,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return widget.storage.writeFile(_textController.text);
   }
 
-  _textChanged(_) {
-    QuitHandler.enable(context);
+  _textChanged(_) async {
+    QuitHandler.enable(context, _saveAndQuit);
+  }
+
+  _saveAndQuit() {
+    _updateStorage().then((_) {
+      Navigator.of(context).pop(true);
+    });
   }
 
   _openSettings() {
