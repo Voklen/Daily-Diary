@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:daily_diary/quit_handler.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/settings_notifier.dart';
 import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/quit_handler.dart';
 import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
-import 'package:daily_diary/settings_notifier.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.storage}) : super(key: key);

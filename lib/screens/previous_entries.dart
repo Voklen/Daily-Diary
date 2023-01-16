@@ -1,9 +1,10 @@
-import 'package:daily_diary/main.dart';
-import 'package:daily_diary/storage.dart';
-import 'package:daily_diary/screens/view_only.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+
+import 'package:daily_diary/main.dart';
+import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/screens/view_only.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
   PreviousEntriesScreen({super.key});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_window_close/flutter_window_close.dart';
 
 /// Handles what happens when the user attempts to close the desktop window
