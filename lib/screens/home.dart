@@ -95,46 +95,57 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return const SpellCheckConfiguration();
   }
 
+  keyPressed(RawKeyEvent value) {
+    if (value.isControlPressed && value.character == 's') {
+      _updateStorage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Settings>(
-      valueListenable: App.settingsNotifier,
-      builder: (_, Settings currentSettings, __) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Daily Diary'),
-            actions: <Widget>[
-              IconButton(
-                onPressed: _openPreviousEntries,
-                icon: const Icon(
-                  Icons.list_outlined,
+    return RawKeyboardListener(
+      autofocus: true,
+      focusNode: FocusNode(),
+      onKey: keyPressed,
+      child: ValueListenableBuilder<Settings>(
+        valueListenable: App.settingsNotifier,
+        builder: (_, Settings currentSettings, __) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Daily Diary'),
+              actions: <Widget>[
+                IconButton(
+                  onPressed: _openPreviousEntries,
+                  icon: const Icon(
+                    Icons.list_outlined,
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: _openSettings,
-                icon: const Icon(
-                  Icons.settings,
+                IconButton(
+                  onPressed: _openSettings,
+                  icon: const Icon(
+                    Icons.settings,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextField(
-              controller: _textController,
-              onChanged: _textChanged,
-              expands: true,
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              spellCheckConfiguration: _getSpellChecker(currentSettings),
-              textCapitalization: TextCapitalization.sentences,
-              style: TextStyle(fontSize: currentSettings.fontSize),
-              decoration:
-                  const InputDecoration.collapsed(hintText: "Start typing…"),
+              ],
             ),
-          ),
-        );
-      },
+            body: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: TextField(
+                controller: _textController,
+                onChanged: _textChanged,
+                expands: true,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                spellCheckConfiguration: _getSpellChecker(currentSettings),
+                textCapitalization: TextCapitalization.sentences,
+                style: TextStyle(fontSize: currentSettings.fontSize),
+                decoration:
+                    const InputDecoration.collapsed(hintText: "Start typing…"),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
