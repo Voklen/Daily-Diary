@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/settings_notifier.dart';
@@ -95,8 +96,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     return const SpellCheckConfiguration();
   }
 
-  keyPressed(RawKeyEvent value) {
-    if (value.isControlPressed && value.character == 's') {
+  keyPressed(RawKeyEvent key) {
+    if (key.isKeyPressed(LogicalKeyboardKey.keyS) && key.isControlPressed) {
       _updateStorage();
     }
   }
