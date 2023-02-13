@@ -21,6 +21,7 @@ class PreviousEntriesScreen extends StatelessWidget {
           future: entries.getFiles(),
           builder: (context, AsyncSnapshot<List<DateTime>> snapshot) {
             List<DateTime> datesList = snapshot.data ?? [];
+            datesList.sort((b, a) => a.compareTo(b));
             return ListView.builder(
               itemCount: datesList.length,
               itemBuilder: (context, index) {
