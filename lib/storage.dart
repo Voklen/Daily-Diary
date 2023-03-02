@@ -18,7 +18,7 @@ class DiaryStorage {
 
   Future<String> readFile() async {
     try {
-      return file.readAsString();
+      return await file.readAsString();
     } catch (error) {
       return '';
     }
