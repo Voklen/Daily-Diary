@@ -47,12 +47,13 @@ class _SettingsListState extends State<SettingsList> {
     List<Widget> modifiedChildren = [
       ElevatedButton(
         onPressed: () => setState(() {
-          showResetOption = true;
+          showResetOption = !showResetOption;
         }),
-        child: const Text('Select settings to reset'),
+        child: Text(showResetOption ? 'Cancel' : 'Select settings to reset'),
       ),
     ];
     modifiedChildren.addAll(widget.children.map(_modifyChild));
+
     return ListView(children: modifiedChildren);
   }
 
