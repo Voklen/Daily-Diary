@@ -6,6 +6,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/path.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -33,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
 class SettingsList extends StatefulWidget {
   const SettingsList({super.key, required this.children});
 
-  final List<Widget> children;
+  final List<SettingTile> children;
 
   @override
   State<SettingsList> createState() => _SettingsListState();
@@ -57,7 +58,7 @@ class _SettingsListState extends State<SettingsList> {
     return ListView(children: modifiedChildren);
   }
 
-  Widget _modifyChild(Widget element) {
+  Widget _modifyChild(SettingTile element) {
     return SettingsListElement(
       showResetOption: showResetOption,
       child: element,
@@ -73,7 +74,7 @@ class SettingsListElement extends StatelessWidget {
   });
 
   final bool showResetOption;
-  final Widget child;
+  final SettingTile child;
 
   static const padding = EdgeInsets.only(bottom: 12);
 
@@ -91,7 +92,7 @@ class SettingsListElement extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             child: IconButton(
               icon: const Icon(Icons.restore),
-              onPressed: () {},
+              onPressed: child.toDefault,
             ),
           ),
           Expanded(child: child),
@@ -101,10 +102,19 @@ class SettingsListElement extends StatelessWidget {
   }
 }
 
+abstract class SettingTile extends Widget {
+  const SettingTile({super.key});
+
+  void toDefault();
+}
+
 const alertColor = Color.fromARGB(255, 240, 88, 50);
 
-class ThemeSetting extends StatefulWidget {
+class ThemeSetting extends StatefulWidget implements SettingTile {
   const ThemeSetting({super.key});
+
+  @override
+  void toDefault() => App.settingsNotifier.setThemeToDefault();
 
   @override
   State<ThemeSetting> createState() => _ThemeSettingState();
@@ -169,8 +179,11 @@ class _ThemeSettingState extends State<ThemeSetting> {
   }
 }
 
-class SpellCheckToggle extends StatefulWidget {
+class SpellCheckToggle extends StatefulWidget implements SettingTile {
   const SpellCheckToggle({super.key});
+
+  @override
+  void toDefault() => App.settingsNotifier.setCheckSpellingToDefault();
 
   @override
   State<SpellCheckToggle> createState() => _SpellCheckToggleState();
@@ -213,8 +226,11 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
   }
 }
 
-class FontSetting extends StatelessWidget {
+class FontSetting extends StatelessWidget implements SettingTile {
   const FontSetting({super.key});
+
+  @override
+  void toDefault() => App.settingsNotifier.setFontSizeToDefault();
 
   static final _fontSizeController = TextEditingController(
     text: App.settingsNotifier.value.fontSize.toString(),
@@ -252,8 +268,11 @@ class FontSetting extends StatelessWidget {
   }
 }
 
-class ColorSetting extends StatelessWidget {
+class ColorSetting extends StatelessWidget implements SettingTile {
   const ColorSetting({super.key});
+
+  @override
+  void toDefault() => App.settingsNotifier.setColorSchemeToDefault();
 
   _setColorScheme(Color colorScheme) {
     App.settingsNotifier.setColorScheme(colorScheme);
@@ -282,8 +301,14 @@ class ColorSetting extends StatelessWidget {
   }
 }
 
-class SavePathSetting extends StatefulWidget {
+class SavePathSetting extends StatefulWidget implements SettingTile {
   const SavePathSetting({super.key});
+
+  @override
+  void toDefault() async {
+    final preferences = await SharedPreferences.getInstance();
+    preferences.setString('save_path', await defaultPath);
+  }
 
   @override
   State<SavePathSetting> createState() => _SavePathSettingState();
