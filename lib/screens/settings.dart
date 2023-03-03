@@ -15,25 +15,44 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  static const padding = EdgeInsets.only(bottom: 12);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: const [
-            Padding(padding: padding, child: ThemeSetting()),
-            Padding(padding: padding, child: FontSetting()),
-            Padding(padding: padding, child: SpellCheckToggle()),
-            Padding(padding: padding, child: ColorSetting()),
-            Padding(padding: padding, child: SavePathSetting()),
+      body: const Padding(
+        padding: EdgeInsets.all(10.0),
+        child: SettingsList(
+          children: [
+            ThemeSetting(),
+            FontSetting(),
+            SpellCheckToggle(),
+            ColorSetting(),
+            SavePathSetting(),
           ],
         ),
       ),
     );
+  }
+}
+
+class SettingsList extends StatelessWidget {
+  const SettingsList({
+    super.key,
+    required this.children,
+  });
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: children.map(_modifyChild).toList(),
+    );
+  }
+
+  Widget _modifyChild(Widget element) {
+    const padding = EdgeInsets.only(bottom: 12);
+    return Padding(padding: padding, child: element);
   }
 }
 
