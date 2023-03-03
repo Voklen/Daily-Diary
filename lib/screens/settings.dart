@@ -7,14 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:daily_diary/main.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,24 +30,73 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-class SettingsList extends StatelessWidget {
-  const SettingsList({
-    super.key,
-    required this.children,
-  });
+class SettingsList extends StatefulWidget {
+  const SettingsList({super.key, required this.children});
 
   final List<Widget> children;
 
   @override
+  State<SettingsList> createState() => _SettingsListState();
+}
+
+class _SettingsListState extends State<SettingsList> {
+  bool showResetOption = false;
+
+  @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: children.map(_modifyChild).toList(),
-    );
+    List<Widget> modifiedChildren = [
+      ElevatedButton(
+        onPressed: () => setState(() {
+          showResetOption = true;
+        }),
+        child: const Text('Select settings to reset'),
+      ),
+    ];
+    modifiedChildren.addAll(widget.children.map(_modifyChild));
+    return ListView(children: modifiedChildren);
   }
 
   Widget _modifyChild(Widget element) {
-    const padding = EdgeInsets.only(bottom: 12);
-    return Padding(padding: padding, child: element);
+    return SettingsListElement(
+      showResetOption: showResetOption,
+      child: element,
+    );
+  }
+}
+
+class SettingsListElement extends StatelessWidget {
+  const SettingsListElement({
+    super.key,
+    required this.showResetOption,
+    required this.child,
+  });
+
+  final bool showResetOption;
+  final Widget child;
+
+  static const padding = EdgeInsets.only(bottom: 12);
+
+  @override
+  Widget build(BuildContext context) {
+    final double containerWidth = showResetOption ? 40 : 0;
+    return Padding(
+      padding: padding,
+      child: Row(
+        children: [
+          AnimatedContainer(
+            width: containerWidth,
+            clipBehavior: Clip.hardEdge,
+            decoration: const BoxDecoration(),
+            duration: const Duration(milliseconds: 500),
+            child: IconButton(
+              icon: const Icon(Icons.restore),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(child: child),
+        ],
+      ),
+    );
   }
 }
 
