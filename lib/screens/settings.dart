@@ -66,7 +66,7 @@ class _SettingsListState extends State<SettingsList> {
   }
 }
 
-class SettingsListElement extends StatelessWidget {
+class SettingsListElement extends StatefulWidget {
   const SettingsListElement({
     super.key,
     required this.showResetOption,
@@ -76,11 +76,17 @@ class SettingsListElement extends StatelessWidget {
   final bool showResetOption;
   final SettingTile child;
 
+  @override
+  State<SettingsListElement> createState() => _SettingsListElementState();
+}
+
+class _SettingsListElementState extends State<SettingsListElement> {
   static const padding = EdgeInsets.only(bottom: 12);
+  late SettingTile child = widget.child;
 
   @override
   Widget build(BuildContext context) {
-    final double containerWidth = showResetOption ? 40 : 0;
+    final double containerWidth = widget.showResetOption ? 40 : 0;
     return Padding(
       padding: padding,
       child: Row(
@@ -92,10 +98,14 @@ class SettingsListElement extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             child: IconButton(
               icon: const Icon(Icons.restore),
-              onPressed: child.toDefault,
+              onPressed: () => setState(() {
+                child = child.newDefault();
+              }),
             ),
           ),
-          Expanded(child: child),
+          Expanded(
+            child: child,
+          ),
         ],
       ),
     );
@@ -105,7 +115,7 @@ class SettingsListElement extends StatelessWidget {
 abstract class SettingTile extends Widget {
   const SettingTile({super.key});
 
-  void toDefault();
+  SettingTile newDefault();
 }
 
 const alertColor = Color.fromARGB(255, 240, 88, 50);
@@ -114,7 +124,10 @@ class ThemeSetting extends StatefulWidget implements SettingTile {
   const ThemeSetting({super.key});
 
   @override
-  void toDefault() => App.settingsNotifier.setThemeToDefault();
+  ThemeSetting newDefault() {
+    App.settingsNotifier.setThemeToDefault();
+    return const ThemeSetting();
+  }
 
   @override
   State<ThemeSetting> createState() => _ThemeSettingState();
@@ -150,6 +163,7 @@ class _ThemeSettingState extends State<ThemeSetting> {
 
   @override
   Widget build(BuildContext context) {
+    _selections = _getTheme();
     return Row(
       children: [
         Text(
@@ -183,7 +197,10 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
   const SpellCheckToggle({super.key});
 
   @override
-  void toDefault() => App.settingsNotifier.setCheckSpellingToDefault();
+  SpellCheckToggle newDefault() {
+    App.settingsNotifier.setCheckSpellingToDefault();
+    return const SpellCheckToggle();
+  }
 
   @override
   State<SpellCheckToggle> createState() => _SpellCheckToggleState();
@@ -230,7 +247,10 @@ class FontSetting extends StatelessWidget implements SettingTile {
   const FontSetting({super.key});
 
   @override
-  void toDefault() => App.settingsNotifier.setFontSizeToDefault();
+  FontSetting newDefault() {
+    App.settingsNotifier.setFontSizeToDefault();
+    return const FontSetting();
+  }
 
   static final _fontSizeController = TextEditingController(
     text: App.settingsNotifier.value.fontSize.toString(),
@@ -247,6 +267,7 @@ class FontSetting extends StatelessWidget implements SettingTile {
 
   @override
   Widget build(BuildContext context) {
+    _fontSizeController.text = App.settingsNotifier.value.fontSize.toString();
     return Row(
       children: [
         Text(
@@ -272,7 +293,10 @@ class ColorSetting extends StatelessWidget implements SettingTile {
   const ColorSetting({super.key});
 
   @override
-  void toDefault() => App.settingsNotifier.setColorSchemeToDefault();
+  ColorSetting newDefault() {
+    App.settingsNotifier.setColorSchemeToDefault();
+    return const ColorSetting();
+  }
 
   _setColorScheme(Color colorScheme) {
     App.settingsNotifier.setColorScheme(colorScheme);
@@ -305,7 +329,13 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
   const SavePathSetting({super.key});
 
   @override
-  void toDefault() async {
+  SavePathSetting newDefault() {
+    setSavePath();
+    return const SavePathSetting();
+  }
+
+  void setSavePath() async {
+    savePath = await defaultPath;
     final preferences = await SharedPreferences.getInstance();
     preferences.setString('save_path', await defaultPath);
   }
