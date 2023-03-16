@@ -95,7 +95,8 @@ class _SettingsListElementState extends State<SettingsListElement> {
             width: containerWidth,
             clipBehavior: Clip.hardEdge,
             decoration: const BoxDecoration(),
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
             child: IconButton(
               icon: const Icon(Icons.restore),
               onPressed: () => setState(() {
