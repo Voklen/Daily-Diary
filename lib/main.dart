@@ -5,6 +5,7 @@ import 'package:daily_diary/screens/home.dart';
 import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/settings_notifier.dart';
 import 'package:daily_diary/themes.dart';
+import 'package:daily_diary/screens/home.dart';
 
 // This will be removed when widgets can react to spell check changes
 bool spellCheckHasChanged = false;

@@ -1,3 +1,6 @@
+# Specific to this project
+test_data/
+
 # Miscellaneous
 *.class
 *.log
