@@ -32,6 +32,22 @@ class SettingsNotifier extends ValueNotifier<Settings> {
     setCheckSpelling(await storage.getCheckSpelling());
   }
 
+  setThemeToDefault() {
+    setTheme(Settings().theme);
+  }
+
+  setFontSizeToDefault() {
+    setFontSize(Settings().fontSize);
+  }
+
+  setColorSchemeToDefault() {
+    setColorScheme(Settings().colorScheme);
+  }
+
+  setCheckSpellingToDefault() {
+    setCheckSpelling(Settings().checkSpelling);
+  }
+
   setTheme(ThemeMode? theme) {
     if (theme == null) {
       return;

@@ -1,34 +1,29 @@
 import 'dart:io';
-
-import 'package:daily_diary/main.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+import 'package:daily_diary/main.dart';
+import 'package:daily_diary/path.dart';
 
-  @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  static const padding = EdgeInsets.only(bottom: 12);
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: ListView(
-          children: const [
-            Padding(padding: padding, child: ThemeSetting()),
-            Padding(padding: padding, child: FontSetting()),
-            Padding(padding: padding, child: SpellCheckToggle()),
-            Padding(padding: padding, child: ColorSetting()),
-            Padding(padding: padding, child: SavePathSetting()),
+      body: const Padding(
+        padding: EdgeInsets.all(10.0),
+        child: SettingsList(
+          children: [
+            ThemeSetting(),
+            FontSetting(),
+            SpellCheckToggle(),
+            ColorSetting(),
+            SavePathSetting(),
           ],
         ),
       ),
@@ -36,10 +31,104 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
+class SettingsList extends StatefulWidget {
+  const SettingsList({super.key, required this.children});
+
+  final List<SettingTile> children;
+
+  @override
+  State<SettingsList> createState() => _SettingsListState();
+}
+
+class _SettingsListState extends State<SettingsList> {
+  bool showResetOption = false;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> modifiedChildren = [
+      ElevatedButton(
+        onPressed: () => setState(() {
+          showResetOption = !showResetOption;
+        }),
+        child: Text(showResetOption ? 'Cancel' : 'Select settings to reset'),
+      ),
+    ];
+    modifiedChildren.addAll(widget.children.map(_modifyChild));
+
+    return ListView(children: modifiedChildren);
+  }
+
+  Widget _modifyChild(SettingTile element) {
+    return SettingsListElement(
+      showResetOption: showResetOption,
+      child: element,
+    );
+  }
+}
+
+class SettingsListElement extends StatefulWidget {
+  const SettingsListElement({
+    super.key,
+    required this.showResetOption,
+    required this.child,
+  });
+
+  final bool showResetOption;
+  final SettingTile child;
+
+  @override
+  State<SettingsListElement> createState() => _SettingsListElementState();
+}
+
+class _SettingsListElementState extends State<SettingsListElement> {
+  static const padding = EdgeInsets.only(bottom: 12);
+  late SettingTile child = widget.child;
+
+  @override
+  Widget build(BuildContext context) {
+    final double containerWidth = widget.showResetOption ? 40 : 0;
+    return Padding(
+      padding: padding,
+      child: Row(
+        children: [
+          AnimatedContainer(
+            width: containerWidth,
+            clipBehavior: Clip.hardEdge,
+            decoration: const BoxDecoration(),
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeInOut,
+            child: IconButton(
+              icon: const Icon(Icons.restore),
+              onPressed: () => setState(() {
+                child = child.newDefault();
+              }),
+            ),
+          ),
+          Expanded(
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+abstract class SettingTile extends Widget {
+  const SettingTile({super.key});
+
+  SettingTile newDefault();
+}
+
 const alertColor = Color.fromARGB(255, 240, 88, 50);
 
-class ThemeSetting extends StatefulWidget {
+class ThemeSetting extends StatefulWidget implements SettingTile {
   const ThemeSetting({super.key});
+
+  @override
+  ThemeSetting newDefault() {
+    App.settingsNotifier.setThemeToDefault();
+    return const ThemeSetting();
+  }
 
   @override
   State<ThemeSetting> createState() => _ThemeSettingState();
@@ -75,6 +164,7 @@ class _ThemeSettingState extends State<ThemeSetting> {
 
   @override
   Widget build(BuildContext context) {
+    _selections = _getTheme();
     return Row(
       children: [
         Text(
@@ -104,8 +194,14 @@ class _ThemeSettingState extends State<ThemeSetting> {
   }
 }
 
-class SpellCheckToggle extends StatefulWidget {
+class SpellCheckToggle extends StatefulWidget implements SettingTile {
   const SpellCheckToggle({super.key});
+
+  @override
+  SpellCheckToggle newDefault() {
+    App.settingsNotifier.setCheckSpellingToDefault();
+    return const SpellCheckToggle();
+  }
 
   @override
   State<SpellCheckToggle> createState() => _SpellCheckToggleState();
@@ -113,7 +209,6 @@ class SpellCheckToggle extends StatefulWidget {
 
 class _SpellCheckToggleState extends State<SpellCheckToggle> {
   _onChanged(bool checked) {
-    spellCheckHasChanged = !spellCheckHasChanged;
     setState(() {
       App.settingsNotifier.setCheckSpelling(checked);
     });
@@ -137,7 +232,8 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
           ],
         ),
         Visibility(
-          visible: spellCheckHasChanged,
+          visible:
+              startupCheckSpelling != App.settingsNotifier.value.checkSpelling,
           child: const Text(
             'Restart app for changes to take effect',
             style: TextStyle(color: alertColor),
@@ -148,8 +244,14 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
   }
 }
 
-class FontSetting extends StatelessWidget {
+class FontSetting extends StatelessWidget implements SettingTile {
   const FontSetting({super.key});
+
+  @override
+  FontSetting newDefault() {
+    App.settingsNotifier.setFontSizeToDefault();
+    return const FontSetting();
+  }
 
   static final _fontSizeController = TextEditingController(
     text: App.settingsNotifier.value.fontSize.toString(),
@@ -166,6 +268,7 @@ class FontSetting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _fontSizeController.text = App.settingsNotifier.value.fontSize.toString();
     return Row(
       children: [
         Text(
@@ -187,8 +290,14 @@ class FontSetting extends StatelessWidget {
   }
 }
 
-class ColorSetting extends StatelessWidget {
+class ColorSetting extends StatelessWidget implements SettingTile {
   const ColorSetting({super.key});
+
+  @override
+  ColorSetting newDefault() {
+    App.settingsNotifier.setColorSchemeToDefault();
+    return const ColorSetting();
+  }
 
   _setColorScheme(Color colorScheme) {
     App.settingsNotifier.setColorScheme(colorScheme);
@@ -217,8 +326,20 @@ class ColorSetting extends StatelessWidget {
   }
 }
 
-class SavePathSetting extends StatefulWidget {
+class SavePathSetting extends StatefulWidget implements SettingTile {
   const SavePathSetting({super.key});
+
+  @override
+  SavePathSetting newDefault() {
+    setSavePath();
+    return const SavePathSetting();
+  }
+
+  void setSavePath() async {
+    savePath = await defaultPath;
+    final preferences = await SharedPreferences.getInstance();
+    preferences.setString('save_path', await defaultPath);
+  }
 
   @override
   State<SavePathSetting> createState() => _SavePathSettingState();
@@ -237,7 +358,6 @@ class _SavePathSettingState extends State<SavePathSetting> {
     preferences.setString('save_path', path);
     setState(() {
       savePath = path;
-      savePathHasChanged = true;
     });
   }
 
@@ -268,7 +388,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
           ),
         ),
         Visibility(
-          visible: savePathHasChanged,
+          visible: savePath != startupSavePath,
           child: const Text(
             'Restart app for changes to take effect',
             style: TextStyle(color: alertColor),

@@ -71,4 +71,16 @@ main() {
     await tester.pumpAndSettle();
     expect(App.settingsNotifier.value.checkSpelling, true);
   });
+
+  testWidgets('Setting reset display', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: SettingsScreen(),
+      ),
+    );
+
+    await tester.tap(find.text('Select settings to reset'));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.restore), findsWidgets);
+  });
 }
