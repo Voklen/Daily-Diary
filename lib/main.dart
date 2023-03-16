@@ -7,13 +7,14 @@ import 'package:daily_diary/themes.dart';
 import 'package:daily_diary/screens/home.dart';
 
 // This will be removed when widgets can react to spell check changes
-bool spellCheckHasChanged = false;
+bool? startupCheckSpelling;
 
 String? savePath;
-bool savePathHasChanged = false;
+String? startupSavePath;
 
 main() async {
   savePath = await getPath();
+  startupSavePath = savePath;
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page
@@ -21,6 +22,7 @@ main() async {
   App.settingsNotifier.setThemeFromFile();
   // This will be moved to _loadSettings when spellCheckHasChanged is removed
   await App.settingsNotifier.setCheckSpellingFromFile();
+  startupCheckSpelling = App.settingsNotifier.value.checkSpelling;
   runApp(const App());
 }
 

@@ -208,7 +208,6 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
 
 class _SpellCheckToggleState extends State<SpellCheckToggle> {
   _onChanged(bool checked) {
-    spellCheckHasChanged = !spellCheckHasChanged;
     setState(() {
       App.settingsNotifier.setCheckSpelling(checked);
     });
@@ -232,7 +231,8 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
           ],
         ),
         Visibility(
-          visible: spellCheckHasChanged,
+          visible:
+              startupCheckSpelling != App.settingsNotifier.value.checkSpelling,
           child: const Text(
             'Restart app for changes to take effect',
             style: TextStyle(color: alertColor),
@@ -357,7 +357,6 @@ class _SavePathSettingState extends State<SavePathSetting> {
     preferences.setString('save_path', path);
     setState(() {
       savePath = path;
-      savePathHasChanged = true;
     });
   }
 
@@ -388,7 +387,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
           ),
         ),
         Visibility(
-          visible: savePathHasChanged,
+          visible: savePath != startupSavePath,
           child: const Text(
             'Restart app for changes to take effect',
             style: TextStyle(color: alertColor),
