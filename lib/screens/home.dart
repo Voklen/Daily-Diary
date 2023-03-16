@@ -93,7 +93,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (!currentSettings.checkSpelling) {
       return null;
     }
-    return const SpellCheckConfiguration();
+    return SpellCheckConfiguration(
+      spellCheckService: DefaultSpellCheckService(),
+    );
   }
 
   keyPressed(RawKeyEvent key) {
