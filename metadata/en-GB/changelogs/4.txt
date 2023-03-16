@@ -1,0 +1,6 @@
+‣ Sort entries by date. Thanks @fhoekstra
+‣ Add ability to reset settings
+
+Desktop:
+‣ Add quit confirmation
+‣ Save on ctrl-s
