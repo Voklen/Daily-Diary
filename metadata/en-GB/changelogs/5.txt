@@ -1,0 +1,10 @@
+1.2.1 is a quick fix to a bug where the settings weren't resetting.
+
+In case you missed them, the 1.2.0 release notes:
+
+‣ Sort entries by date. Thanks @fhoekstra
+‣ Add ability to reset settings
+
+Desktop:
+‣ Add quit confirmation
+‣ Save on ctrl-s

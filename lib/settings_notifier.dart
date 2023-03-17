@@ -16,39 +16,39 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   final SettingsStorage storage;
 
-  setThemeFromFile() async {
-    setTheme(await storage.getTheme());
+  Future<void> setThemeFromFile() async {
+    await setTheme(await storage.getTheme());
   }
 
-  setFontSizeFromFile() async {
-    setFontSize(await storage.getFontSize());
+  Future<void> setFontSizeFromFile() async {
+    await setFontSize(await storage.getFontSize());
   }
 
-  setColorSchemeFromFile() async {
-    setColorScheme(await storage.getColorScheme());
+  Future<void> setColorSchemeFromFile() async {
+    await setColorScheme(await storage.getColorScheme());
   }
 
-  setCheckSpellingFromFile() async {
-    setCheckSpelling(await storage.getCheckSpelling());
+  Future<void> setCheckSpellingFromFile() async {
+    await setCheckSpelling(await storage.getCheckSpelling());
   }
 
-  setThemeToDefault() {
-    setTheme(Settings().theme);
+  Future<void> setThemeToDefault() async {
+    await setTheme(Settings().theme);
   }
 
-  setFontSizeToDefault() {
-    setFontSize(Settings().fontSize);
+  Future<void> setFontSizeToDefault() async {
+    await setFontSize(Settings().fontSize);
   }
 
-  setColorSchemeToDefault() {
-    setColorScheme(Settings().colorScheme);
+  Future<void> setColorSchemeToDefault() async {
+    await setColorScheme(Settings().colorScheme);
   }
 
-  setCheckSpellingToDefault() {
-    setCheckSpelling(Settings().checkSpelling);
+  Future<void> setCheckSpellingToDefault() async {
+    await setCheckSpelling(Settings().checkSpelling);
   }
 
-  setTheme(ThemeMode? theme) {
+  Future<void> setTheme(ThemeMode? theme) async {
     if (theme == null) {
       return;
     }
@@ -57,31 +57,30 @@ class SettingsNotifier extends ValueNotifier<Settings> {
     notifyListeners();
   }
 
-  setFontSize(double? fontSize) {
+  Future<void> setFontSize(double? fontSize) async {
     if (fontSize == null) {
       return;
     }
     value.fontSize = fontSize;
-    storage.setFontSize(fontSize);
+    await storage.setFontSize(fontSize);
     notifyListeners();
   }
 
-  setColorScheme(Color? colorScheme) {
+  Future<void> setColorScheme(Color? colorScheme) async {
     if (colorScheme == null) {
       return;
     }
     value.colorScheme = colorScheme;
-    storage.setColorScheme(colorScheme);
+    await storage.setColorScheme(colorScheme);
     notifyListeners();
   }
 
-  Future<void> setCheckSpelling(bool? checkSpelling) {
+  Future<void> setCheckSpelling(bool? checkSpelling) async {
     if (checkSpelling == null) {
       return Future(() => null);
     }
     value.checkSpelling = checkSpelling;
-    storage.setCheckSpelling(checkSpelling);
+    await storage.setCheckSpelling(checkSpelling);
     notifyListeners();
-    return Future(() => null);
   }
 }

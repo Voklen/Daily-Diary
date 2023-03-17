@@ -76,16 +76,16 @@ class SettingsStorage {
     }
   }
 
-  setTheme(ThemeMode theme) {
+  Future<void> setTheme(ThemeMode theme) async {
     switch (theme) {
       case ThemeMode.light:
-        _writeToFile('theme', 'light');
+        await _writeToFile('theme', 'light');
         break;
       case ThemeMode.system:
-        _writeToFile('theme', 'system');
+        await _writeToFile('theme', 'system');
         break;
       case ThemeMode.dark:
-        _writeToFile('theme', 'dark');
+        await _writeToFile('theme', 'dark');
         break;
     }
   }
@@ -95,8 +95,8 @@ class SettingsStorage {
     return fontSize is double ? fontSize : null;
   }
 
-  setFontSize(double size) {
-    _writeToFile('font_size', size);
+  Future<void> setFontSize(double size) async {
+    await _writeToFile('font_size', size);
   }
 
   Future<Color?> getColorScheme() async {
@@ -104,9 +104,9 @@ class SettingsStorage {
     return colorFromHex(hex);
   }
 
-  setColorScheme(Color color) async {
+  Future<void> setColorScheme(Color color) async {
     String hex = colorToHex(color, includeHashSign: true, enableAlpha: false);
-    _writeToFile('color_scheme', hex);
+    await _writeToFile('color_scheme', hex);
   }
 
   Future<bool?> getCheckSpelling() async {
@@ -114,17 +114,17 @@ class SettingsStorage {
     return checkSpelling is bool ? checkSpelling : null;
   }
 
-  setCheckSpelling(bool checkSpelling) async {
-    _writeToFile('check_spelling', checkSpelling);
+  Future<void> setCheckSpelling(bool checkSpelling) async {
+    await _writeToFile('check_spelling', checkSpelling);
   }
 
-  _writeToFile(key, value) async {
+  Future<void> _writeToFile(key, value) async {
     var map = await settingsMap;
     map[key] = value;
     settingsMap = Future(() => map);
 
     TomlDocument asToml = TomlDocument.fromMap(map);
-    File(_file).writeAsString(asToml.toString());
+    await File(_file).writeAsString(asToml.toString());
   }
 }
 
