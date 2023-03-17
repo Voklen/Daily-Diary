@@ -128,7 +128,9 @@ class ThemeSetting extends StatefulWidget implements SettingTile {
   @override
   Future<ThemeSetting> newDefault() async {
     await App.settingsNotifier.setThemeToDefault();
-    return const ThemeSetting();
+    return ThemeSetting(
+      key: UniqueKey(),
+    );
   }
 
   @override
@@ -201,7 +203,9 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
   @override
   Future<SpellCheckToggle> newDefault() async {
     await App.settingsNotifier.setCheckSpellingToDefault();
-    return const SpellCheckToggle();
+    return SpellCheckToggle(
+      key: UniqueKey(),
+    );
   }
 
   @override
@@ -251,7 +255,9 @@ class FontSetting extends StatelessWidget implements SettingTile {
   @override
   Future<FontSetting> newDefault() async {
     await App.settingsNotifier.setFontSizeToDefault();
-    return const FontSetting();
+    return FontSetting(
+      key: UniqueKey(),
+    );
   }
 
   static final _fontSizeController = TextEditingController(
