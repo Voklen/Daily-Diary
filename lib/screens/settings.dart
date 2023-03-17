@@ -99,9 +99,10 @@ class _SettingsListElementState extends State<SettingsListElement> {
             curve: Curves.easeInOut,
             child: IconButton(
               icon: const Icon(Icons.restore),
-              onPressed: () => setState(() async {
+              onPressed: () async {
                 child = await child.newDefault();
-              }),
+                setState(() {});
+              },
             ),
           ),
           Expanded(
