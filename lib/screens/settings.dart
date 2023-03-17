@@ -99,8 +99,8 @@ class _SettingsListElementState extends State<SettingsListElement> {
             curve: Curves.easeInOut,
             child: IconButton(
               icon: const Icon(Icons.restore),
-              onPressed: () => setState(() {
-                child = child.newDefault();
+              onPressed: () => setState(() async {
+                child = await child.newDefault();
               }),
             ),
           ),
@@ -116,7 +116,7 @@ class _SettingsListElementState extends State<SettingsListElement> {
 abstract class SettingTile extends Widget {
   const SettingTile({super.key});
 
-  SettingTile newDefault();
+  Future<SettingTile> newDefault();
 }
 
 const alertColor = Color.fromARGB(255, 240, 88, 50);
@@ -125,8 +125,8 @@ class ThemeSetting extends StatefulWidget implements SettingTile {
   const ThemeSetting({super.key});
 
   @override
-  ThemeSetting newDefault() {
-    App.settingsNotifier.setThemeToDefault();
+  Future<ThemeSetting> newDefault() async {
+    await App.settingsNotifier.setThemeToDefault();
     return const ThemeSetting();
   }
 
@@ -198,8 +198,8 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
   const SpellCheckToggle({super.key});
 
   @override
-  SpellCheckToggle newDefault() {
-    App.settingsNotifier.setCheckSpellingToDefault();
+  Future<SpellCheckToggle> newDefault() async {
+    await App.settingsNotifier.setCheckSpellingToDefault();
     return const SpellCheckToggle();
   }
 
@@ -248,8 +248,8 @@ class FontSetting extends StatelessWidget implements SettingTile {
   const FontSetting({super.key});
 
   @override
-  FontSetting newDefault() {
-    App.settingsNotifier.setFontSizeToDefault();
+  Future<FontSetting> newDefault() async {
+    await App.settingsNotifier.setFontSizeToDefault();
     return const FontSetting();
   }
 
@@ -294,8 +294,8 @@ class ColorSetting extends StatelessWidget implements SettingTile {
   const ColorSetting({super.key});
 
   @override
-  ColorSetting newDefault() {
-    App.settingsNotifier.setColorSchemeToDefault();
+  Future<ColorSetting> newDefault() async {
+    await App.settingsNotifier.setColorSchemeToDefault();
     return const ColorSetting();
   }
 
@@ -330,12 +330,12 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
   const SavePathSetting({super.key});
 
   @override
-  SavePathSetting newDefault() {
-    setSavePath();
+  Future<SavePathSetting> newDefault() async {
+    await setSavePath();
     return const SavePathSetting();
   }
 
-  void setSavePath() async {
+  Future<void> setSavePath() async {
     savePath = await defaultPath;
     final preferences = await SharedPreferences.getInstance();
     preferences.setString('save_path', await defaultPath);
