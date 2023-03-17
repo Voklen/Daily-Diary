@@ -53,7 +53,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
       return;
     }
     value.theme = theme;
-    await storage.setTheme(theme);
+    storage.setTheme(theme);
     notifyListeners();
   }
 
