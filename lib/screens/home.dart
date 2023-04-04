@@ -9,6 +9,8 @@ import 'package:daily_diary/quit_handler.dart';
 import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
 
+import 'package:flutter_window_close/flutter_window_close.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.storage});
 
@@ -145,6 +147,9 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   keyPressed(RawKeyEvent key) {
     if (key.isKeyPressed(LogicalKeyboardKey.keyS) && key.isControlPressed) {
       _updateStorage();
+    }
+    if (key.isKeyPressed(LogicalKeyboardKey.keyQ) && key.isControlPressed) {
+      FlutterWindowClose.closeWindow();
     }
   }
 
