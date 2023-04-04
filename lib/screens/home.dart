@@ -78,6 +78,7 @@ class EntryEditor extends StatefulWidget {
 
 class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   final _textController = TextEditingController();
+  bool exiting = false;
 
   @override
   initState() {
@@ -102,6 +103,9 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   @override
   didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    if (exiting) {
+      return;
+    }
     if (state == AppLifecycleState.paused) {
       _updateStorage();
     }
@@ -144,25 +148,36 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     }
   }
 
+  Future<bool> saveBeforeExit() async {
+    exiting = true;
+    if (Platform.isAndroid || Platform.isIOS) {
+      await _updateStorage();
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      autofocus: true,
-      focusNode: FocusNode(),
-      onKey: keyPressed,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: TextField(
-          controller: _textController,
-          onChanged: _textChanged,
-          expands: true,
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          spellCheckConfiguration: _getSpellChecker(widget.settings),
-          textCapitalization: TextCapitalization.sentences,
-          style: TextStyle(fontSize: widget.settings.fontSize),
-          decoration:
-              const InputDecoration.collapsed(hintText: "Start typing…"),
+    return WillPopScope(
+      onWillPop: saveBeforeExit,
+      child: RawKeyboardListener(
+        autofocus: true,
+        focusNode: FocusNode(),
+        onKey: keyPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: TextField(
+            controller: _textController,
+            onChanged: _textChanged,
+            expands: true,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            spellCheckConfiguration: _getSpellChecker(widget.settings),
+            textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(fontSize: widget.settings.fontSize),
+            decoration:
+                const InputDecoration.collapsed(hintText: "Start typing…"),
+          ),
         ),
       ),
     );
