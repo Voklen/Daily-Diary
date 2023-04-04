@@ -1,0 +1,5 @@
+Fix bug with entry saving when exiting through the back button.
+Thanks @CodingFan72 and @mrodant
+
+Desktop:
+Quit on ctrl-q

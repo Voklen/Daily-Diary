@@ -9,17 +9,78 @@ import 'package:daily_diary/quit_handler.dart';
 import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.storage}) : super(key: key);
+import 'package:flutter_window_close/flutter_window_close.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key, required this.storage});
 
   final DiaryStorage storage;
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<Settings>(
+      valueListenable: App.settingsNotifier,
+      builder: (_, Settings currentSettings, __) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Daily Diary'),
+            actions: [
+              IconButton(
+                onPressed: () => _openPreviousEntries(context),
+                icon: const Icon(
+                  Icons.list_outlined,
+                ),
+              ),
+              IconButton(
+                onPressed: () => _openSettings(context),
+                icon: const Icon(
+                  Icons.settings,
+                ),
+              ),
+            ],
+          ),
+          body: EntryEditor(
+            storage: storage,
+            settings: currentSettings,
+          ),
+        );
+      },
+    );
+  }
+
+  _openPreviousEntries(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PreviousEntriesScreen(),
+      ),
+    );
+  }
+
+  _openSettings(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
+      ),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class EntryEditor extends StatefulWidget {
+  const EntryEditor({Key? key, required this.storage, required this.settings})
+      : super(key: key);
+
+  final DiaryStorage storage;
+  final Settings settings;
+
+  @override
+  State<EntryEditor> createState() => _EntryEditorState();
+}
+
+class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   final _textController = TextEditingController();
+  bool exiting = false;
 
   @override
   initState() {
@@ -44,6 +105,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    if (exiting) {
+      return;
+    }
     if (state == AppLifecycleState.paused) {
       _updateStorage();
     }
@@ -68,24 +132,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     });
   }
 
-  _openSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SettingsScreen(),
-      ),
-    );
-  }
-
-  _openPreviousEntries() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PreviousEntriesScreen(),
-      ),
-    );
-  }
-
   SpellCheckConfiguration? _getSpellChecker(Settings currentSettings) {
     if (Platform.isLinux) {
       return null;
@@ -102,52 +148,42 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (key.isKeyPressed(LogicalKeyboardKey.keyS) && key.isControlPressed) {
       _updateStorage();
     }
+    if (key.isKeyPressed(LogicalKeyboardKey.keyQ) && key.isControlPressed) {
+      FlutterWindowClose.closeWindow();
+    }
+  }
+
+  Future<bool> saveBeforeExit() async {
+    exiting = true;
+    if (Platform.isAndroid || Platform.isIOS) {
+      await _updateStorage();
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
-      autofocus: true,
-      focusNode: FocusNode(),
-      onKey: keyPressed,
-      child: ValueListenableBuilder<Settings>(
-        valueListenable: App.settingsNotifier,
-        builder: (_, Settings currentSettings, __) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Daily Diary'),
-              actions: <Widget>[
-                IconButton(
-                  onPressed: _openPreviousEntries,
-                  icon: const Icon(
-                    Icons.list_outlined,
-                  ),
-                ),
-                IconButton(
-                  onPressed: _openSettings,
-                  icon: const Icon(
-                    Icons.settings,
-                  ),
-                ),
-              ],
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _textController,
-                onChanged: _textChanged,
-                expands: true,
-                maxLines: null,
-                keyboardType: TextInputType.multiline,
-                spellCheckConfiguration: _getSpellChecker(currentSettings),
-                textCapitalization: TextCapitalization.sentences,
-                style: TextStyle(fontSize: currentSettings.fontSize),
-                decoration:
-                    const InputDecoration.collapsed(hintText: "Start typing…"),
-              ),
-            ),
-          );
-        },
+    return WillPopScope(
+      onWillPop: saveBeforeExit,
+      child: RawKeyboardListener(
+        autofocus: true,
+        focusNode: FocusNode(),
+        onKey: keyPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: TextField(
+            controller: _textController,
+            onChanged: _textChanged,
+            expands: true,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            spellCheckConfiguration: _getSpellChecker(widget.settings),
+            textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(fontSize: widget.settings.fontSize),
+            decoration:
+                const InputDecoration.collapsed(hintText: "Start typing…"),
+          ),
+        ),
       ),
     );
   }

@@ -5,10 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:daily_diary/storage.dart';
 
 main() {
-  Directory testDirectory = Directory('test_data/');
+  Directory testDirectory = Directory('test_data/diary_storage_test/');
 
   setUp(() async {
-    await testDirectory.create();
+    await testDirectory.create(recursive: true);
   });
 
   test('Normal', () async {
