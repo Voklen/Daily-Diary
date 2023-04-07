@@ -6,12 +6,12 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
-  const DiaryStorage(this.path);
+  DiaryStorage(this.path);
 
   final String path;
+  DateTime date = DateTime.now();
 
   File get file {
-    DateTime date = DateTime.now();
     String isoDate = date.toIso8601String().substring(0, 10);
     return File('$path/$isoDate.txt');
   }
@@ -26,6 +26,10 @@ class DiaryStorage {
 
   Future<File> writeFile(String counter) async {
     return file.writeAsString(counter);
+  }
+
+  void recalculateDate() {
+    date = DateTime.now();
   }
 }
 

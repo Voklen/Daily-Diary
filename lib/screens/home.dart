@@ -67,9 +67,13 @@ class HomePage extends StatelessWidget {
   }
 }
 
+/// The main diary entry editing field, made for editing today's entry
 class EntryEditor extends StatefulWidget {
-  const EntryEditor({Key? key, required this.storage, required this.settings})
-      : super(key: key);
+  const EntryEditor({
+    Key? key,
+    required this.storage,
+    required this.settings,
+  }) : super(key: key);
 
   final DiaryStorage storage;
   final Settings settings;
@@ -103,14 +107,15 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   }
 
   @override
-  didChangeAppLifecycleState(AppLifecycleState state) {
+  didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (exiting) {
       return;
     }
     if (state == AppLifecycleState.paused) {
-      _updateStorage();
+      await _updateStorage();
     }
+    resetIfNewDay();
   }
 
   _loadSettings() {
@@ -161,6 +166,19 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     return true;
   }
 
+  void resetIfNewDay() {
+    DateTime startWriting = widget.storage.date;
+    DateTime now = DateTime.now();
+    if (startWriting.isSameDate(now)) return;
+
+    widget.storage.recalculateDate();
+    widget.storage.readFile().then((value) {
+      setState(() {
+        _textController.text = value;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -186,5 +204,11 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+}
+
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
   }
 }
