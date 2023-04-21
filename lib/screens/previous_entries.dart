@@ -1,3 +1,4 @@
+import 'package:daily_diary/screens/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -24,39 +25,49 @@ class PreviousEntriesScreen extends StatelessWidget {
             datesList.sort((b, a) => a.compareTo(b));
             return ListView.builder(
               itemCount: datesList.length,
-              itemBuilder: (context, index) {
-                DateTime date = datesList[index];
-                String humanDate = DateFormat.yMMMd().format(date);
-                return ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          String filename =
-                              date.toIso8601String().substring(0, 10);
-                          final storage =
-                              PreviousEntryStorage(filename, savePath!);
-                          return ViewOnlyScreen(
-                              title: humanDate, storage: storage);
-                        },
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      humanDate,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                );
-              },
+              itemBuilder: (_, index) => PreviousEntry(
+                date: datesList[index],
+              ),
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class PreviousEntry extends StatelessWidget {
+  const PreviousEntry({super.key, required this.date});
+
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    if (date.isSameDate(DateTime.now())) {
+      return Container();
+    }
+    final String humanDate = DateFormat.yMMMd().format(date);
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              String filename = date.toIso8601String().substring(0, 10);
+              final storage = PreviousEntryStorage(filename, savePath!);
+              return ViewOnlyScreen(title: humanDate, storage: storage);
+            },
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Theme.of(context).colorScheme.background,
+      ),
+      child: SizedBox(
+        width: double.infinity,
+        child: Text(
+          humanDate,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ),
     );
