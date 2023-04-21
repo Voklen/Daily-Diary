@@ -48,9 +48,14 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
             child: FutureBuilder(
               future: widget.storage.readFile(),
               builder: ((context, AsyncSnapshot<String> file) {
-                return Text(
-                  file.data ?? "",
-                  style: TextStyle(fontSize: currentSettings.fontSize),
+                return FractionallySizedBox(
+                  widthFactor: 1.0,
+                  child: SingleChildScrollView(
+                    child: Text(
+                      file.data ?? "",
+                      style: TextStyle(fontSize: currentSettings.fontSize),
+                    ),
+                  ),
                 );
               }),
             ),
