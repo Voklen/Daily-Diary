@@ -1,0 +1,3 @@
+Fixed previous entry not scrolling. Thanks @Shashank3736
+Does not save empty entries
+Removed today's entry from "Previous entries"
