@@ -113,7 +113,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
       return;
     }
     if (state == AppLifecycleState.paused) {
-      await _updateStorage();
+      _updateStorage();
     }
     resetIfNewDay();
   }
@@ -122,9 +122,9 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     App.settingsNotifier.setFontSizeFromFile();
   }
 
-  Future<File> _updateStorage() {
+  void _updateStorage() {
     QuitHandler.disable();
-    return widget.storage.writeFile(_textController.text);
+    widget.storage.writeFile(_textController.text);
   }
 
   _textChanged(_) async {
@@ -132,9 +132,8 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   }
 
   _saveAndQuit() {
-    _updateStorage().then((_) {
-      Navigator.of(context).pop(true);
-    });
+    _updateStorage();
+    Navigator.of(context).pop(true);
   }
 
   SpellCheckConfiguration? _getSpellChecker(Settings currentSettings) {
@@ -161,7 +160,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   Future<bool> saveBeforeExit() async {
     exiting = true;
     if (Platform.isAndroid || Platform.isIOS) {
-      await _updateStorage();
+      _updateStorage();
     }
     return true;
   }

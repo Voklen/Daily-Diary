@@ -11,8 +11,12 @@
 - [ ] git push
 
 - [ ] Release on GitHub
-- [ ] Set GitHub tag and title to version number (with 'v' at the start)
-- [ ] Set GitHub target branch to releases
-- [ ] Copy changelog in to GitHub
-- [ ] Attach binaries to GitHub
+  - [ ] Set GitHub tag and title to version number (with 'v' at the start)
+  - [ ] Set GitHub target branch to releases
+  - [ ] Copy changelog in to GitHub
+  - [ ] Attach binaries to GitHub
+    - [ ] cp build/app/outputs/flutter-apk/app-release.apk daily_diary.apk
+    - [ ] cp -r build/linux/x64/release/bundle/ linux/
+    - [ ] tar -czvf linux.tar.gz linux/
+    - [ ] rm linux/
 - [ ] Publish

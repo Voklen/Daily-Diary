@@ -14,7 +14,7 @@ main() {
   test('Normal', () async {
     final storage = DiaryStorage('test_data/');
     const testText = 'This is a test diary\n a newline here\nwow, another';
-    await storage.writeFile(testText);
+    storage.writeFile(testText);
     String result = await storage.readFile();
 
     expect(result, testText);
@@ -23,7 +23,7 @@ main() {
   test('Unicode', () async {
     final storage = DiaryStorage('test_data/');
     const testText = 'This is a اختبر diary\n a newline here\nа вот еще один';
-    await storage.writeFile(testText);
+    storage.writeFile(testText);
     String result = await storage.readFile();
 
     expect(result, testText);

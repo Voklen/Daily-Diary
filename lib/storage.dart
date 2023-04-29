@@ -24,8 +24,15 @@ class DiaryStorage {
     }
   }
 
-  Future<File> writeFile(String counter) async {
-    return file.writeAsString(counter);
+  void writeFile(String text) {
+    if (text.isNotEmpty) {
+      file.writeAsStringSync(text);
+      return;
+    }
+    if (file.existsSync()) {
+      file.deleteSync();
+      return;
+    }
   }
 
   void recalculateDate() {
