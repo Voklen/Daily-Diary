@@ -16,7 +16,9 @@
   - [ ] Copy changelog in to GitHub
   - [ ] Attach binaries to GitHub
     - [ ] cp build/app/outputs/flutter-apk/app-release.apk daily_diary.apk
-    - [ ] cp -r build/linux/x64/release/bundle/ linux/
-    - [ ] tar -czvf linux.tar.gz linux/
-    - [ ] rm linux/
+    - [ ] cp -r build/linux/x64/release/bundle/ Daily-Diary/
+    - [ ] tar -czvf linux.tar.gz Daily-Diary/
+    - [ ] rm -r Daily-Diary/
 - [ ] Publish
+- [ ] rm linux.tar.gz daily_diary.apk
+- [ ] git checkout main -f
