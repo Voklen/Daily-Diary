@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_storage/shared_storage.dart' as saf;
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/path.dart';
@@ -338,14 +340,16 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 
   @override
   Future<SavePathSetting> newDefault() async {
-    await setSavePath();
+    await resetSavePath();
     return const SavePathSetting();
   }
 
-  Future<void> setSavePath() async {
+  Future<void> resetSavePath() async {
     savePath = await defaultPath;
     final preferences = await SharedPreferences.getInstance();
-    preferences.setString('save_path', await defaultPath);
+    SavePath path = await defaultPath;
+    preferences.setString('save_path', path.path!);
+    preferences.setBool('is_android_scoped', false);
   }
 
   @override
@@ -353,19 +357,58 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 }
 
 class _SavePathSettingState extends State<SavePathSetting> {
-  _selectNewPath() async {
-    // Load SharedPreferences while user is picking a path
-    final preferencesFuture = SharedPreferences.getInstance();
-    final path = await FilePicker.platform.getDirectoryPath();
-    final preferences = await preferencesFuture;
+  void _selectNewPath() async {
+    final path = await _askForPath();
     if (path == null) {
-      // if the user aborted the dialog or if the folder path couldn't be resolved.
+      // The user aborted the dialog or the folder path couldn't be resolved.
       return;
     }
-    preferences.setString('save_path', path);
+
     setState(() {
       savePath = path;
     });
+  }
+
+  Future<SavePath?> _askForPath() async {
+    if (Platform.isAndroid) {
+      return _askForPathAndroid();
+    }
+    // Load SharedPreferences while user is picking a path
+    final preferencesFuture = SharedPreferences.getInstance();
+    String? path = await FilePicker.platform.getDirectoryPath();
+    if (path == null) {
+      return null;
+    }
+
+    final preferences = await preferencesFuture;
+    preferences.setString('save_path', path);
+    preferences.setBool('is_android_scoped', false);
+    return SavePath.normal(path);
+  }
+
+  Future<SavePath?> _askForPathAndroid() async {
+    // Load SharedPreferences while user is picking a path
+    final preferencesFuture = SharedPreferences.getInstance();
+    // Remove previous permissions
+    if (savePath != null && savePath!.uri != null) {
+      final previousPath = savePath!.uri!;
+      saf.releasePersistableUriPermission(previousPath);
+    }
+
+    // Ask user for path and permissions
+    Uri? uri;
+    while (uri == null) {
+      uri = await saf.openDocumentTree();
+    }
+
+    // Only null before Android API 21, but this project is API 21+
+    final asDocumentFile = await uri.toDocumentFile();
+    Map asMap = asDocumentFile!.toMap();
+    String asString = json.encode(asMap);
+    final preferences = await preferencesFuture;
+    preferences.setString('save_path', asString);
+    preferences.setBool('is_android_scoped', true);
+    return SavePath.android(uri);
   }
 
   @override
@@ -382,7 +425,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: TextField(
-            controller: TextEditingController(text: savePath),
+            controller: TextEditingController(text: savePath!.string),
             enabled: false,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
