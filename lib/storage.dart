@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:daily_diary/main.dart';
 import 'package:flutter/material.dart';
+
+import 'package:daily_diary/path.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_storage/saf.dart';

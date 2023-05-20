@@ -345,10 +345,9 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
   }
 
   Future<void> resetSavePath() async {
-    savePath = await defaultPath;
+    savePath = SavePath.normal(await defaultPath);
     final preferences = await SharedPreferences.getInstance();
-    SavePath path = await defaultPath;
-    preferences.setString('save_path', path.path!);
+    preferences.setString('save_path', await defaultPath);
     preferences.setBool('is_android_scoped', false);
   }
 

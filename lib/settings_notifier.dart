@@ -1,6 +1,6 @@
-import 'package:daily_diary/main.dart';
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/path.dart';
 import 'package:daily_diary/storage.dart';
 
 class Settings {

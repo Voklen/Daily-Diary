@@ -14,51 +14,6 @@ bool? startupCheckSpelling;
 SavePath? savePath;
 SavePath? startupSavePath;
 
-class SavePath {
-  // Due to the constructors only one can ever be null at any time
-  const SavePath.normal(String this.path) : uri = null;
-  const SavePath.android(Uri this.uri) : path = null;
-
-  final String? path;
-  final Uri? uri;
-
-  bool get isScopedStorage => path == null;
-
-  String get string => isScopedStorage ? uri!.toString() : path!;
-
-  Future<String> getScopedFile(String filename) async {
-    final file = await getChildFile(filename);
-    final content = await file.getContentAsString();
-    return content!;
-  }
-
-  void writeScopedFile(String filename, String content) async {
-    final file = await getChildFile(filename);
-    file.writeToFileAsString(content: content);
-  }
-
-  Future<bool> scopedExists(String filename) async {
-    final scopedStorageFile = await getChildFile(filename);
-    final exists = await scopedStorageFile.exists();
-    return exists!;
-  }
-
-  void deleteScoped(String filename) async {
-    final file = await getChildFile(filename);
-    file.delete();
-  }
-
-  Future<DocumentFile> getChildFile(String filename) async {
-    final file = await findFile(uri!, filename);
-    if (file != null) {
-      return file;
-    }
-    DocumentFile? createdFile =
-        await createFile(uri!, mimeType: 'text/plain', displayName: filename);
-    return createdFile!;
-  }
-}
-
 main() async {
   savePath = await getPath();
   startupSavePath = savePath;
