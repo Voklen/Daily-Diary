@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 
 main() {
@@ -13,7 +14,7 @@ main() {
   });
 
   test('Normal', () async {
-    final storage = SettingsStorage(testDirectory.path);
+    final storage = SettingsStorage(SavePath.normal(testDirectory.path));
 
     await storage.setTheme(ThemeMode.dark);
     await storage.setFontSize(42);

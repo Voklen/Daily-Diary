@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/storage.dart';
 
 main() {
@@ -12,7 +13,7 @@ main() {
   });
 
   test('Normal', () async {
-    final storage = DiaryStorage('test_data/');
+    final storage = DiaryStorage(const SavePath.normal('test_data/'));
     const testText = 'This is a test diary\n a newline here\nwow, another';
     storage.writeFile(testText);
     String result = await storage.readFile();
@@ -21,7 +22,7 @@ main() {
   });
 
   test('Unicode', () async {
-    final storage = DiaryStorage('test_data/');
+    final storage = DiaryStorage(const SavePath.normal('test_data/'));
     const testText = 'This is a اختبر diary\n a newline here\nа вот еще один';
     storage.writeFile(testText);
     String result = await storage.readFile();

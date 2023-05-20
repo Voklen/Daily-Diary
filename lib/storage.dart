@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_storage/saf.dart';
-import 'package:shared_storage/shared_storage.dart' as saf;
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
@@ -17,7 +16,7 @@ class DiaryStorage {
   String get isoDate => date.toIso8601String().substring(0, 10);
 
   File get file {
-    return File('$path/$isoDate.txt');
+    return File('${path.path}/$isoDate.txt');
   }
 
   Future<String> readFile() async {
