@@ -229,9 +229,9 @@ class PreviousEntryStorage {
   Future<String> readFile() async {
     try {
       if (path.isScopedStorage) {
-        return await _readFileAndroid(path.uri!);
+        return await _readFileAndroid();
       }
-      final file = File('$path/$filename.txt');
+      final file = File('$path/$filename');
       final contents = await file.readAsString();
       return contents;
     } catch (error) {
@@ -239,9 +239,9 @@ class PreviousEntryStorage {
     }
   }
 
-  Future<String> _readFileAndroid(Uri uri) async {
-    DocumentFile? child = await findFile(uri, filename);
-    String? contents = await child!.getContentAsString();
+  Future<String> _readFileAndroid() async {
+    DocumentFile? child = await path.getChildFile(filename);
+    String? contents = await child.getContentAsString();
     return contents!;
   }
 }

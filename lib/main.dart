@@ -51,6 +51,7 @@ class SavePath {
   Future<DocumentFile> getChildFile(String filename) async {
     final file = await findFile(uri!, filename);
     if (file != null) {
+      print(await file.getContentAsString());
       return file;
     }
     DocumentFile? createdFile =
