@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/main.dart';
+
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_storage/saf.dart';
 
 class SavePath {
@@ -53,7 +54,7 @@ class SavePath {
 
 Future<SavePath> getPath() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final preferences = await SharedPreferences.getInstance();
+  final preferences = await App.preferences;
   String? path = preferences.getString('save_path');
   bool? isAndroidScoped = preferences.getBool('is_android_scoped');
   if (path != null) {
@@ -63,14 +64,26 @@ Future<SavePath> getPath() async {
     }
     return SavePath.normal(path);
   } else {
-    String path = await defaultPath;
-    preferences.setString('save_path', path);
-    preferences.setBool('is_android_scoped', false);
-    return SavePath.normal(path);
+    return resetPathToDefault();
   }
 }
 
-Future<String> get defaultPath async {
+/// Resets the savePath to default in `SharedPreferences` and returns the
+/// `SavePath` it was set to. It does NOT set the global `savePath`.
+///
+/// To set `savePath` do:
+/// ```
+/// savePath = await resetPathToDefault();
+/// ```
+Future<SavePath> resetPathToDefault() async {
+  final preferences = await App.preferences;
+  String path = await _defaultPath;
+  preferences.setString('save_path', path);
+  preferences.setBool('is_android_scoped', false);
+  return SavePath.normal(path);
+}
+
+Future<String> get _defaultPath async {
   final directory = await _directory;
   return directory.path;
 }

@@ -2,13 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_storage/shared_storage.dart' as saf;
-
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/path.dart';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:shared_storage/shared_storage.dart' as saf;
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -340,15 +339,8 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 
   @override
   Future<SavePathSetting> newDefault() async {
-    await resetSavePath();
+    savePath = await resetPathToDefault();
     return const SavePathSetting();
-  }
-
-  Future<void> resetSavePath() async {
-    savePath = SavePath.normal(await defaultPath);
-    final preferences = await SharedPreferences.getInstance();
-    preferences.setString('save_path', await defaultPath);
-    preferences.setBool('is_android_scoped', false);
   }
 
   @override
@@ -372,27 +364,19 @@ class _SavePathSettingState extends State<SavePathSetting> {
     if (Platform.isAndroid) {
       return _askForPathAndroid();
     }
-    // Load SharedPreferences while user is picking a path
-    final preferencesFuture = SharedPreferences.getInstance();
     String? path = await FilePicker.platform.getDirectoryPath();
     if (path == null) {
       return null;
     }
 
-    final preferences = await preferencesFuture;
+    final preferences = await App.preferences;
     preferences.setString('save_path', path);
     preferences.setBool('is_android_scoped', false);
     return SavePath.normal(path);
   }
 
   Future<SavePath?> _askForPathAndroid() async {
-    // Load SharedPreferences while user is picking a path
-    final preferencesFuture = SharedPreferences.getInstance();
-    // Remove previous permissions
-    if (savePath != null && savePath!.uri != null) {
-      final previousPath = savePath!.uri!;
-      saf.releasePersistableUriPermission(previousPath);
-    }
+    _removePreviousPermissions();
 
     // Ask user for path and permissions
     Uri? uri;
@@ -404,10 +388,20 @@ class _SavePathSettingState extends State<SavePathSetting> {
     final asDocumentFile = await uri.toDocumentFile();
     Map asMap = asDocumentFile!.toMap();
     String asString = json.encode(asMap);
-    final preferences = await preferencesFuture;
+    final preferences = await App.preferences;
     preferences.setString('save_path', asString);
     preferences.setBool('is_android_scoped', true);
     return SavePath.android(uri);
+  }
+
+  Future<void> _removePreviousPermissions() async {
+    SavePath? path = savePath;
+    if (path == null) return;
+
+    Uri? previousPath = path.uri;
+    if (previousPath == null) return;
+
+    await saf.releasePersistableUriPermission(previousPath);
   }
 
   @override
