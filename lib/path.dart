@@ -17,7 +17,14 @@ class SavePath {
 
   bool get isScopedStorage => path == null;
 
-  String get string => isScopedStorage ? uri!.toString() : path!;
+  String get string {
+    if (isScopedStorage) {
+      String fullString = Uri.decodeFull(uri!.path);
+      return fullString.split(':').last;
+    } else {
+      return path!.replaceFirst('/storage/emulated/0/', '');
+    }
+  }
 
   Future<String> getScopedFile(String filename) async {
     final file = await getChildFile(filename);

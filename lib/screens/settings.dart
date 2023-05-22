@@ -409,12 +409,10 @@ class _SavePathSettingState extends State<SavePathSetting> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Visibility(
-            visible: Platform.isAndroid,
-            child: Text(
-              'Changing this setting will only work properly if the device is rooted:',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            )),
+        Text(
+          'Save Location:',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: TextField(
