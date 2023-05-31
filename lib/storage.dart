@@ -231,7 +231,7 @@ class PreviousEntryStorage {
       if (path.isScopedStorage) {
         return await _readFileAndroid();
       }
-      final file = File('$path/$filename');
+      final file = File('${path.path}/$filename');
       final contents = await file.readAsString();
       return contents;
     } catch (error) {
