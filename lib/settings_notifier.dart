@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/path.dart';
 import 'package:daily_diary/storage.dart';
 
 class Settings {
@@ -10,7 +11,7 @@ class Settings {
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
-  SettingsNotifier(String savePath)
+  SettingsNotifier(SavePath savePath)
       : storage = SettingsStorage(savePath),
         super(Settings());
 

@@ -6,11 +6,13 @@ import 'package:daily_diary/storage.dart';
 import 'package:daily_diary/themes.dart';
 import 'package:daily_diary/screens/home.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 // This will be removed when widgets can react to spell check changes
 bool? startupCheckSpelling;
 
-String? savePath;
-String? startupSavePath;
+SavePath? savePath;
+SavePath? startupSavePath;
 
 main() async {
   savePath = await getPath();
@@ -29,7 +31,8 @@ main() async {
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
 
-  static final SettingsNotifier settingsNotifier = SettingsNotifier(savePath!);
+  static final settingsNotifier = SettingsNotifier(savePath!);
+  static final preferences = SharedPreferences.getInstance();
 
   @override
   Widget build(BuildContext context) {

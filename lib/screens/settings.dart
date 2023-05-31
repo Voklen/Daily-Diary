@@ -1,12 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/path.dart';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:shared_storage/shared_storage.dart' as saf;
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -338,14 +339,8 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 
   @override
   Future<SavePathSetting> newDefault() async {
-    await setSavePath();
+    savePath = await resetPathToDefault();
     return const SavePathSetting();
-  }
-
-  Future<void> setSavePath() async {
-    savePath = await defaultPath;
-    final preferences = await SharedPreferences.getInstance();
-    preferences.setString('save_path', await defaultPath);
   }
 
   @override
@@ -353,19 +348,60 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 }
 
 class _SavePathSettingState extends State<SavePathSetting> {
-  _selectNewPath() async {
-    // Load SharedPreferences while user is picking a path
-    final preferencesFuture = SharedPreferences.getInstance();
-    final path = await FilePicker.platform.getDirectoryPath();
-    final preferences = await preferencesFuture;
+  void _selectNewPath() async {
+    final path = await _askForPath();
     if (path == null) {
-      // if the user aborted the dialog or if the folder path couldn't be resolved.
+      // The user aborted the dialog or the folder path couldn't be resolved.
       return;
     }
-    preferences.setString('save_path', path);
+
     setState(() {
       savePath = path;
     });
+  }
+
+  Future<SavePath?> _askForPath() async {
+    if (Platform.isAndroid) {
+      return _askForPathAndroid();
+    }
+    String? path = await FilePicker.platform.getDirectoryPath();
+    if (path == null) {
+      return null;
+    }
+
+    final preferences = await App.preferences;
+    preferences.setString('save_path', path);
+    preferences.setBool('is_android_scoped', false);
+    return SavePath.normal(path);
+  }
+
+  Future<SavePath?> _askForPathAndroid() async {
+    _removePreviousPermissions();
+
+    // Ask user for path and permissions
+    Uri? uri;
+    while (uri == null) {
+      uri = await saf.openDocumentTree();
+    }
+
+    // Only null before Android API 21, but this project is API 21+
+    final asDocumentFile = await uri.toDocumentFile();
+    Map asMap = asDocumentFile!.toMap();
+    String asString = json.encode(asMap);
+    final preferences = await App.preferences;
+    preferences.setString('save_path', asString);
+    preferences.setBool('is_android_scoped', true);
+    return SavePath.android(uri);
+  }
+
+  Future<void> _removePreviousPermissions() async {
+    SavePath? path = savePath;
+    if (path == null) return;
+
+    Uri? previousPath = path.uri;
+    if (previousPath == null) return;
+
+    await saf.releasePersistableUriPermission(previousPath);
   }
 
   @override
@@ -373,16 +409,14 @@ class _SavePathSettingState extends State<SavePathSetting> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Visibility(
-            visible: Platform.isAndroid,
-            child: Text(
-              'Changing this setting will only work properly if the device is rooted:',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            )),
+        Text(
+          'Save Location:',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: TextField(
-            controller: TextEditingController(text: savePath),
+            controller: TextEditingController(text: savePath!.string),
             enabled: false,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
