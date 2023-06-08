@@ -1,10 +1,7 @@
 # Daily Diary
 
-
-<img src="https://img.shields.io/f-droid/v/com.voklen.daily_diary.svg?logo=F-Droid"
-     alt="F-droid version">
-<img src="https://img.shields.io/github/v/release/Voklen/daily-diary.svg?logo=github"
-     alt="Github version">
+[![Github version](https://img.shields.io/github/v/release/Voklen/daily-diary.svg?logo=github)](https://github.com/Voklen/Daily-Diary/releases/latest)
+[![F-droid version](https://img.shields.io/f-droid/v/com.voklen.daily_diary.svg?logo=F-Droid)](https://f-droid.org/packages/com.voklen.daily_diary/)
 
 Jot down whatever you want throughout the day and the app will reset the next morning. All previous days are stored in plaintext files which can be exported and moved to a different device.
 
