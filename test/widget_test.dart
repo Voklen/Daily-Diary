@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/path.dart';
+import 'package:daily_diary/settings_widgets.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 main() {
@@ -73,7 +74,7 @@ main() {
     expect(App.settingsNotifier.value.checkSpelling, true);
   });
 
-  testWidgets('Setting reset display', (WidgetTester tester) async {
+  testWidgets('Settings reset button display', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: SettingsScreen(),
@@ -83,5 +84,11 @@ main() {
     await tester.tap(find.text('Select settings to reset'));
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.restore), findsWidgets);
+    expect(find.text('Select settings to reset'), findsNothing);
+
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.text('Select settings to reset'), findsOneWidget);
+    expect(find.text('Cancel'), findsNothing);
   });
 }
