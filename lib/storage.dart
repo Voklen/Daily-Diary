@@ -152,6 +152,15 @@ class SettingsStorage {
     await _writeToFile('check_spelling', checkSpelling);
   }
 
+  Future<String?> getDateFormat() async {
+    final dateFormat = await _getFromFile('date_format');
+    return dateFormat is String ? dateFormat : null;
+  }
+
+  Future<void> setDateFormat(String dateFormat) async {
+    await _writeToFile('date_format', dateFormat);
+  }
+
   Future<void> _writeToFile(key, value) async {
     var map = await settingsMap;
     map[key] = value;

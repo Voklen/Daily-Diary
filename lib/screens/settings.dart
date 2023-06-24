@@ -17,6 +17,7 @@ class SettingsScreen extends StatelessWidget {
             FontSetting(),
             SpellCheckToggle(),
             ColorSetting(),
+            DateFormatSetting(),
             SavePathSetting(),
           ],
         ),

@@ -8,6 +8,7 @@ class Settings {
   double fontSize = 16;
   Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
   bool checkSpelling = true;
+  String dateFormat = '%Y-%M-%D.txt';
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
@@ -33,6 +34,10 @@ class SettingsNotifier extends ValueNotifier<Settings> {
     await setCheckSpelling(await storage.getCheckSpelling());
   }
 
+  Future<void> setDateFormatFromFile() async {
+    await setDateFormat(await storage.getDateFormat());
+  }
+
   Future<void> setThemeToDefault() async {
     await setTheme(Settings().theme);
   }
@@ -47,6 +52,10 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   Future<void> setCheckSpellingToDefault() async {
     await setCheckSpelling(Settings().checkSpelling);
+  }
+
+  Future<void> setDateFormatToDefault() async {
+    await setDateFormat(Settings().dateFormat);
   }
 
   Future<void> setTheme(ThemeMode? theme) async {
@@ -82,6 +91,15 @@ class SettingsNotifier extends ValueNotifier<Settings> {
     }
     value.checkSpelling = checkSpelling;
     await storage.setCheckSpelling(checkSpelling);
+    notifyListeners();
+  }
+
+  Future<void> setDateFormat(String? dateFormat) async {
+    if (dateFormat == null) {
+      return Future(() => null);
+    }
+    value.dateFormat = dateFormat;
+    await storage.setDateFormat(dateFormat);
     notifyListeners();
   }
 }

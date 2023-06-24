@@ -223,6 +223,46 @@ class ColorSetting extends StatelessWidget implements SettingTile {
   }
 }
 
+class DateFormatSetting extends StatefulWidget implements SettingTile {
+  const DateFormatSetting({super.key});
+
+  @override
+  State<DateFormatSetting> createState() => _DateFormatSettingState();
+
+  @override
+  Future<DateFormatSetting> newDefault() async {
+    await App.settingsNotifier.setDateFormatToDefault();
+    return DateFormatSetting(
+      key: UniqueKey(),
+    );
+  }
+}
+
+class _DateFormatSettingState extends State<DateFormatSetting> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Date format:',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: TextField(
+            controller: TextEditingController(
+              text: App.settingsNotifier.value.dateFormat,
+            ),
+            enabled: true,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class SavePathSetting extends StatefulWidget implements SettingTile {
   const SavePathSetting({super.key});
 
