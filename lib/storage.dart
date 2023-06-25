@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/path.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -14,16 +15,29 @@ class DiaryStorage {
   final SavePath path;
   DateTime date = DateTime.now();
 
-  String get isoDate => date.toIso8601String().substring(0, 10);
+  String get filename => dateToFilename(date);
+
+  static String dateToFilename(DateTime date) {
+    String filename = App.settingsNotifier.value.dateFormat;
+    filename = filename.replaceAll('%Y', _twoDigits(date.year));
+    filename = filename.replaceAll('%M', _twoDigits(date.month));
+    filename = filename.replaceAll('%D', _twoDigits(date.day));
+    return filename;
+  }
+
+  static String _twoDigits(int n) {
+    if (n >= 10) return "$n";
+    return "0$n";
+  }
 
   File get file {
-    return File('${path.path}/$isoDate.txt');
+    return File('${path.path}/$filename');
   }
 
   Future<String> readFile() async {
     try {
       if (path.isScopedStorage) {
-        return path.getScopedFile('$isoDate.txt');
+        return path.getScopedFile(filename);
       }
       return await file.readAsString();
     } catch (error) {
@@ -34,11 +48,11 @@ class DiaryStorage {
   void writeFile(String text) async {
     if (path.isScopedStorage) {
       if (text.isNotEmpty) {
-        path.writeScopedFile('$isoDate.txt', text);
+        path.writeScopedFile(filename, text);
         return;
       }
-      if (await path.scopedExists('$isoDate.txt')) {
-        path.deleteScoped('$isoDate.txt');
+      if (await path.scopedExists(filename)) {
+        path.deleteScoped(filename);
         return;
       }
       return;
@@ -218,14 +232,27 @@ class PreviousEntriesStorage {
 
   DateTime? toFilename(String path) {
     int filenameStart = path.lastIndexOf('/') + 1;
-    int filenameEnd = path.length - 4;
-    String isoDate = path.substring(filenameStart, filenameEnd);
+    String isoDate = path.substring(filenameStart);
     try {
-      return DateTime.parse(isoDate);
+      return parseFilename(isoDate);
     } on FormatException {
       // Empty strings will be filtered after this map
       return null;
     }
+  }
+
+  DateTime? parseFilename(String filename) {
+    final RegExp regex = RegExp(r'(\d+)-(\d+)-(\d+).txt');
+
+    // Find all matches of the pattern in the expression
+    final RegExpMatch? matches = regex.firstMatch(filename);
+    if (matches == null) return null;
+
+    // The groups cannot be null because the regex has 3 groups and so all must exist
+    int year = int.parse(matches.group(1)!);
+    int month = int.parse(matches.group(2)!);
+    int day = int.parse(matches.group(3)!);
+    return DateTime(year, month, day);
   }
 }
 

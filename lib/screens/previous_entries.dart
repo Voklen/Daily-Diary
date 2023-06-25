@@ -53,8 +53,7 @@ class PreviousEntry extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              String isoDate = date.toIso8601String().substring(0, 10);
-              String filename = '$isoDate.txt';
+              String filename = DiaryStorage.dateToFilename(date);
               final storage = PreviousEntryStorage(filename, savePath!);
               return ViewOnlyScreen(title: humanDate, storage: storage);
             },
