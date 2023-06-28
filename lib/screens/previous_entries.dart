@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
 
@@ -53,7 +54,7 @@ class PreviousEntry extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              String filename = DiaryStorage.dateToFilename(date);
+              String filename = Filename.dateToFilename(date);
               final storage = PreviousEntryStorage(filename, savePath!);
               return ViewOnlyScreen(title: humanDate, storage: storage);
             },

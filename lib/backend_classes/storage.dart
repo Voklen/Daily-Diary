@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -15,20 +15,7 @@ class DiaryStorage {
   final SavePath path;
   DateTime date = DateTime.now();
 
-  String get filename => dateToFilename(date);
-
-  static String dateToFilename(DateTime date) {
-    String filename = App.settingsNotifier.value.dateFormat;
-    filename = filename.replaceAll('%Y', _twoDigits(date.year));
-    filename = filename.replaceAll('%M', _twoDigits(date.month));
-    filename = filename.replaceAll('%D', _twoDigits(date.day));
-    return filename;
-  }
-
-  static String _twoDigits(int n) {
-    if (n >= 10) return "$n";
-    return "0$n";
-  }
+  String get filename => Filename.dateToFilename(date);
 
   File get file {
     return File('${path.path}/$filename');
@@ -232,27 +219,13 @@ class PreviousEntriesStorage {
 
   DateTime? toFilename(String path) {
     int filenameStart = path.lastIndexOf('/') + 1;
-    String isoDate = path.substring(filenameStart);
+    String filename = path.substring(filenameStart);
     try {
-      return parseFilename(isoDate);
+      return Filename.filenameToDate(filename);
     } on FormatException {
       // Empty strings will be filtered after this map
       return null;
     }
-  }
-
-  DateTime? parseFilename(String filename) {
-    final RegExp regex = RegExp(r'(\d+)-(\d+)-(\d+).txt');
-
-    // Find all matches of the pattern in the expression
-    final RegExpMatch? matches = regex.firstMatch(filename);
-    if (matches == null) return null;
-
-    // The groups cannot be null because the regex has 3 groups and so all must exist
-    int year = int.parse(matches.group(1)!);
-    int month = int.parse(matches.group(2)!);
-    int day = int.parse(matches.group(3)!);
-    return DateTime(year, month, day);
   }
 }
 
