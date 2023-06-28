@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/settings_notifier.dart';
-import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 class ViewOnlyScreen extends StatefulWidget {

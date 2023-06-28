@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:daily_diary/path.dart';
+import 'package:daily_diary/backend_classes/path.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
 
 main() {
   Directory testDirectory = Directory('test_data/diary_storage_test/');

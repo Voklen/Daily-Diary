@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/path.dart';
+import 'package:daily_diary/backend_classes/path.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_storage/saf.dart';

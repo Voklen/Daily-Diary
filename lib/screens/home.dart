@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/settings_notifier.dart';
-import 'package:daily_diary/storage.dart';
-import 'package:daily_diary/quit_handler.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
+import 'package:daily_diary/widgets/quit_handler.dart';
 import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
 

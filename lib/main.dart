@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/path.dart';
-import 'package:daily_diary/settings_notifier.dart';
-import 'package:daily_diary/storage.dart';
-import 'package:daily_diary/themes.dart';
+import 'package:daily_diary/backend_classes/path.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
+import 'package:daily_diary/widgets/themes.dart';
 import 'package:daily_diary/screens/home.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
