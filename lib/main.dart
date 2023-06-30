@@ -15,19 +15,23 @@ SavePath? savePath;
 SavePath? startupSavePath;
 
 main() async {
+  await loadSettings();
+  runApp(const App());
+}
+
+Future<void> loadSettings() async {
   savePath = await getPath();
   startupSavePath = savePath;
+  // Date format must be set so on first load it reads the correct filename
+  App.settingsNotifier.setDateFormatFromFile();
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page
   App.settingsNotifier.setColorSchemeFromFile();
   App.settingsNotifier.setThemeFromFile();
-  // This must be set so on first load it reads the correct filename
-  App.settingsNotifier.setDateFormatFromFile();
   // This will be moved to _loadSettings when spellCheckHasChanged is removed
   await App.settingsNotifier.setCheckSpellingFromFile();
   startupCheckSpelling = App.settingsNotifier.value.checkSpelling;
-  runApp(const App());
 }
 
 class App extends StatelessWidget {

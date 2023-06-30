@@ -87,7 +87,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   Future<void> setCheckSpelling(bool? checkSpelling) async {
     if (checkSpelling == null) {
-      return Future(() => null);
+      return;
     }
     value.checkSpelling = checkSpelling;
     await storage.setCheckSpelling(checkSpelling);
@@ -96,7 +96,7 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   Future<void> setDateFormat(String? dateFormat) async {
     if (dateFormat == null) {
-      return Future(() => null);
+      return;
     }
     value.dateFormat = dateFormat;
     await storage.setDateFormat(dateFormat);
