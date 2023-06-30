@@ -22,6 +22,8 @@ main() async {
   // Other settings are loaded it the initState of the home page
   App.settingsNotifier.setColorSchemeFromFile();
   App.settingsNotifier.setThemeFromFile();
+  // This must be set so on first load it reads the correct filename
+  App.settingsNotifier.setDateFormatFromFile();
   // This will be moved to _loadSettings when spellCheckHasChanged is removed
   await App.settingsNotifier.setCheckSpellingFromFile();
   startupCheckSpelling = App.settingsNotifier.value.checkSpelling;

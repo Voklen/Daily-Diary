@@ -54,7 +54,7 @@ class SavePath {
       return file;
     }
     DocumentFile? createdFile =
-        await createFile(uri!, mimeType: 'text/plain', displayName: filename);
+        await createFile(uri!, mimeType: '', displayName: filename);
     return createdFile!;
   }
 }

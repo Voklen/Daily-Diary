@@ -154,7 +154,7 @@ class FontSetting extends StatelessWidget implements SettingTile {
     text: App.settingsNotifier.value.fontSize.toString(),
   );
 
-  _setFontSize(String fontSizeString) {
+  void _setFontSize(String fontSizeString) {
     try {
       final fontSize = double.parse(fontSizeString);
       App.settingsNotifier.setFontSize(fontSize);
@@ -223,11 +223,8 @@ class ColorSetting extends StatelessWidget implements SettingTile {
   }
 }
 
-class DateFormatSetting extends StatefulWidget implements SettingTile {
+class DateFormatSetting extends StatelessWidget implements SettingTile {
   const DateFormatSetting({super.key});
-
-  @override
-  State<DateFormatSetting> createState() => _DateFormatSettingState();
 
   @override
   Future<DateFormatSetting> newDefault() async {
@@ -236,9 +233,17 @@ class DateFormatSetting extends StatefulWidget implements SettingTile {
       key: UniqueKey(),
     );
   }
-}
 
-class _DateFormatSettingState extends State<DateFormatSetting> {
+  static final _dateFormatController = TextEditingController(
+    text: App.settingsNotifier.value.dateFormat,
+  );
+
+  void _setDateFormat() {
+    //TODO add verification
+    final dateFormat = _dateFormatController.text;
+    App.settingsNotifier.setDateFormat(dateFormat);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -251,11 +256,8 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: TextField(
-            controller: TextEditingController(
-              text: App.settingsNotifier.value.dateFormat,
-            ),
-            enabled: true,
-            style: Theme.of(context).textTheme.bodyMedium,
+            controller: _dateFormatController,
+            onEditingComplete: _setDateFormat,
           ),
         ),
       ],
