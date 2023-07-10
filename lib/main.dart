@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool? startupCheckSpelling;
 
 SavePath? savePath;
-SavePath? startupSavePath;
+SavePath? newSavePath;
 
 main() async {
   await loadSettings();
@@ -21,7 +21,7 @@ main() async {
 
 Future<void> loadSettings() async {
   savePath = await getPath();
-  startupSavePath = savePath;
+  newSavePath = savePath;
   // Date format must be set so on first load it reads the correct filename
   App.settingsNotifier.setDateFormatFromFile();
   // Color and theme are loaded before the app starts

@@ -270,7 +270,7 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 
   @override
   Future<SavePathSetting> newDefault() async {
-    savePath = await resetPathToDefault();
+    newSavePath = await resetPathToDefault();
     return const SavePathSetting();
   }
 
@@ -287,7 +287,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
     }
 
     setState(() {
-      savePath = path;
+      newSavePath = path;
     });
   }
 
@@ -347,7 +347,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: TextField(
-            controller: TextEditingController(text: savePath!.string),
+            controller: TextEditingController(text: newSavePath!.string),
             enabled: false,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
@@ -360,7 +360,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
           ),
         ),
         Visibility(
-          visible: savePath != startupSavePath,
+          visible: savePath!.string != newSavePath!.string,
           child: const Text(
             'Restart app for changes to take effect',
             style: TextStyle(color: alertColor),
