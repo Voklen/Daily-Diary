@@ -185,28 +185,34 @@ class PreviousEntriesStorage {
   final SavePath path;
 
   Future<List<DateTime>> getFiles() async {
+    Stream<DateTime> datesStream;
     if (path.isScopedStorage) {
-      return _getFilesScopedStorage(path.uri!);
+      datesStream = await _getFilesScopedStorage();
+    } else {
+      datesStream = _getFilesNormal();
     }
+    List<DateTime> datesList = await datesStream.toList();
+    datesList.sort((b, a) => a.compareTo(b));
+    return datesList;
+  }
 
+  Stream<DateTime> _getFilesNormal() {
     final directory = Directory(path.path!);
     final files = directory.list();
     final filesAsDateTime = files.map(toFilenameFromFileEntity);
-    final filesWithoutNull =
-        filesAsDateTime.where((s) => s != null).cast<DateTime>();
-    final list = await filesWithoutNull.toList();
-    return list.reversed.toList();
+    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
+    return filesWithoutNull.cast<DateTime>();
   }
 
-  Future<List<DateTime>> _getFilesScopedStorage(Uri uri) async {
+  Future<Stream<DateTime>> _getFilesScopedStorage() async {
+    Uri uri = path.uri!;
     if (await canRead(uri) == true) {
       //TODO handle lack of permissions
     }
     final files = listFiles(uri, columns: [DocumentFileColumn.displayName]);
     final filesAsDateTime = files.map(toFilenameFromDocumentFile);
-    final filesWithoutNull =
-        filesAsDateTime.where((s) => s != null).cast<DateTime>();
-    return filesWithoutNull.toList();
+    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
+    return filesWithoutNull.cast<DateTime>();
   }
 
   DateTime? toFilenameFromFileEntity(FileSystemEntity file) {
