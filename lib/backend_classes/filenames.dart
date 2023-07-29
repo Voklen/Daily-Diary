@@ -1,8 +1,8 @@
 import 'package:daily_diary/main.dart';
 
 class Filename {
-  static String dateToFilename(DateTime date) {
-    String filename = App.settingsNotifier.value.dateFormat;
+  static String dateToFilename(DateTime date, {String? dateFormat}) {
+    String filename = dateFormat ?? App.settingsNotifier.value.dateFormat;
     filename = filename.replaceAll('%Y', _twoDigits(date.year));
     filename = filename.replaceAll('%M', _twoDigits(date.month));
     filename = filename.replaceAll('%D', _twoDigits(date.day));
