@@ -279,14 +279,14 @@ class RenameFiles {
     if (path.isScopedStorage) {
       await _getFilesScopedStorage();
     } else {
-      _getFilesNormal();
+      await _getFilesNormal();
     }
   }
 
-  void _getFilesNormal() {
+  Future<void> _getFilesNormal() async {
     final directory = Directory(path.path!);
     final files = directory.list();
-    files.forEach(renameFileEntity);
+    await files.forEach(renameFileEntity);
   }
 
   Future<void> _getFilesScopedStorage() async {
@@ -296,7 +296,7 @@ class RenameFiles {
     }
     final files =
         saf.listFiles(uri, columns: [saf.DocumentFileColumn.displayName]);
-    await files.map(renameDocumentFile).toList();
+    await files.forEach(renameDocumentFile);
   }
 
   void renameFileEntity(FileSystemEntity file) {
