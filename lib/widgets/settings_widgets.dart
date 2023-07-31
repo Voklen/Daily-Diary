@@ -240,11 +240,35 @@ class DateFormatSetting extends StatelessWidget implements SettingTile {
   );
 
   void _setDateFormat() async {
-    //TODO add verification
     final newDateFormat = _dateFormatController.text;
+    if (_validator(newDateFormat) != null) return;
+
     final renameFiles = RenameFiles(newDateFormat);
     await renameFiles.rewriteExistingFiles();
     App.settingsNotifier.setDateFormat(newDateFormat);
+  }
+
+  /// Returns null if okay, otherwise returns a string with a description of the error
+  String? _validator(value) {
+    if (value == null) {
+      return 'Cannot be empty';
+    }
+    const invalidChars = ['/', '<', '>', ':', '"', '\\', '|', '?', '*'];
+    for (int i = 0; i < invalidChars.length; i++) {
+      if (value.contains(invalidChars[i])) {
+        return 'Invalid character: ${invalidChars[i]}';
+      }
+    }
+    const requiredStrings = ['%Y', '%M', '%D'];
+    for (int i = 0; i < requiredStrings.length; i++) {
+      if (!value.contains(requiredStrings[i])) {
+        return 'Must contain: ${requiredStrings[i]}';
+      }
+    }
+    if (value[value.length - 1] == ' ' || value[value.length - 1] == '.') {
+      return 'Cannot end in a space or a dot';
+    }
+    return null;
   }
 
   @override
@@ -258,7 +282,9 @@ class DateFormatSetting extends StatelessWidget implements SettingTile {
         ),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
-          child: TextField(
+          child: TextFormField(
+            autovalidateMode: AutovalidateMode.always,
+            validator: _validator,
             controller: _dateFormatController,
             onEditingComplete: _setDateFormat,
           ),
