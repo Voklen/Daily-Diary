@@ -8,6 +8,8 @@ import 'package:daily_diary/screens/settings.dart';
 
 main() {
   savePath = const SavePath.normal('');
+  newSavePath = savePath;
+
   testWidgets('Navigation', (WidgetTester tester) async {
     await tester.pumpWidget(const App());
 
