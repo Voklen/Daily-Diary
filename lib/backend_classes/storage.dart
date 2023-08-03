@@ -6,7 +6,7 @@ import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:shared_storage/saf.dart';
+import 'package:shared_storage/shared_storage.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
