@@ -224,7 +224,7 @@ class ColorSetting extends StatelessWidget implements SettingTile {
   }
 }
 
-class DateFormatSetting extends StatelessWidget implements SettingTile {
+class DateFormatSetting extends StatefulWidget implements SettingTile {
   const DateFormatSetting({super.key});
 
   @override
@@ -239,13 +239,21 @@ class DateFormatSetting extends StatelessWidget implements SettingTile {
     text: App.settingsNotifier.value.dateFormat,
   );
 
+  @override
+  State<DateFormatSetting> createState() => _DateFormatSettingState();
+}
+
+class _DateFormatSettingState extends State<DateFormatSetting> {
+  bool _askToPressEnter = false;
+
   void _setDateFormat() async {
-    final newDateFormat = _dateFormatController.text;
+    final newDateFormat = DateFormatSetting._dateFormatController.text;
     if (_validator(newDateFormat) != null) return;
 
     final renameFiles = RenameFiles(newDateFormat);
     await renameFiles.rewriteExistingFiles();
     App.settingsNotifier.setDateFormat(newDateFormat);
+    _checkIfAskToPressEnter(newDateFormat);
   }
 
   /// Returns null if okay, otherwise returns a string with a description of the error
@@ -271,13 +279,25 @@ class DateFormatSetting extends StatelessWidget implements SettingTile {
     return null;
   }
 
+  void _checkIfAskToPressEnter(String value) {
+    if (value == App.settingsNotifier.value.dateFormat) {
+      setState(() {
+        _askToPressEnter = false;
+      });
+    } else {
+      setState(() {
+        _askToPressEnter = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Date format:',
+          'File name format:',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         ConstrainedBox(
@@ -285,8 +305,13 @@ class DateFormatSetting extends StatelessWidget implements SettingTile {
           child: TextFormField(
             autovalidateMode: AutovalidateMode.always,
             validator: _validator,
-            controller: _dateFormatController,
+            onChanged: _checkIfAskToPressEnter,
+            controller: DateFormatSetting._dateFormatController,
             onEditingComplete: _setDateFormat,
+            decoration: InputDecoration(
+              helperText: _askToPressEnter ? 'Press enter to save' : null,
+              helperStyle: const TextStyle(color: Colors.green),
+            ),
           ),
         ),
       ],
