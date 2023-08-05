@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/path.dart';
-import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/backend_classes/path.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
 
 class Settings {
   ThemeMode theme = ThemeMode.system;
   double fontSize = 16;
   Color colorScheme = const Color.fromARGB(255, 152, 85, 211);
   bool checkSpelling = true;
+  String dateFormat = '%Y-%M-%D.txt';
 }
 
 class SettingsNotifier extends ValueNotifier<Settings> {
@@ -33,6 +34,10 @@ class SettingsNotifier extends ValueNotifier<Settings> {
     await setCheckSpelling(await storage.getCheckSpelling());
   }
 
+  Future<void> setDateFormatFromFile() async {
+    await setDateFormat(await storage.getDateFormat());
+  }
+
   Future<void> setThemeToDefault() async {
     await setTheme(Settings().theme);
   }
@@ -47,6 +52,10 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   Future<void> setCheckSpellingToDefault() async {
     await setCheckSpelling(Settings().checkSpelling);
+  }
+
+  Future<void> setDateFormatToDefault() async {
+    await setDateFormat(Settings().dateFormat);
   }
 
   Future<void> setTheme(ThemeMode? theme) async {
@@ -78,10 +87,19 @@ class SettingsNotifier extends ValueNotifier<Settings> {
 
   Future<void> setCheckSpelling(bool? checkSpelling) async {
     if (checkSpelling == null) {
-      return Future(() => null);
+      return;
     }
     value.checkSpelling = checkSpelling;
     await storage.setCheckSpelling(checkSpelling);
+    notifyListeners();
+  }
+
+  Future<void> setDateFormat(String? dateFormat) async {
+    if (dateFormat == null) {
+      return;
+    }
+    value.dateFormat = dateFormat;
+    await storage.setDateFormat(dateFormat);
     notifyListeners();
   }
 }

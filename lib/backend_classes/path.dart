@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
 
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_storage/saf.dart';
+import 'package:path_provider/path_provider.dart' as path_prov;
+import 'package:shared_storage/shared_storage.dart';
 
 class SavePath {
   // Due to the constructors only one can ever be null at any time
@@ -54,7 +54,7 @@ class SavePath {
       return file;
     }
     DocumentFile? createdFile =
-        await createFile(uri!, mimeType: 'text/plain', displayName: filename);
+        await createFile(uri!, mimeType: '', displayName: filename);
     return createdFile!;
   }
 }
@@ -98,12 +98,12 @@ Future<String> get _defaultPath async {
 Future<Directory> get _directory async {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isAndroid) {
-    final directory = await getExternalStorageDirectory();
+    final directory = await path_prov.getExternalStorageDirectory();
     if (directory != null) {
       return directory;
     }
   }
 
-  final directory = await getApplicationDocumentsDirectory();
+  final directory = await path_prov.getApplicationDocumentsDirectory();
   return directory;
 }

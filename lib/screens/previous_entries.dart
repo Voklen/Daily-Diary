@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/storage.dart';
+import 'package:daily_diary/backend_classes/filenames.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
@@ -22,7 +23,6 @@ class PreviousEntriesScreen extends StatelessWidget {
           future: entries.getFiles(),
           builder: (context, AsyncSnapshot<List<DateTime>> snapshot) {
             List<DateTime> datesList = snapshot.data ?? [];
-            datesList.sort((b, a) => a.compareTo(b));
             return ListView.builder(
               itemCount: datesList.length,
               itemBuilder: (_, index) => PreviousEntry(
@@ -53,8 +53,7 @@ class PreviousEntry extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              String isoDate = date.toIso8601String().substring(0, 10);
-              String filename = '$isoDate.txt';
+              String filename = Filename.dateToFilename(date);
               final storage = PreviousEntryStorage(filename, savePath!);
               return ViewOnlyScreen(title: humanDate, storage: storage);
             },

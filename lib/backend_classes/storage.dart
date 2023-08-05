@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/path.dart';
+import 'package:daily_diary/backend_classes/filenames.dart';
+import 'package:daily_diary/backend_classes/path.dart';
 
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:shared_storage/saf.dart';
+import 'package:shared_storage/shared_storage.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
@@ -14,16 +15,16 @@ class DiaryStorage {
   final SavePath path;
   DateTime date = DateTime.now();
 
-  String get isoDate => date.toIso8601String().substring(0, 10);
+  String get filename => Filename.dateToFilename(date);
 
   File get file {
-    return File('${path.path}/$isoDate.txt');
+    return File('${path.path}/$filename');
   }
 
   Future<String> readFile() async {
     try {
       if (path.isScopedStorage) {
-        return path.getScopedFile('$isoDate.txt');
+        return path.getScopedFile(filename);
       }
       return await file.readAsString();
     } catch (error) {
@@ -34,11 +35,11 @@ class DiaryStorage {
   void writeFile(String text) async {
     if (path.isScopedStorage) {
       if (text.isNotEmpty) {
-        path.writeScopedFile('$isoDate.txt', text);
+        path.writeScopedFile(filename, text);
         return;
       }
-      if (await path.scopedExists('$isoDate.txt')) {
-        path.deleteScoped('$isoDate.txt');
+      if (await path.scopedExists(filename)) {
+        path.deleteScoped(filename);
         return;
       }
       return;
@@ -152,6 +153,15 @@ class SettingsStorage {
     await _writeToFile('check_spelling', checkSpelling);
   }
 
+  Future<String?> getDateFormat() async {
+    final dateFormat = await _getFromFile('date_format');
+    return dateFormat is String ? dateFormat : null;
+  }
+
+  Future<void> setDateFormat(String dateFormat) async {
+    await _writeToFile('date_format', dateFormat);
+  }
+
   Future<void> _writeToFile(key, value) async {
     var map = await settingsMap;
     map[key] = value;
@@ -175,28 +185,34 @@ class PreviousEntriesStorage {
   final SavePath path;
 
   Future<List<DateTime>> getFiles() async {
+    Stream<DateTime> datesStream;
     if (path.isScopedStorage) {
-      return _getFilesScopedStorage(path.uri!);
+      datesStream = await _getFilesScopedStorage();
+    } else {
+      datesStream = _getFilesNormal();
     }
+    List<DateTime> datesList = await datesStream.toList();
+    datesList.sort((b, a) => a.compareTo(b));
+    return datesList;
+  }
 
+  Stream<DateTime> _getFilesNormal() {
     final directory = Directory(path.path!);
     final files = directory.list();
     final filesAsDateTime = files.map(toFilenameFromFileEntity);
-    final filesWithoutNull =
-        filesAsDateTime.where((s) => s != null).cast<DateTime>();
-    final list = await filesWithoutNull.toList();
-    return list.reversed.toList();
+    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
+    return filesWithoutNull.cast<DateTime>();
   }
 
-  Future<List<DateTime>> _getFilesScopedStorage(Uri uri) async {
+  Future<Stream<DateTime>> _getFilesScopedStorage() async {
+    Uri uri = path.uri!;
     if (await canRead(uri) == true) {
       //TODO handle lack of permissions
     }
     final files = listFiles(uri, columns: [DocumentFileColumn.displayName]);
     final filesAsDateTime = files.map(toFilenameFromDocumentFile);
-    final filesWithoutNull =
-        filesAsDateTime.where((s) => s != null).cast<DateTime>();
-    return filesWithoutNull.toList();
+    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
+    return filesWithoutNull.cast<DateTime>();
   }
 
   DateTime? toFilenameFromFileEntity(FileSystemEntity file) {
@@ -209,10 +225,9 @@ class PreviousEntriesStorage {
 
   DateTime? toFilename(String path) {
     int filenameStart = path.lastIndexOf('/') + 1;
-    int filenameEnd = path.length - 4;
-    String isoDate = path.substring(filenameStart, filenameEnd);
+    String filename = path.substring(filenameStart);
     try {
-      return DateTime.parse(isoDate);
+      return Filename.filenameToDate(filename);
     } on FormatException {
       // Empty strings will be filtered after this map
       return null;

@@ -32,6 +32,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace "com.voklen.daily_diary"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

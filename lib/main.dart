@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/path.dart';
-import 'package:daily_diary/settings_notifier.dart';
-import 'package:daily_diary/storage.dart';
-import 'package:daily_diary/themes.dart';
+import 'package:daily_diary/backend_classes/path.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
+import 'package:daily_diary/backend_classes/storage.dart';
+import 'package:daily_diary/widgets/themes.dart';
 import 'package:daily_diary/screens/home.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,11 +12,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool? startupCheckSpelling;
 
 SavePath? savePath;
-SavePath? startupSavePath;
+SavePath? newSavePath;
 
 main() async {
+  await loadSettings();
+  runApp(const App());
+}
+
+Future<void> loadSettings() async {
   savePath = await getPath();
-  startupSavePath = savePath;
+  newSavePath = savePath;
+  // Date format must be set so on first load it reads the correct filename
+  App.settingsNotifier.setDateFormatFromFile();
   // Color and theme are loaded before the app starts
   // This is to make it not jarringly switch theme/color while loading
   // Other settings are loaded it the initState of the home page
@@ -25,7 +32,6 @@ main() async {
   // This will be moved to _loadSettings when spellCheckHasChanged is removed
   await App.settingsNotifier.setCheckSpellingFromFile();
   startupCheckSpelling = App.settingsNotifier.value.checkSpelling;
-  runApp(const App());
 }
 
 class App extends StatelessWidget {
