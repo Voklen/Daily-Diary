@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 import 'package:file_picker/file_picker.dart';
@@ -229,7 +230,12 @@ class DateFormatSetting extends StatefulWidget implements SettingTile {
 
   @override
   Future<DateFormatSetting> newDefault() async {
+    String defaultDateFormat = Settings().dateFormat;
+    final renameFiles = RenameFiles(defaultDateFormat);
+    await renameFiles.rewriteExistingFiles();
+
     await App.settingsNotifier.setDateFormatToDefault();
+    _dateFormatController.text = App.settingsNotifier.value.dateFormat;
     return DateFormatSetting(
       key: UniqueKey(),
     );
