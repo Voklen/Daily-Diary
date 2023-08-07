@@ -50,9 +50,17 @@ class _SettingsListState extends State<SettingsList> {
   }
 
   Widget buttonToShowResetButtons() {
-    return ElevatedButton(
-      onPressed: toggleResetButtons,
-      child: Text(showResetButtons ? 'Cancel' : 'Select settings to reset'),
+    return Row(
+      children: [
+        SizedBox(
+          width: 200,
+          child: ElevatedButton(
+            onPressed: toggleResetButtons,
+            child:
+                Text(showResetButtons ? 'Cancel' : 'Select settings to reset'),
+          ),
+        )
+      ],
     );
   }
 
