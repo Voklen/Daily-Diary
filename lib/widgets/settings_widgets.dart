@@ -418,6 +418,9 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
 
 class _SavePathSettingState extends State<SavePathSetting> {
   void _selectNewPath() async {
+    if (!await confirmChangingSavePath(context)) {
+      return;
+    }
     final path = await _askForPath();
     if (path == null) {
       // The user aborted the dialog or the folder path couldn't be resolved.
@@ -507,4 +510,27 @@ class _SavePathSettingState extends State<SavePathSetting> {
       ],
     );
   }
+}
+
+Future<bool> confirmChangingSavePath(BuildContext context) async {
+  bool? shouldContinue = await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text('Changing save location'),
+      content: const Text(
+        'If you change the save location your old entries will not be copied over so it may appear as they are gone but they will still be safely in the old save location. To see them again either reset this setting back to the default or copy the files over manually to the new location.',
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('Continue'),
+        ),
+      ],
+    ),
+  );
+  return shouldContinue ?? false;
 }

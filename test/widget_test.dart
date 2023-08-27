@@ -93,4 +93,37 @@ main() {
     expect(find.text('Select settings to reset'), findsOneWidget);
     expect(find.text('Cancel'), findsNothing);
   });
+
+  testWidgets('Change path dialogue', (WidgetTester tester) async {
+    GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: const Scaffold(),
+        navigatorKey: navigatorKey,
+      ),
+    );
+
+    Future<bool> resultFuture =
+        confirmChangingSavePath(navigatorKey.currentContext!);
+    await tester.pumpAndSettle();
+    expect(find.text('Continue'), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
+
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.text('Continue'), findsNothing);
+    expect(find.text('Cancel'), findsNothing);
+    expect(await resultFuture, false);
+
+    resultFuture = confirmChangingSavePath(navigatorKey.currentContext!);
+    await tester.pumpAndSettle();
+    expect(find.text('Continue'), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
+
+    await tester.tap(find.text('Continue'));
+    await tester.pumpAndSettle();
+    expect(find.text('Continue'), findsNothing);
+    expect(find.text('Cancel'), findsNothing);
+    expect(await resultFuture, true);
+  });
 }
