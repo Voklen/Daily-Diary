@@ -3,8 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/path.dart';
-import 'package:daily_diary/widgets/settings_widgets.dart';
 import 'package:daily_diary/screens/settings.dart';
+import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
+import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
+import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
+import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
 main() {
   savePath = const SavePath.normal('');

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/widgets/settings_widgets.dart';
+import 'package:daily_diary/widgets/settings_widgets/app_color.dart';
+import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
+import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
+import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
+import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
+import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
