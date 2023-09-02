@@ -25,6 +25,7 @@ dependencies:
   file_picker: ^5.2.4
   flutter_window_close: ^0.2.2
   shared_storage: ^0.8.0
+  archive: ^3.3.7
 
 dev_dependencies:
   flutter_test:

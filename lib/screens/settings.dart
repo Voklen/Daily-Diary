@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:daily_diary/widgets/settings_widgets/app_color.dart';
 import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
+import 'package:daily_diary/widgets/settings_widgets/export_files.dart';
 import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
 import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
@@ -46,7 +47,7 @@ class _SettingsListState extends State<SettingsList> {
   @override
   Widget build(BuildContext context) {
     // The first item in the list is the Reset button
-    List<Widget> children = [buttonToShowResetButtons()];
+    List<Widget> children = [buttonToShowResetButtons(), const ExportData()];
     // Then all the children are wrapped in `SettingsListElement`
     // which allows a reset button to appear beside them
     children.addAll(widget.children.map(_modifyChild));
