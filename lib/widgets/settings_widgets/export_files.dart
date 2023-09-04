@@ -13,9 +13,9 @@ class ExportData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: _exportEntries,
-      child: const Text('Export entries'),
+    return ListTile(
+      onTap: _exportEntries,
+      title: const Text('Export entries'),
     );
   }
 

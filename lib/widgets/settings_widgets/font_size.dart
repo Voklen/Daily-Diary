@@ -30,23 +30,19 @@ class FontSetting extends StatelessWidget implements SettingTile {
   @override
   Widget build(BuildContext context) {
     _fontSizeController.text = App.settingsNotifier.value.fontSize.toString();
-    return Row(
-      children: [
-        Text(
-          "Font size:",
-          style: Theme.of(context).textTheme.titleMedium,
+    return ListTile(
+      title: Text(
+        "Font size:",
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      trailing: SizedBox(
+        width: 48,
+        child: TextField(
+          controller: _fontSizeController,
+          onChanged: _setFontSize,
+          keyboardType: TextInputType.number,
         ),
-        const SizedBox(width: 5),
-        SizedBox(
-          width: 48,
-          height: 24,
-          child: TextField(
-            controller: _fontSizeController,
-            onChanged: _setFontSize,
-            keyboardType: TextInputType.number,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -83,28 +83,27 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'File name format:',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: TextFormField(
-            autovalidateMode: AutovalidateMode.always,
-            validator: _validator,
-            onChanged: _checkIfAskToPressEnter,
-            controller: DateFormatSetting._dateFormatController,
-            onEditingComplete: _setDateFormat,
-            decoration: InputDecoration(
-              helperText: _askToPressEnter ? 'Press enter to save' : null,
-              helperStyle: const TextStyle(color: Colors.green),
-            ),
+    return ListTile(
+      // crossAxisAlignment: CrossAxisAlignment.start,
+
+      title: Text(
+        'File name format:',
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      trailing: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 160),
+        child: TextFormField(
+          autovalidateMode: AutovalidateMode.always,
+          validator: _validator,
+          onChanged: _checkIfAskToPressEnter,
+          controller: DateFormatSetting._dateFormatController,
+          onEditingComplete: _setDateFormat,
+          decoration: InputDecoration(
+            helperText: _askToPressEnter ? 'Press enter to save' : null,
+            helperStyle: const TextStyle(color: Colors.green),
           ),
         ),
-      ],
+      ),
     );
   }
 }

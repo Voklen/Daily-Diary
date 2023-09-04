@@ -34,7 +34,9 @@ main() {
   testWidgets('Theme setting', (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
-        home: ThemeSetting(),
+        home: Scaffold(
+          body: ThemeSetting(),
+        ),
       ),
     );
 
@@ -71,10 +73,10 @@ main() {
     );
 
     expect(App.settingsNotifier.value.checkSpelling, true);
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Checkbox));
     await tester.pumpAndSettle();
     expect(App.settingsNotifier.value.checkSpelling, false);
-    await tester.tap(find.byType(Switch));
+    await tester.tap(find.byType(Checkbox));
     await tester.pumpAndSettle();
     expect(App.settingsNotifier.value.checkSpelling, true);
   });

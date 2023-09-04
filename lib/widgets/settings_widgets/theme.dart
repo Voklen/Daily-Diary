@@ -49,31 +49,28 @@ class _ThemeSettingState extends State<ThemeSetting> {
   @override
   Widget build(BuildContext context) {
     _selections = _getTheme();
-    return Row(
-      children: [
-        Text(
-          "Theme:",
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(width: 5),
-        ToggleButtons(
-          isSelected: _selections,
-          onPressed: (int index) {
-            _selections = [false, false, false];
-            setState(() {
-              _selections[index] = true;
-            });
-            _setTheme(index);
-          },
-          renderBorder: false,
-          borderRadius: BorderRadius.circular(8),
-          children: const [
-            Text('Light'),
-            Text('System'),
-            Text('Dark'),
-          ],
-        ),
-      ],
+    return ListTile(
+      title: Text(
+        "Theme:",
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      trailing: ToggleButtons(
+        isSelected: _selections,
+        onPressed: (int index) {
+          _selections = [false, false, false];
+          setState(() {
+            _selections[index] = true;
+          });
+          _setTheme(index);
+        },
+        renderBorder: false,
+        borderRadius: BorderRadius.circular(8),
+        children: const [
+          Text('Light'),
+          Text('System'),
+          Text('Dark'),
+        ],
+      ),
     );
   }
 }

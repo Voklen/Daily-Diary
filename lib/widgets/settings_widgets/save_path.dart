@@ -89,24 +89,17 @@ class _SavePathSettingState extends State<SavePathSetting> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Save Location:',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: TextField(
-            controller: TextEditingController(text: newSavePath!.string),
-            enabled: false,
+        ListTile(
+          onTap: _selectNewPath,
+          title: Text(
+            'Change Save Location:',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          subtitle: Text(
+            newSavePath!.string,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
-        ),
-        SizedBox(
-          width: 125,
-          child: ElevatedButton(
-            onPressed: _selectNewPath,
-            child: const Text('Change folder'),
-          ),
+          trailing: const Icon(Icons.navigate_next),
         ),
         Visibility(
           visible: savePath!.string != newSavePath!.string,

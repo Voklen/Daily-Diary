@@ -21,7 +21,11 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
 }
 
 class _SpellCheckToggleState extends State<SpellCheckToggle> {
-  _onChanged(bool checked) {
+  _onChanged(bool? checked) {
+    if (checked == null) {
+      // This shouldn't be possible because it's not a tristate checkbox
+      return;
+    }
     setState(() {
       App.settingsNotifier.setCheckSpelling(checked);
     });
@@ -31,18 +35,15 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Text(
-              'Check spelling:',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(width: 5),
-            Switch(
-              value: App.settingsNotifier.value.checkSpelling,
-              onChanged: _onChanged,
-            )
-          ],
+        ListTile(
+          title: Text(
+            'Check spelling:',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          trailing: Checkbox(
+            value: App.settingsNotifier.value.checkSpelling,
+            onChanged: _onChanged,
+          ),
         ),
         Visibility(
           visible:
