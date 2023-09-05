@@ -86,10 +86,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
     return ListTile(
       // crossAxisAlignment: CrossAxisAlignment.start,
 
-      title: Text(
-        'File name format:',
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      title: const Text('File name format'),
       trailing: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 160),
         child: TextFormField(

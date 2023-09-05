@@ -88,14 +88,16 @@ main() {
       ),
     );
 
-    await tester.tap(find.text('Select settings to reset'));
+    await tester.drag(find.byType(ListView), const Offset(0.0, -300));
+    await tester.pump();
+    await tester.tap(find.text('Reset settings'));
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.restore), findsWidgets);
-    expect(find.text('Select settings to reset'), findsNothing);
+    expect(find.text('Reset settings'), findsNothing);
 
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
-    expect(find.text('Select settings to reset'), findsOneWidget);
+    expect(find.text('Reset settings'), findsOneWidget);
     expect(find.text('Cancel'), findsNothing);
   });
 

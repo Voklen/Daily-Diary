@@ -31,10 +31,7 @@ class FontSetting extends StatelessWidget implements SettingTile {
   Widget build(BuildContext context) {
     _fontSizeController.text = App.settingsNotifier.value.fontSize.toString();
     return ListTile(
-      title: Text(
-        "Font size:",
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      title: const Text("Font size"),
       trailing: SizedBox(
         width: 48,
         child: TextField(

@@ -16,6 +16,7 @@ class ExportData extends StatelessWidget {
     return ListTile(
       onTap: _exportEntries,
       title: const Text('Export entries'),
+      leading: const Icon(Icons.unarchive),
     );
   }
 

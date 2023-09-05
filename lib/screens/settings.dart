@@ -46,19 +46,21 @@ class _SettingsListState extends State<SettingsList> {
 
   @override
   Widget build(BuildContext context) {
-    // The first item in the list is the Reset button
-    List<Widget> children = [buttonToShowResetButtons(), const ExportData()];
     // Then all the children are wrapped in `SettingsListElement`
     // which allows a reset button to appear beside them
-    children.addAll(widget.children.map(_modifyChild));
+    List<Widget> children = widget.children.map(_modifyChild).toList();
 
+    // Buttons that are not settings (cannot be reset) are appended here
+    children.addAll([const ExportData(), buttonToShowResetButtons()]);
     return ListView(children: children);
   }
 
   Widget buttonToShowResetButtons() {
     return ListTile(
       onTap: toggleResetButtons,
-      title: Text(showResetButtons ? 'Cancel' : 'Select settings to reset'),
+      title: Text(showResetButtons ? 'Cancel' : 'Reset settings'),
+      subtitle: const Text('You can reset individual settings'),
+      leading: Icon(showResetButtons ? Icons.cancel : Icons.restore),
     );
   }
 

@@ -36,10 +36,7 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
     return Column(
       children: [
         ListTile(
-          title: Text(
-            'Check spelling:',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          title: const Text('Check spelling'),
           trailing: Checkbox(
             value: App.settingsNotifier.value.checkSpelling,
             onChanged: _onChanged,

@@ -91,10 +91,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
       children: [
         ListTile(
           onTap: _selectNewPath,
-          title: Text(
-            'Change Save Location:',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+          title: const Text('Change Save Location'),
           subtitle: Text(
             newSavePath!.string,
             style: Theme.of(context).textTheme.bodyMedium,

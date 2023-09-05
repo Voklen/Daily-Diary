@@ -50,10 +50,7 @@ class _ThemeSettingState extends State<ThemeSetting> {
   Widget build(BuildContext context) {
     _selections = _getTheme();
     return ListTile(
-      title: Text(
-        "Theme:",
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      title: const Text("Theme"),
       trailing: ToggleButtons(
         isSelected: _selections,
         onPressed: (int index) {
