@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 
 class ColorSetting extends StatefulWidget implements SettingTile {
   const ColorSetting({super.key});
@@ -27,24 +27,16 @@ class _ColorSettingState extends State<ColorSetting> {
   }
 
   void _showColorPicker() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Pick a color!'),
-        content: SingleChildScrollView(
-          child: ColorPicker(
-            pickerColor: App.settingsNotifier.value.colorScheme,
-            onColorChanged: _setColorScheme,
-            enableAlpha: false,
-          ),
-        ),
-        actions: [
-          ElevatedButton(
-            child: const Text('Got it'),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
+    ColorPicker(
+        color: App.settingsNotifier.value.colorScheme,
+        onColorChanged: _setColorScheme,
+        enableOpacity: false,
+        pickersEnabled: const {
+          ColorPickerType.primary: true,
+          ColorPickerType.accent: false,
+          ColorPickerType.wheel: true,
+        }).showPickerDialog(
+      context,
     );
   }
 
@@ -85,7 +77,7 @@ class ColorIndicator extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(1000.0)),
-        child: CustomPaint(painter: IndicatorPainter(color)),
+        child: ColoredBox(color: color),
       ),
     );
   }

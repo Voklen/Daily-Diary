@@ -20,12 +20,12 @@ dependencies:
   path_provider: ^2.0.11
   toml: ^0.14.0
   intl: ^0.18.0
-  flutter_colorpicker: ^1.0.3
   shared_preferences: ^2.0.15
   file_picker: ^5.2.4
   flutter_window_close: ^0.2.2
   shared_storage: ^0.8.0
   archive: ^3.3.7
+  flex_color_picker: ^3.3.0
 
 dev_dependencies:
   flutter_test:
