@@ -5,7 +5,7 @@
 - [ ] git push
 
 - [ ] git checkout releases
-- [ ] git merge main -X theirs
+- [ ] git merge main -X theirs -m "Release v<version>"
 - [ ] flutter build apk
 - [ ] flutter build linux
 - [ ] git push
@@ -15,10 +15,10 @@
   - [ ] Set GitHub target branch to releases
   - [ ] Copy changelog in to GitHub
   - [ ] Attach binaries to GitHub
-    - [ ] cp build/app/outputs/flutter-apk/app-release.apk daily_diary.apk
+    - [ ] cp build/app/outputs/flutter-apk/app-release.apk daily_diary_android.apk
     - [ ] cp -r build/linux/x64/release/bundle/ Daily-Diary/
-    - [ ] tar -czvf linux.tar.gz Daily-Diary/
+    - [ ] tar -czvf daily_diary_linux.tar.gz Daily-Diary/
     - [ ] rm -r Daily-Diary/
 - [ ] Publish
-- [ ] rm linux.tar.gz daily_diary.apk
+- [ ] rm daily_diary_android.apk daily_diary_linux.tar.gz
 - [ ] git checkout main -f

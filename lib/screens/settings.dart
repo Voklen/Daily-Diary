@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/widgets/settings_widgets.dart';
+import 'package:daily_diary/widgets/settings_widgets/app_color.dart';
+import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
+import 'package:daily_diary/widgets/settings_widgets/export_files.dart';
+import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
+import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
+import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
+import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -40,19 +46,21 @@ class _SettingsListState extends State<SettingsList> {
 
   @override
   Widget build(BuildContext context) {
-    // The first item in the list is the Reset button
-    List<Widget> children = [buttonToShowResetButtons()];
     // Then all the children are wrapped in `SettingsListElement`
     // which allows a reset button to appear beside them
-    children.addAll(widget.children.map(_modifyChild));
+    List<Widget> children = widget.children.map(_modifyChild).toList();
 
+    // Buttons that are not settings (cannot be reset) are appended here
+    children.addAll([const ExportData(), buttonToShowResetButtons()]);
     return ListView(children: children);
   }
 
   Widget buttonToShowResetButtons() {
-    return ElevatedButton(
-      onPressed: toggleResetButtons,
-      child: Text(showResetButtons ? 'Cancel' : 'Select settings to reset'),
+    return ListTile(
+      onTap: toggleResetButtons,
+      title: Text(showResetButtons ? 'Cancel' : 'Reset settings'),
+      subtitle: const Text('You can reset individual settings'),
+      leading: Icon(showResetButtons ? Icons.cancel : Icons.restore),
     );
   }
 
