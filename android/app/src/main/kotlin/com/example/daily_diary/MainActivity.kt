@@ -1,4 +1,4 @@
-package com.voklen.daily_diary
+package com.example.daily_diary
 
 import io.flutter.embedding.android.FlutterActivity
 
