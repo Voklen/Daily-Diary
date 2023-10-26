@@ -52,7 +52,10 @@ class App extends StatelessWidget {
           darkTheme: theme.darkTheme,
           themeMode: currentSettings.theme,
           home: HomePage(
-            storage: DiaryStorage(savePath!),
+            child: EntryEditor(
+              storage: DiaryStorage(savePath!),
+              settings: currentSettings,
+            ),
           ),
         );
       },

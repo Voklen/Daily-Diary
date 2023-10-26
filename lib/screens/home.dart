@@ -12,39 +12,31 @@ import 'package:daily_diary/screens/previous_entries.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.storage});
+  const HomePage({super.key, required this.child});
 
-  final DiaryStorage storage;
+  final EntryEditor child;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Settings>(
-      valueListenable: App.settingsNotifier,
-      builder: (_, Settings currentSettings, __) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Daily Diary'),
-            actions: [
-              IconButton(
-                onPressed: () => _openPreviousEntries(context),
-                icon: const Icon(
-                  Icons.list_outlined,
-                ),
-              ),
-              IconButton(
-                onPressed: () => _openSettings(context),
-                icon: const Icon(
-                  Icons.settings,
-                ),
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Daily Diary'),
+        actions: [
+          IconButton(
+            onPressed: () => _openPreviousEntries(context),
+            icon: const Icon(
+              Icons.list_outlined,
+            ),
           ),
-          body: EntryEditor(
-            storage: storage,
-            settings: currentSettings,
+          IconButton(
+            onPressed: () => _openSettings(context),
+            icon: const Icon(
+              Icons.settings,
+            ),
           ),
-        );
-      },
+        ],
+      ),
+      body: child,
     );
   }
 
