@@ -21,7 +21,7 @@ dependencies:
   toml: ^0.14.0
   intl: ^0.18.0
   shared_preferences: ^2.0.15
-  file_picker: ^5.2.4
+  file_picker: ^6.0.0
   flutter_window_close: ^0.2.2
   shared_storage: ^0.8.0
   archive: ^3.3.7
@@ -31,7 +31,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
