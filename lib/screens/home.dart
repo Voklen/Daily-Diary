@@ -82,7 +82,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   initState() {
     super.initState();
 
-    QuitHandler.disable();
+    UnsavedChangesAlert.disable();
     _loadSettings();
     WidgetsBinding.instance.addObserver(this);
     widget.storage.readFile().then((value) {
@@ -115,7 +115,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   }
 
   void _updateStorage() {
-    QuitHandler.disable();
+    UnsavedChangesAlert.disable();
     widget.storage.writeFile(_textController.text);
   }
 

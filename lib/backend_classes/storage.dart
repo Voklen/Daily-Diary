@@ -134,7 +134,8 @@ class SettingsStorage {
   }
 
   Future<Color?> getColorScheme() async {
-    String hex = await _getFromFile('color_scheme') ?? "";
+    final dynamic hex = await _getFromFile('color_scheme');
+    if (hex is! String) return null;
     return HexColor.fromHex(hex);
   }
 
@@ -161,7 +162,7 @@ class SettingsStorage {
     await _writeToFile('date_format', dateFormat);
   }
 
-  Future<void> _writeToFile(key, value) async {
+  Future<void> _writeToFile(String key, dynamic value) async {
     var map = await settingsMap;
     map[key] = value;
     settingsMap = Future(() => map);

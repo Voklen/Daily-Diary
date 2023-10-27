@@ -37,7 +37,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
   bool _askToPressEnter = false;
 
   void _setDateFormat() async {
-    final newDateFormat = DateFormatSetting._dateFormatController.text;
+    final String newDateFormat = DateFormatSetting._dateFormatController.text;
     if (_validator(newDateFormat) != null) return;
 
     final renameFiles = RenameFiles(newDateFormat);
@@ -47,7 +47,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
   }
 
   /// Returns null if okay, otherwise returns a string with a description of the error
-  String? _validator(value) {
+  String? _validator(String? value) {
     if (value == null) {
       return 'Cannot be empty';
     }
