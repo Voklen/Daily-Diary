@@ -43,7 +43,7 @@ class _ColorSettingState extends State<ColorSetting> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text("App color scheme"),
+      title: const Text('App color scheme'),
       trailing: ColorIndicator(
         App.settingsNotifier.value.colorScheme,
         key: UniqueKey(),

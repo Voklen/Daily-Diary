@@ -270,7 +270,7 @@ class PreviousEntryStorage {
       final contents = await file.readAsString();
       return contents;
     } catch (error) {
-      return "";
+      return '';
     }
   }
 

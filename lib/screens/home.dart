@@ -190,7 +190,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: widget.settings.fontSize),
             decoration:
-                const InputDecoration.collapsed(hintText: "Start typing…"),
+                const InputDecoration.collapsed(hintText: 'Start typing…'),
           ),
         ),
       ),

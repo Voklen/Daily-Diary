@@ -55,7 +55,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
                   widthFactor: 1.0,
                   child: SingleChildScrollView(
                     child: Text(
-                      file.data ?? "",
+                      file.data ?? '',
                       style: TextStyle(fontSize: currentSettings.fontSize),
                     ),
                   ),
