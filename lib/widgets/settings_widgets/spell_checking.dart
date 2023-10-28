@@ -21,7 +21,7 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
 }
 
 class _SpellCheckToggleState extends State<SpellCheckToggle> {
-  _onChanged(bool? checked) {
+  void _onChanged(bool? checked) {
     if (checked == null) {
       // This shouldn't be possible because it's not a tristate checkbox
       return;

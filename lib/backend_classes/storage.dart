@@ -86,7 +86,7 @@ class SettingsStorage {
     return TomlDocument.load(_file);
   }
 
-  Future<dynamic> _getFromFile(key) async {
+  Future<dynamic> _getFromFile(String key) async {
     try {
       final map = await settingsMap;
       return map[key];

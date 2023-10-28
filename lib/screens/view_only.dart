@@ -20,10 +20,10 @@ class ViewOnlyScreen extends StatefulWidget {
 }
 
 class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
-  _openSettings() {
+  void _openSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => const SettingsScreen(),
       ),
     );

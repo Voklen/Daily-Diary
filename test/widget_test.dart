@@ -9,7 +9,7 @@ import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
-main() {
+void main() {
   savePath = const SavePath.normal('');
   newSavePath = savePath;
 

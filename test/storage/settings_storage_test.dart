@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 
-main() {
+void main() {
   Directory testDirectory = Directory('test_data/settings_storage_test');
 
   setUp(() async {

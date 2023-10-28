@@ -32,7 +32,7 @@ class _ThemeSettingState extends State<ThemeSetting> {
     }
   }
 
-  _setTheme(int index) {
+  void _setTheme(int index) {
     switch (index) {
       case 0:
         App.settingsNotifier.setTheme(ThemeMode.light);

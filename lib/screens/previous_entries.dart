@@ -51,7 +51,7 @@ class PreviousEntry extends StatelessWidget {
       onPressed: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (context) {
               String filename = Filename.dateToFilename(date);
               final storage = PreviousEntryStorage(filename, savePath!);

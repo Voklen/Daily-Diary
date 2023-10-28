@@ -40,19 +40,19 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  _openPreviousEntries(BuildContext context) {
+  void _openPreviousEntries(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => PreviousEntriesScreen(),
       ),
     );
   }
 
-  _openSettings(BuildContext context) {
+  void _openSettings(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => const SettingsScreen(),
       ),
     );
@@ -110,7 +110,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     resetIfNewDay();
   }
 
-  _loadSettings() {
+  void _loadSettings() {
     App.settingsNotifier.setFontSizeFromFile();
   }
 
@@ -119,11 +119,11 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     widget.storage.writeFile(_textController.text);
   }
 
-  _textChanged(_) async {
+  void _textChanged(_) async {
     QuitHandler.enable(context, _saveAndQuit);
   }
 
-  _saveAndQuit() {
+  void _saveAndQuit() {
     _updateStorage();
     Navigator.of(context).pop(true);
   }
@@ -140,7 +140,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     );
   }
 
-  keyPressed(RawKeyEvent key) {
+  void keyPressed(RawKeyEvent key) {
     if (key.isKeyPressed(LogicalKeyboardKey.keyS) && key.isControlPressed) {
       _updateStorage();
     }

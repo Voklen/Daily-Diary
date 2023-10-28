@@ -5,7 +5,7 @@ import 'package:flutter_window_close/flutter_window_close.dart';
 /// Handles what happens when the user attempts to close the desktop window
 /// On mobile using this class will have no effect
 class QuitHandler {
-  static enable(BuildContext context, void Function() saveAndQuit) {
+  static void enable(BuildContext context, void Function() saveAndQuit) {
     FlutterWindowClose.setWindowShouldCloseHandler(
       () => show(context, saveAndQuit),
     );
@@ -51,15 +51,15 @@ class UnsavedChangesAlert extends StatelessWidget {
     );
   }
 
-  static disable() {
+  static void disable() {
     FlutterWindowClose.setWindowShouldCloseHandler(() async => true);
   }
 
-  static _quit(BuildContext context) {
+  static void _quit(BuildContext context) {
     Navigator.of(context).pop(true);
   }
 
-  static _cancel(BuildContext context) {
+  static void _cancel(BuildContext context) {
     Navigator.of(context).pop(false);
   }
 }

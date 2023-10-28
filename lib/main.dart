@@ -14,7 +14,7 @@ bool? startupCheckSpelling;
 SavePath? savePath;
 SavePath? newSavePath;
 
-main() async {
+void main() async {
   await loadSettings();
   runApp(const App());
 }
