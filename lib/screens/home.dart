@@ -62,10 +62,10 @@ class HomePage extends StatelessWidget {
 /// The main diary entry editing field, made for editing today's entry
 class EntryEditor extends StatefulWidget {
   const EntryEditor({
-    Key? key,
+    super.key,
     required this.storage,
     required this.settings,
-  }) : super(key: key);
+  });
 
   final DiaryStorage storage;
   final Settings settings;

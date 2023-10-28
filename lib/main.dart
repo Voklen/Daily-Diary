@@ -35,7 +35,7 @@ Future<void> loadSettings() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   static final settingsNotifier = SettingsNotifier(savePath!);
   static final preferences = SharedPreferences.getInstance();

@@ -6,8 +6,11 @@ import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 class ViewOnlyScreen extends StatefulWidget {
-  const ViewOnlyScreen({Key? key, required this.title, required this.storage})
-      : super(key: key);
+  const ViewOnlyScreen({
+    super.key,
+    required this.title,
+    required this.storage,
+  });
 
   final String title;
   final PreviousEntryStorage storage;

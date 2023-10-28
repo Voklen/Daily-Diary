@@ -57,10 +57,10 @@ class _ColorSettingState extends State<ColorSetting> {
 class ColorIndicator extends StatelessWidget {
   const ColorIndicator(
     this.color, {
-    Key? key,
+    super.key,
     this.width = 50.0,
     this.height = 50.0,
-  }) : super(key: key);
+  });
 
   final Color color;
   final double width;
