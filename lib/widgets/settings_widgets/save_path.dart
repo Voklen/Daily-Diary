@@ -7,6 +7,7 @@ import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_storage/shared_storage.dart' as saf;
 
 const alertColor = Color.fromARGB(255, 240, 88, 50);
@@ -59,16 +60,15 @@ class _SavePathSettingState extends State<SavePathSetting> {
     _removePreviousPermissions();
 
     // Ask user for path and permissions
-    Uri? uri;
-    while (uri == null) {
-      uri = await saf.openDocumentTree();
-    }
+    Uri? uri = await saf.openDocumentTree();
+    if (uri == null) return null;
 
-    // Only null before Android API 21, but this project is API 21+
     final asDocumentFile = await uri.toDocumentFile();
-    Map asMap = asDocumentFile!.toMap();
-    String asString = json.encode(asMap);
-    final preferences = await App.preferences;
+    // [toDocumentFile] can only return null before Android API 21, but this
+    // project is API 21+
+    final Map<String, dynamic> asMap = asDocumentFile!.toMap();
+    final String asString = json.encode(asMap);
+    final SharedPreferences preferences = await App.preferences;
     preferences.setString('save_path', asString);
     preferences.setBool('is_android_scoped', true);
     return SavePath.android(uri);
