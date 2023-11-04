@@ -48,24 +48,32 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
 
   /// Returns null if okay, otherwise returns a string with a description of the error
   String? _validator(String? value) {
-    if (value == null) {
-      return 'Cannot be empty';
-    }
+    if (value == null || value.isEmpty) return 'Cannot be empty';
+
     const invalidChars = ['/', '<', '>', ':', '"', '\\', '|', '?', '*'];
-    for (int i = 0; i < invalidChars.length; i++) {
-      if (value.contains(invalidChars[i])) {
-        return 'Invalid character: ${invalidChars[i]}';
+    for (String invalidChar in invalidChars) {
+      if (value.contains(invalidChar)) return 'Invalid character: $invalidChar';
+    }
+
+    // Conversion specification is the term used in `man 3 strftime`
+    const conversionSpecifications = ['%Y', '%M', '%D'];
+    for (String i in conversionSpecifications) {
+      if (!value.contains(i)) return 'Must contain: $i';
+    }
+
+    for (String first in conversionSpecifications) {
+      for (String second in conversionSpecifications) {
+        final String combined = first + second;
+        if (value.contains(combined)) return '$combined cannot be together';
       }
     }
-    const requiredStrings = ['%Y', '%M', '%D'];
-    for (int i = 0; i < requiredStrings.length; i++) {
-      if (!value.contains(requiredStrings[i])) {
-        return 'Must contain: ${requiredStrings[i]}';
-      }
-    }
-    if (value[value.length - 1] == ' ' || value[value.length - 1] == '.') {
+
+    final String lastChar = value[value.length - 1];
+    if (lastChar == ' ' || lastChar == '.') {
       return 'Cannot end in a space or a dot';
     }
+
+    // Only if all checks are passed do we return null
     return null;
   }
 
@@ -98,6 +106,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
           decoration: InputDecoration(
             helperText: _askToPressEnter ? 'Press enter to save' : null,
             helperStyle: const TextStyle(color: Colors.green),
+            errorMaxLines: 3,
           ),
         ),
       ),

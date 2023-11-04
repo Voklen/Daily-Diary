@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/path.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
+import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
 import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
 import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
@@ -132,5 +134,50 @@ void main() {
     expect(find.text('Continue'), findsNothing);
     expect(find.text('Cancel'), findsNothing);
     expect(await resultFuture, true);
+  });
+
+  testWidgets('Date format Setting', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: DateFormatSetting(),
+        ),
+      ),
+    );
+    await tester.enterText(find.byType(TextFormField), '%Y-%D-%M-.md');
+    await tester.pump();
+    expect(find.text('Press enter to save'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '');
+    await tester.pump();
+    expect(find.text('Cannot be empty'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '%Y-%M/-%D.txt');
+    await tester.pump();
+    expect(find.text('Invalid character: /'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '%Y-%D.txt');
+    await tester.pump();
+    expect(find.text('Must contain: %M'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '%Y-%M%D.txt');
+    await tester.pump();
+    expect(find.text('%M%D cannot be together'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '%Y%M%D.txt');
+    await tester.pump();
+    expect(find.text('%Y%M cannot be together'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '%Y-%M-%D.txt ');
+    await tester.pump();
+    expect(find.text('Cannot end in a space or a dot'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), '%Y-%M-%D.txt.');
+    await tester.pump();
+    expect(find.text('Cannot end in a space or a dot'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextFormField), Settings().dateFormat);
+    await tester.pump();
+    expect(find.text('Press enter to save'), findsNothing);
   });
 }
