@@ -11,18 +11,14 @@ import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 void main() {
   savePath = const SavePath.normal('');
   newSavePath = savePath;
 
   testWidgets('Theme setting', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: ThemeSetting(),
-        ),
-      ),
-    );
+    await tester.pumpWidget(const TestApp(ThemeSetting()));
 
     await tester.tap(find.text('Dark'));
     expect(App.settingsNotifier.value.theme, ThemeMode.dark);
@@ -33,13 +29,7 @@ void main() {
   });
 
   testWidgets('Font setting', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: FontSetting(),
-        ),
-      ),
-    );
+    await tester.pumpWidget(const TestApp(FontSetting()));
 
     await tester.enterText(find.byType(TextField), '30');
     expect(App.settingsNotifier.value.fontSize, 30);
@@ -48,13 +38,7 @@ void main() {
   });
 
   testWidgets('Spell check setting', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: SpellCheckToggle(),
-        ),
-      ),
-    );
+    await tester.pumpWidget(const TestApp(SpellCheckToggle()));
 
     expect(App.settingsNotifier.value.checkSpelling, true);
     await tester.tap(find.byType(Checkbox));
@@ -66,22 +50,24 @@ void main() {
   });
 
   testWidgets('Settings reset button display', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: SettingsScreen(),
-      ),
-    );
+    await tester.pumpWidget(const TestApp(SettingsScreen()));
 
     await tester.drag(find.byType(ListView), const Offset(0.0, -300));
     await tester.pump();
-    await tester.tap(find.text('Reset settings'));
+    await tester.tap(find.text('Reset settings (individually selectable)'));
     await tester.pumpAndSettle();
     expect(find.byIcon(Icons.restore), findsWidgets);
-    expect(find.text('Reset settings'), findsNothing);
+    expect(
+      find.text('Reset settings (individually selectable)'),
+      findsNothing,
+    );
 
     await tester.tap(find.text('Cancel'));
     await tester.pumpAndSettle();
-    expect(find.text('Reset settings'), findsOneWidget);
+    expect(
+      find.text('Reset settings (individually selectable)'),
+      findsOneWidget,
+    );
     expect(find.text('Cancel'), findsNothing);
   });
 
@@ -119,13 +105,8 @@ void main() {
   });
 
   testWidgets('Date format Setting', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: DateFormatSetting(),
-        ),
-      ),
-    );
+    await tester.pumpWidget(const TestApp(DateFormatSetting()));
+
     await tester.enterText(find.byType(TextFormField), '%Y-%D-%M-.md');
     await tester.pump();
     expect(find.text('Press enter to save'), findsOneWidget);
@@ -162,4 +143,21 @@ void main() {
     await tester.pump();
     expect(find.text('Press enter to save'), findsNothing);
   });
+}
+
+class TestApp extends StatelessWidget {
+  const TestApp(this.child, {super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: child,
+      ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+    );
+  }
 }

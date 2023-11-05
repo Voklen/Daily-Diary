@@ -6,6 +6,8 @@ import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/widgets/themes.dart';
 import 'package:daily_diary/screens/home.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // This will be removed when widgets can react to spell check changes
@@ -16,6 +18,7 @@ SavePath? newSavePath;
 
 void main() async {
   await loadSettings();
+  Intl.defaultLocale = 'en_US';
   runApp(const App());
 }
 
@@ -57,6 +60,8 @@ class App extends StatelessWidget {
               settings: currentSettings,
             ),
           ),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
         );
       },
     );

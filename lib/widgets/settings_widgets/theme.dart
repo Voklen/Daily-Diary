@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ThemeSetting extends StatefulWidget implements SettingTile {
   const ThemeSetting({super.key});
 
@@ -46,11 +48,20 @@ class _ThemeSettingState extends State<ThemeSetting> {
     }
   }
 
+  Widget _toTextWidget(String string) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Text(
+        string,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    _selections = _getTheme();
     return ListTile(
-      title: const Text('Theme'),
+      title: Text(AppLocalizations.of(context)!.theme),
       trailing: ToggleButtons(
         isSelected: _selections,
         onPressed: (int index) {
@@ -62,11 +73,11 @@ class _ThemeSettingState extends State<ThemeSetting> {
         },
         renderBorder: false,
         borderRadius: BorderRadius.circular(8),
-        children: const [
-          Text('Light'),
-          Text('System'),
-          Text('Dark'),
-        ],
+        children: [
+          AppLocalizations.of(context)!.lightTheme,
+          AppLocalizations.of(context)!.systemTheme,
+          AppLocalizations.of(context)!.darkTheme,
+        ].map(_toTextWidget).toList(),
       ),
     );
   }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const alertColor = Color.fromARGB(255, 240, 88, 50);
 
 class SpellCheckToggle extends StatefulWidget implements SettingTile {
@@ -36,7 +38,7 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
     return Column(
       children: [
         ListTile(
-          title: const Text('Check spelling'),
+          title: Text(AppLocalizations.of(context)!.checkSpelling),
           trailing: Checkbox(
             value: App.settingsNotifier.value.checkSpelling,
             onChanged: _onChanged,

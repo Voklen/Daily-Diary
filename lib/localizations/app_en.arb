@@ -1,0 +1,62 @@
+{
+  "startTyping": "Start typing…",
+  "@startTyping": {
+    "description": "Hint text on a black entry"
+  },
+  "previousEntries": "Previous Entries",
+  "@previousEntries": {
+    "description": "Previous Entries page title"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Settings page title"
+  },
+  "theme": "Theme",
+  "@theme": {
+    "description": "Label for theme setting"
+  },
+  "lightTheme": "Light",
+  "@lightTheme": {
+    "description": "Label for light theme option"
+  },
+  "systemTheme": "System",
+  "@systemTheme": {
+    "description": "Label for system theme option"
+  },
+  "darkTheme": "Dark",
+  "@darkTheme": {
+    "description": "Label for dark theme option"
+  },
+  "fontSize": "Font size",
+  "@fontSize": {
+    "description": "Label for font size setting"
+  },
+  "checkSpelling": "Check spelling",
+  "@checkSpelling": {
+    "description": "Label for spell checking setting"
+  },
+  "colorScheme": "Color scheme",
+  "@colorScheme": {
+    "description": "Label for color scheme setting"
+  },
+  "filenameFormat": "Filename format",
+  "@filenameFormat": {
+    "description": "Label for filename format setting"
+  },
+  "changeSaveFolder": "Change path to save folder",
+  "@changeSaveFolder": {
+    "description": "Button to change save folder"
+  },
+  "exportEntries": "Export diary entries",
+  "@exportEntries": {
+    "description": "Button to export previous entries"
+  },
+  "resetSettings": "Reset settings (individually selectable)",
+  "@resetSettings": {
+    "description": "Button to reset settings"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel action"
+  }
+}

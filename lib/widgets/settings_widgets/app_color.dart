@@ -4,6 +4,7 @@ import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 import 'package:flex_color_picker/flex_color_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ColorSetting extends StatefulWidget implements SettingTile {
   const ColorSetting({super.key});
@@ -43,7 +44,7 @@ class _ColorSettingState extends State<ColorSetting> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text('App color scheme'),
+      title: Text(AppLocalizations.of(context)!.colorScheme),
       trailing: ColorIndicator(
         App.settingsNotifier.value.colorScheme,
         key: UniqueKey(),

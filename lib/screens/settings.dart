@@ -8,13 +8,15 @@ import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: const Padding(
         padding: EdgeInsets.all(10.0),
         child: SettingsList(
@@ -58,8 +60,11 @@ class _SettingsListState extends State<SettingsList> {
   Widget buttonToShowResetButtons() {
     return ListTile(
       onTap: toggleResetButtons,
-      title: Text(showResetButtons ? 'Cancel' : 'Reset settings'),
-      subtitle: const Text('You can reset individual settings'),
+      title: Text(
+        showResetButtons
+            ? AppLocalizations.of(context)!.cancel
+            : AppLocalizations.of(context)!.resetSettings,
+      ),
       leading: Icon(showResetButtons ? Icons.cancel : Icons.restore),
     );
   }

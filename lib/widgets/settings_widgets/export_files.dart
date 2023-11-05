@@ -6,6 +6,7 @@ import 'package:daily_diary/main.dart';
 
 import 'package:archive/archive_io.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_storage/shared_storage.dart';
 
 class ExportData extends StatelessWidget {
@@ -15,7 +16,7 @@ class ExportData extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: _exportEntries,
-      title: const Text('Export entries'),
+      title: Text(AppLocalizations.of(context)!.exportEntries),
       leading: const Icon(Icons.unarchive),
     );
   }

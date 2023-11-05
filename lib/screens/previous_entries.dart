@@ -1,12 +1,13 @@
 import 'package:daily_diary/screens/home.dart';
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
-
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
   PreviousEntriesScreen({super.key});
@@ -16,7 +17,9 @@ class PreviousEntriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Previous Entries')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.previousEntries),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
