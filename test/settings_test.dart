@@ -42,10 +42,10 @@ void main() {
 
     expect(App.settingsNotifier.value.checkSpelling, true);
     await tester.tap(find.byType(Checkbox));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(App.settingsNotifier.value.checkSpelling, false);
     await tester.tap(find.byType(Checkbox));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(App.settingsNotifier.value.checkSpelling, true);
   });
 
@@ -55,7 +55,7 @@ void main() {
     await tester.drag(find.byType(ListView), const Offset(0.0, -300));
     await tester.pump();
     await tester.tap(find.text('Reset settings (individually selectable)'));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.byIcon(Icons.restore), findsWidgets);
     expect(
       find.text('Reset settings (individually selectable)'),
@@ -63,7 +63,7 @@ void main() {
     );
 
     await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(
       find.text('Reset settings (individually selectable)'),
       findsOneWidget,
@@ -82,23 +82,23 @@ void main() {
 
     Future<bool> resultFuture =
         confirmChangingSavePath(navigatorKey.currentContext!);
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('Continue'), findsOneWidget);
     expect(find.text('Cancel'), findsOneWidget);
 
     await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('Continue'), findsNothing);
     expect(find.text('Cancel'), findsNothing);
     expect(await resultFuture, false);
 
     resultFuture = confirmChangingSavePath(navigatorKey.currentContext!);
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('Continue'), findsOneWidget);
     expect(find.text('Cancel'), findsOneWidget);
 
     await tester.tap(find.text('Continue'));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('Continue'), findsNothing);
     expect(find.text('Cancel'), findsNothing);
     expect(await resultFuture, true);

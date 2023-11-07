@@ -16,13 +16,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Settings'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.arrow_back));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('Daily Diary'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.list_outlined));
     await tester.pumpAndSettle();
     expect(find.text('Previous Entries'), findsOneWidget);
     await tester.tap(find.byIcon(Icons.arrow_back));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('Daily Diary'), findsOneWidget);
   });
 }
