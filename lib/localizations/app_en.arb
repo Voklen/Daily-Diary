@@ -7,6 +7,16 @@
   "@previousEntries": {
     "description": "Previous Entries page title"
   },
+  "entryDate": "{date}",
+  "@entryDate": {
+    "description": "A date for a previous entry",
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
   "settings": "Settings",
   "@settings": {
     "description": "Settings page title"

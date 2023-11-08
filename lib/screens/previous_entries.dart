@@ -7,8 +7,6 @@ import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
 
-import 'package:intl/intl.dart';
-
 class PreviousEntriesScreen extends StatelessWidget {
   PreviousEntriesScreen({super.key});
 
@@ -49,7 +47,7 @@ class PreviousEntry extends StatelessWidget {
     if (date.isSameDate(DateTime.now())) {
       return Container();
     }
-    final String humanDate = DateFormat.yMMMd().format(date);
+    final String humanDate = locale(context).entryDate(date);
     return ElevatedButton(
       onPressed: () {
         Navigator.push(

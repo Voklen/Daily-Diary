@@ -1,6 +1,7 @@
 {
   "startTyping": "Empezar a escribir…",
   "previousEntries": "Entradas Anteriores",
+  "entryDate": "{date}",
   "settings": "Ajustes",
   "theme": "Tema de colores",
   "lightTheme": "Claro",

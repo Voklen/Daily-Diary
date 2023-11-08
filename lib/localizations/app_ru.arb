@@ -1,6 +1,7 @@
 {
   "startTyping": "Введите текст…",
   "previousEntries": "Предыдущий Записи",
+  "entryDate": "{date}",
   "settings": "Настройки",
   "theme": "Тема",
   "lightTheme": "Светлая",
