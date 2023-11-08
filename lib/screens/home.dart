@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/widgets/quit_handler.dart';
 import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
 
 class HomePage extends StatelessWidget {
@@ -191,7 +191,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: widget.settings.fontSize),
             decoration: InputDecoration.collapsed(
-              hintText: AppLocalizations.of(context)!.startTyping,
+              hintText: locale(context).startTyping,
             ),
           ),
         ),

@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 
 import 'package:archive/archive_io.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_storage/shared_storage.dart';
 
 class ExportData extends StatelessWidget {
@@ -16,7 +16,7 @@ class ExportData extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: _exportEntries,
-      title: Text(AppLocalizations.of(context)!.exportEntries),
+      title: Text(locale(context).exportEntries),
       leading: const Icon(Icons.unarchive),
     );
   }

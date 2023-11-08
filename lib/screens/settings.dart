@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/widgets/settings_widgets/app_color.dart';
 import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
 import 'package:daily_diary/widgets/settings_widgets/export_files.dart';
@@ -8,15 +9,13 @@ import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
+      appBar: AppBar(title: Text(locale(context).settings)),
       body: const Padding(
         padding: EdgeInsets.all(10.0),
         child: SettingsList(
@@ -62,8 +61,8 @@ class _SettingsListState extends State<SettingsList> {
       onTap: toggleResetButtons,
       title: Text(
         showResetButtons
-            ? AppLocalizations.of(context)!.cancel
-            : AppLocalizations.of(context)!.resetSettings,
+            ? locale(context).cancel
+            : locale(context).resetSettings,
       ),
       leading: Icon(showResetButtons ? Icons.cancel : Icons.restore),
     );

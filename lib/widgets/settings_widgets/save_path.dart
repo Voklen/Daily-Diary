@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_storage/shared_storage.dart' as saf;
 
@@ -92,7 +92,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
       children: [
         ListTile(
           onTap: _selectNewPath,
-          title: Text(AppLocalizations.of(context)!.changeSaveFolder),
+          title: Text(locale(context).changeSaveFolder),
           subtitle: Text(
             newSavePath!.string,
             style: Theme.of(context).textTheme.bodyMedium,

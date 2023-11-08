@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/filenames.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_storage/shared_storage.dart' as saf;
 
 class DateFormatSetting extends StatefulWidget implements SettingTile {
@@ -95,7 +95,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
     return ListTile(
       // crossAxisAlignment: CrossAxisAlignment.start,
 
-      title: Text(AppLocalizations.of(context)!.filenameFormat),
+      title: Text(locale(context).filenameFormat),
       trailing: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 160),
         child: TextFormField(
