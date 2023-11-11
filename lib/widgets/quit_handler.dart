@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/backend_classes/localization.dart';
+
 import 'package:flutter_window_close/flutter_window_close.dart';
 
 /// Handles what happens when the user attempts to close the desktop window
@@ -33,19 +35,19 @@ class UnsavedChangesAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('You have unsaved changes'),
+      title: Text(locale(context).unsavedChanges),
       actions: [
         ElevatedButton(
           onPressed: saveAndQuit,
-          child: const Text('Save'),
+          child: Text(locale(context).save),
         ),
         ElevatedButton(
           onPressed: () => _quit(context),
-          child: const Text('Don’t save'),
+          child: Text(locale(context).discardChanges),
         ),
         ElevatedButton(
           onPressed: () => _cancel(context),
-          child: const Text('Cancel'),
+          child: Text(locale(context).cancel),
         ),
       ],
     );

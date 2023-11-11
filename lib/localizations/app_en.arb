@@ -68,5 +68,17 @@
   "cancel": "Cancel",
   "@cancel": {
     "description": "Cancel action"
+  },
+  "unsavedChanges": "You have unsaved changes",
+  "@unsavedChanges": {
+    "description": "Dialog when attempting to close with unsaved changes on desktop"
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Button to save changes"
+  },
+  "discardChanges": "Don't save",
+  "@discardChanges": {
+    "description": "Button to discard changes"
   }
 }
