@@ -10,8 +10,8 @@ class Filename {
   }
 
   static String _twoDigits(int n) {
-    if (n >= 10) return "$n";
-    return "0$n";
+    if (n >= 10) return '$n';
+    return '0$n';
   }
 
   static DateTime? filenameToDate(String filename) {

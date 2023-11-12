@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/widgets/quit_handler.dart';
@@ -12,55 +13,47 @@ import 'package:daily_diary/screens/previous_entries.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.storage});
+  const HomePage({super.key, required this.child});
 
-  final DiaryStorage storage;
+  final EntryEditor child;
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Settings>(
-      valueListenable: App.settingsNotifier,
-      builder: (_, Settings currentSettings, __) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Daily Diary'),
-            actions: [
-              IconButton(
-                onPressed: () => _openPreviousEntries(context),
-                icon: const Icon(
-                  Icons.list_outlined,
-                ),
-              ),
-              IconButton(
-                onPressed: () => _openSettings(context),
-                icon: const Icon(
-                  Icons.settings,
-                ),
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Daily Diary'),
+        actions: [
+          IconButton(
+            onPressed: () => _openPreviousEntries(context),
+            icon: const Icon(
+              Icons.list_outlined,
+            ),
           ),
-          body: EntryEditor(
-            storage: storage,
-            settings: currentSettings,
+          IconButton(
+            onPressed: () => _openSettings(context),
+            icon: const Icon(
+              Icons.settings,
+            ),
           ),
-        );
-      },
+        ],
+      ),
+      body: child,
     );
   }
 
-  _openPreviousEntries(BuildContext context) {
+  void _openPreviousEntries(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => PreviousEntriesScreen(),
       ),
     );
   }
 
-  _openSettings(BuildContext context) {
+  void _openSettings(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => const SettingsScreen(),
       ),
     );
@@ -70,10 +63,10 @@ class HomePage extends StatelessWidget {
 /// The main diary entry editing field, made for editing today's entry
 class EntryEditor extends StatefulWidget {
   const EntryEditor({
-    Key? key,
+    super.key,
     required this.storage,
     required this.settings,
-  }) : super(key: key);
+  });
 
   final DiaryStorage storage;
   final Settings settings;
@@ -90,7 +83,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   initState() {
     super.initState();
 
-    QuitHandler.disable();
+    UnsavedChangesAlert.disable();
     _loadSettings();
     WidgetsBinding.instance.addObserver(this);
     widget.storage.readFile().then((value) {
@@ -118,20 +111,20 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     resetIfNewDay();
   }
 
-  _loadSettings() {
+  void _loadSettings() {
     App.settingsNotifier.setFontSizeFromFile();
   }
 
   void _updateStorage() {
-    QuitHandler.disable();
+    UnsavedChangesAlert.disable();
     widget.storage.writeFile(_textController.text);
   }
 
-  _textChanged(_) async {
+  void _textChanged(_) async {
     QuitHandler.enable(context, _saveAndQuit);
   }
 
-  _saveAndQuit() {
+  void _saveAndQuit() {
     _updateStorage();
     Navigator.of(context).pop(true);
   }
@@ -148,7 +141,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     );
   }
 
-  keyPressed(RawKeyEvent key) {
+  void keyPressed(RawKeyEvent key) {
     if (key.isKeyPressed(LogicalKeyboardKey.keyS) && key.isControlPressed) {
       _updateStorage();
     }
@@ -197,8 +190,9 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
             spellCheckConfiguration: _getSpellChecker(widget.settings),
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: widget.settings.fontSize),
-            decoration:
-                const InputDecoration.collapsed(hintText: "Start typing…"),
+            decoration: InputDecoration.collapsed(
+              hintText: locale(context).startTyping,
+            ),
           ),
         ),
       ),

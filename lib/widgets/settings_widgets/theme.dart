@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 class ThemeSetting extends StatefulWidget implements SettingTile {
@@ -32,7 +33,7 @@ class _ThemeSettingState extends State<ThemeSetting> {
     }
   }
 
-  _setTheme(int index) {
+  void _setTheme(int index) {
     switch (index) {
       case 0:
         App.settingsNotifier.setTheme(ThemeMode.light);
@@ -46,11 +47,20 @@ class _ThemeSettingState extends State<ThemeSetting> {
     }
   }
 
+  Widget _toTextWidget(String string) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Text(
+        string,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    _selections = _getTheme();
     return ListTile(
-      title: const Text("Theme"),
+      title: Text(locale(context).theme),
       trailing: ToggleButtons(
         isSelected: _selections,
         onPressed: (int index) {
@@ -62,11 +72,11 @@ class _ThemeSettingState extends State<ThemeSetting> {
         },
         renderBorder: false,
         borderRadius: BorderRadius.circular(8),
-        children: const [
-          Text('Light'),
-          Text('System'),
-          Text('Dark'),
-        ],
+        children: [
+          locale(context).lightTheme,
+          locale(context).systemTheme,
+          locale(context).darkTheme,
+        ].map(_toTextWidget).toList(),
       ),
     );
   }

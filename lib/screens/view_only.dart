@@ -6,8 +6,11 @@ import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 class ViewOnlyScreen extends StatefulWidget {
-  const ViewOnlyScreen({Key? key, required this.title, required this.storage})
-      : super(key: key);
+  const ViewOnlyScreen({
+    super.key,
+    required this.title,
+    required this.storage,
+  });
 
   final String title;
   final PreviousEntryStorage storage;
@@ -17,10 +20,10 @@ class ViewOnlyScreen extends StatefulWidget {
 }
 
 class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
-  _openSettings() {
+  void _openSettings() {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => const SettingsScreen(),
       ),
     );
@@ -52,7 +55,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
                   widthFactor: 1.0,
                   child: SingleChildScrollView(
                     child: Text(
-                      file.data ?? "",
+                      file.data ?? '',
                       style: TextStyle(fontSize: currentSettings.fontSize),
                     ),
                   ),

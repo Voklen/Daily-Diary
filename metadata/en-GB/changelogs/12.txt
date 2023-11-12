@@ -1,0 +1,3 @@
+‣ Internationalize app and support translations
+‣ Add Russian and Spanish translations
+‣ Use stricter typing in internal code

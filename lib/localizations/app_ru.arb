@@ -1,0 +1,21 @@
+{
+  "startTyping": "Введите текст…",
+  "previousEntries": "Предыдущий Записи",
+  "entryDate": "{date}",
+  "settings": "Настройки",
+  "theme": "Тема",
+  "lightTheme": "Светлая",
+  "systemTheme": "По умолчанию",
+  "darkTheme": "Тёмная",
+  "fontSize": "Размер шрифта",
+  "checkSpelling": "Проверять орфографию",
+  "colorScheme": "Цвет приложения",
+  "filenameFormat": "Формат имени файла",
+  "changeSaveFolder": "Изменить путь к папке сохранения данных",
+  "exportEntries": "Экспортировать записи ежедневника",
+  "resetSettings": "Восстановить настройки по умолчанию (выбор для каждой настройки)",
+  "cancel": "Отменить",
+  "unsavedChanges": "У вас есть несохраненные изменения",
+  "save": "Сохранять",
+  "discardChanges": "Не сохранять"
+}

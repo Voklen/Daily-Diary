@@ -1,0 +1,21 @@
+{
+  "startTyping": "Empezar a escribir…",
+  "previousEntries": "Entradas Anteriores",
+  "entryDate": "{date}",
+  "settings": "Ajustes",
+  "theme": "Tema de colores",
+  "lightTheme": "Claro",
+  "systemTheme": "Automático",
+  "darkTheme": "Oscuro",
+  "fontSize": "Tamaño de fuente",
+  "checkSpelling": "Revisar la ortografía",
+  "colorScheme": "Color de la aplicación",
+  "filenameFormat": "Formato de nombre de archivo",
+  "changeSaveFolder": "Cambiar la ruta a la carpeta para guardar datos",
+  "exportEntries": "Exportar entradas del diario",
+  "resetSettings": "Reiniciar ajustes",
+  "cancel": "Cancelar",
+  "unsavedChanges": "Tiene cambios sin guardar",
+  "save": "Guardar cambios",
+  "discardChanges": "Descartar"
+}

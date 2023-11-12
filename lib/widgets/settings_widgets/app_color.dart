@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 import 'package:flex_color_picker/flex_color_picker.dart';
@@ -43,7 +44,7 @@ class _ColorSettingState extends State<ColorSetting> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text("App color scheme"),
+      title: Text(locale(context).colorScheme),
       trailing: ColorIndicator(
         App.settingsNotifier.value.colorScheme,
         key: UniqueKey(),
@@ -57,10 +58,10 @@ class _ColorSettingState extends State<ColorSetting> {
 class ColorIndicator extends StatelessWidget {
   const ColorIndicator(
     this.color, {
-    Key? key,
+    super.key,
     this.width = 50.0,
     this.height = 50.0,
-  }) : super(key: key);
+  });
 
   final Color color;
   final double width;

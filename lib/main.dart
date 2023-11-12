@@ -6,6 +6,7 @@ import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/widgets/themes.dart';
 import 'package:daily_diary/screens/home.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // This will be removed when widgets can react to spell check changes
@@ -14,7 +15,7 @@ bool? startupCheckSpelling;
 SavePath? savePath;
 SavePath? newSavePath;
 
-main() async {
+void main() async {
   await loadSettings();
   runApp(const App());
 }
@@ -35,7 +36,7 @@ Future<void> loadSettings() async {
 }
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   static final settingsNotifier = SettingsNotifier(savePath!);
   static final preferences = SharedPreferences.getInstance();
@@ -52,8 +53,13 @@ class App extends StatelessWidget {
           darkTheme: theme.darkTheme,
           themeMode: currentSettings.theme,
           home: HomePage(
-            storage: DiaryStorage(savePath!),
+            child: EntryEditor(
+              storage: DiaryStorage(savePath!),
+              settings: currentSettings,
+            ),
           ),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
         );
       },
     );

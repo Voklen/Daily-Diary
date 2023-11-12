@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 class FontSetting extends StatelessWidget implements SettingTile {
@@ -31,7 +32,7 @@ class FontSetting extends StatelessWidget implements SettingTile {
   Widget build(BuildContext context) {
     _fontSizeController.text = App.settingsNotifier.value.fontSize.toString();
     return ListTile(
-      title: const Text("Font size"),
+      title: Text(locale(context).fontSize),
       trailing: SizedBox(
         width: 48,
         child: TextField(

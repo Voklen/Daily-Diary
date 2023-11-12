@@ -6,7 +6,7 @@ import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 
-main() {
+void main() {
   //TODO Use something other than global variables in main.dart for savePath
   // so hacks like this are not needed
   savePath = const SavePath.normal('test_data/diary_storage_test/');

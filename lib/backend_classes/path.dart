@@ -10,6 +10,7 @@ import 'package:shared_storage/shared_storage.dart';
 class SavePath {
   // Due to the constructors only one can ever be null at any time
   const SavePath.normal(String this.path) : uri = null;
+
   const SavePath.android(Uri this.uri) : path = null;
 
   final String? path;
@@ -66,7 +67,8 @@ Future<SavePath> getPath() async {
   bool? isAndroidScoped = preferences.getBool('is_android_scoped');
   if (path != null) {
     if (isAndroidScoped == true) {
-      DocumentFile document = DocumentFile.fromMap(json.decode(path));
+      final map = json.decode(path) as Map<String, dynamic>;
+      DocumentFile document = DocumentFile.fromMap(map);
       return SavePath.android(document.uri);
     }
     return SavePath.normal(path);

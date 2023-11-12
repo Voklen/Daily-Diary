@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 const alertColor = Color.fromARGB(255, 240, 88, 50);
@@ -21,7 +22,7 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
 }
 
 class _SpellCheckToggleState extends State<SpellCheckToggle> {
-  _onChanged(bool? checked) {
+  void _onChanged(bool? checked) {
     if (checked == null) {
       // This shouldn't be possible because it's not a tristate checkbox
       return;
@@ -36,7 +37,7 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
     return Column(
       children: [
         ListTile(
-          title: const Text('Check spelling'),
+          title: Text(locale(context).checkSpelling),
           trailing: Checkbox(
             value: App.settingsNotifier.value.checkSpelling,
             onChanged: _onChanged,

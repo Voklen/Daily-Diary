@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/widgets/settings_widgets/app_color.dart';
 import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
 import 'package:daily_diary/widgets/settings_widgets/export_files.dart';
@@ -14,7 +15,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(locale(context).settings)),
       body: const Padding(
         padding: EdgeInsets.all(10.0),
         child: SettingsList(
@@ -58,8 +59,11 @@ class _SettingsListState extends State<SettingsList> {
   Widget buttonToShowResetButtons() {
     return ListTile(
       onTap: toggleResetButtons,
-      title: Text(showResetButtons ? 'Cancel' : 'Reset settings'),
-      subtitle: const Text('You can reset individual settings'),
+      title: Text(
+        showResetButtons
+            ? locale(context).cancel
+            : locale(context).resetSettings,
+      ),
       leading: Icon(showResetButtons ? Icons.cancel : Icons.restore),
     );
   }
