@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
@@ -29,13 +30,14 @@ class SavePath {
 
   Future<String> getScopedFile(String filename) async {
     final file = await getChildFile(filename);
-    final content = await file.getContentAsString();
-    return content!;
+    final content = await file.getContent();
+    return utf8.decode(content!);
   }
 
-  void writeScopedFile(String filename, String content) async {
+  Future<void> writeScopedFile(String filename, String content) async {
     final file = await getChildFile(filename);
-    file.writeToFileAsString(content: content);
+    final bytes = Uint8List.fromList(utf8.encode(content));
+    await file.writeToFileAsBytes(bytes: bytes);
   }
 
   Future<bool> scopedExists(String filename) async {

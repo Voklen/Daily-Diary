@@ -1,6 +1,7 @@
 {
   "startTyping": "Введите текст…",
   "previousEntries": "Предыдущий Записи",
+  "noEntriesYet": "Записи предыдущих дней будут показаны здесь",
   "entryDate": "{date}",
   "settings": "Настройки",
   "theme": "Тема",

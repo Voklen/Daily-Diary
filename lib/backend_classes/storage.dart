@@ -171,8 +171,7 @@ class SettingsStorage {
     String asToml = TomlDocument.fromMap(map).toString();
 
     if (path.isScopedStorage) {
-      DocumentFile file = await path.getChildFile('config.toml');
-      await file.writeToFileAsString(content: asToml);
+      await path.writeScopedFile('config.toml', asToml);
     } else {
       await File(_file).writeAsString(asToml);
     }
@@ -264,7 +263,7 @@ class PreviousEntryStorage {
   Future<String> readFile() async {
     try {
       if (path.isScopedStorage) {
-        return await _readFileAndroid();
+        return await path.getScopedFile(filename);
       }
       final file = File('${path.path}/$filename');
       final contents = await file.readAsString();
@@ -272,11 +271,5 @@ class PreviousEntryStorage {
     } catch (error) {
       return '';
     }
-  }
-
-  Future<String> _readFileAndroid() async {
-    DocumentFile? child = await path.getChildFile(filename);
-    String? contents = await child.getContentAsString();
-    return contents!;
   }
 }

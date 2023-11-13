@@ -7,6 +7,10 @@
   "@previousEntries": {
     "description": "Previous Entries page title"
   },
+  "noEntriesYet": "Entries from previous days will end up here",
+  "@noEntriesYet": {
+    "description": "Text shown when there are no previous entries"
+  },
   "entryDate": "{date}",
   "@entryDate": {
     "description": "A date for a previous entry",

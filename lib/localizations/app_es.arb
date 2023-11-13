@@ -1,6 +1,7 @@
 {
   "startTyping": "Empezar a escribir…",
   "previousEntries": "Entradas Anteriores",
+  "noEntriesYet": "Se encontrarán las entradas de días anteriores",
   "entryDate": "{date}",
   "settings": "Ajustes",
   "theme": "Tema de colores",
