@@ -29,8 +29,8 @@ class SavePath {
 
   Future<String> getScopedFile(String filename) async {
     final file = await getChildFile(filename);
-    final content = await file.getContentAsString();
-    return content!;
+    final content = await file.getContent();
+    return utf8.decode(content!);
   }
 
   void writeScopedFile(String filename, String content) async {
