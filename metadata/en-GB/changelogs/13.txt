@@ -1,0 +1,7 @@
+‣ Display text when there are no previous entries
+‣ Fixed incorrect saving of different scripts, thanks to @wjksiazek and @ivysrono
+
+I case you didn't catch it, v1.4.0 release notes:
+‣ Internationalize app and support translations
+‣ Add Russian and Spanish translations
+‣ Use stricter typing in internal code
