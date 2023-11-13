@@ -12,6 +12,19 @@ class PreviousEntriesScreen extends StatelessWidget {
 
   final entries = PreviousEntriesStorage(savePath!);
 
+  Widget _listBuilder(context, AsyncSnapshot<List<DateTime>> snapshot) {
+    List<DateTime> datesList = snapshot.data ?? [];
+    if (datesList.isEmpty) {
+      return const NoEntriesYet();
+    }
+    return ListView.builder(
+      itemCount: datesList.length,
+      itemBuilder: (_, index) => PreviousEntry(
+        date: datesList[index],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,15 +35,7 @@ class PreviousEntriesScreen extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
           future: entries.getFiles(),
-          builder: (context, AsyncSnapshot<List<DateTime>> snapshot) {
-            List<DateTime> datesList = snapshot.data ?? [];
-            return ListView.builder(
-              itemCount: datesList.length,
-              itemBuilder: (_, index) => PreviousEntry(
-                date: datesList[index],
-              ),
-            );
-          },
+          builder: _listBuilder,
         ),
       ),
     );
@@ -70,6 +75,23 @@ class PreviousEntry extends StatelessWidget {
           humanDate,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
+      ),
+    );
+  }
+}
+
+class NoEntriesYet extends StatelessWidget {
+  const NoEntriesYet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          const Icon(Icons.sticky_note_2_outlined),
+          Center(child: Text(locale(context).noEntriesYet)),
+        ],
       ),
     );
   }
