@@ -171,8 +171,7 @@ class SettingsStorage {
     String asToml = TomlDocument.fromMap(map).toString();
 
     if (path.isScopedStorage) {
-      DocumentFile file = await path.getChildFile('config.toml');
-      await file.writeToFileAsString(content: asToml);
+      await path.writeScopedFile('config.toml', asToml);
     } else {
       await File(_file).writeAsString(asToml);
     }
