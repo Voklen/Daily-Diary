@@ -13,7 +13,10 @@ class PreviousEntriesScreen extends StatelessWidget {
   final entries = PreviousEntriesStorage(savePath!);
 
   Widget _listBuilder(context, AsyncSnapshot<List<DateTime>> snapshot) {
-    List<DateTime> datesList = snapshot.data ?? [];
+    List<DateTime>? datesList = snapshot.data;
+    if (datesList == null) {
+      return const Scaffold();
+    }
     if (datesList.isEmpty) {
       return const NoEntriesYet();
     }
