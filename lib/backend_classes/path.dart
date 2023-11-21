@@ -28,8 +28,38 @@ class SavePath {
     }
   }
 
+  Future<Stream<MyFile>> list() async {
+    if (isScopedStorage) return _listScoped();
+    return _listNormal();
+  }
+
+  Future<Stream<MyFile>> _listScoped() async {
+    if (await canRead(uri!) == true) {
+      //TODO handle lack of permissions
+    }
+    final files = listFiles(uri!, columns: [DocumentFileColumn.displayName]);
+    return files.map(MyFile.android);
+  }
+
+  Future<Stream<MyFile>> _listNormal() async {
+    final dir = Directory(path!);
+    final files = dir.list();
+    // Can cast Stream<File?> to Stream<File> because we've just filtered all the null values
+    final filtered = files.map(_entityToFile).where(_isNotNull) as Stream<File>;
+    return filtered.map(MyFile.normal);
+  }
+
+  bool _isNotNull(dynamic value) => value != null;
+
+  File? _entityToFile(FileSystemEntity entity) {
+    if (entity is File) return entity;
+    return null;
+  }
+
+  // Old methods
+
   Future<String> getScopedFile(String filename) async {
-    final file = await getChildFile(filename);
+    final file = await getChildFile(filename); // This is where it pauses
     final content = await file.getContent();
     return utf8.decode(content!);
   }
@@ -59,6 +89,44 @@ class SavePath {
     DocumentFile? createdFile =
         await createFile(uri!, mimeType: '', displayName: filename);
     return createdFile!;
+  }
+}
+
+/// The .android() DocumentFile must have [DocumentFileColumn.displayName]
+class MyFile {
+  // Due to the constructors only one can ever be null at any time
+  const MyFile.normal(File this._file) : _docFile = null;
+
+  const MyFile.android(DocumentFile this._docFile) : _file = null;
+
+  final File? _file;
+  final DocumentFile? _docFile;
+
+  bool get isScopedStorage => _file == null;
+
+  String get name {
+    if (isScopedStorage) {
+      // Name is only null if the file is obtained without [DocumentFileColumn.displayName]
+      return _docFile!.name!;
+    }
+    String path = _file!.path;
+    int filenameStart = path.lastIndexOf(Platform.pathSeparator) + 1;
+    return path.substring(filenameStart);
+  }
+
+  Future<void> rename(String filename) async {
+    if (isScopedStorage) {
+      await _docFile!.renameTo(filename);
+    } else {
+      await _renameNormal(filename);
+    }
+  }
+
+  Future<File> _renameNormal(String newFilename) {
+    var path = _file!.path;
+    var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
+    var newPath = path.substring(0, lastSeparator + 1) + newFilename;
+    return _file!.rename(newPath);
   }
 }
 
