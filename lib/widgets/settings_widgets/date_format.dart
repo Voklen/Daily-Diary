@@ -120,7 +120,7 @@ class RenameFiles {
   static final SavePath path = savePath!;
 
   Future<void> rewriteExistingFiles() async {
-    final files = await path.list();
+    Stream<MyFile> files = await path.list();
     await files.forEach(_renameFile);
   }
 
@@ -133,21 +133,12 @@ class RenameFiles {
   }
 
   String? _getNewFilename(String oldFilename) {
-    DateTime? date = _dateFromFilename(oldFilename);
+    DateTime? date = Filename.filenameToDate(oldFilename);
     if (date == null) return null;
 
     String newFilename =
         Filename.dateToFilename(date, dateFormat: newDateFormat);
     if (newFilename == oldFilename) return null;
     return newFilename;
-  }
-
-  DateTime? _dateFromFilename(String filename) {
-    try {
-      return Filename.filenameToDate(filename);
-    } on FormatException {
-      // Invalid files will be ignored
-      return null;
-    }
   }
 }
