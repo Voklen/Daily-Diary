@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/filenames.dart';
 
+import 'package:archive/archive_io.dart';
 import 'package:path_provider/path_provider.dart' as path_prov;
 import 'package:shared_storage/shared_storage.dart';
 
@@ -18,10 +19,10 @@ class SavePath {
   final String? path;
   final Uri? uri;
 
-  bool get isScopedStorage => path == null;
+  bool get _isScopedStorage => path == null;
 
   String get string {
-    if (isScopedStorage) {
+    if (_isScopedStorage) {
       String fullString = Uri.decodeFull(uri!.path);
       return fullString.split(':').last;
     } else {
@@ -30,7 +31,7 @@ class SavePath {
   }
 
   Future<Stream<MyFile>> list() async {
-    if (isScopedStorage) return _listScoped();
+    if (_isScopedStorage) return _listScoped();
     return _listNormal();
   }
 
@@ -58,7 +59,7 @@ class SavePath {
   }
 
   Future<MyFile> getChild(String filename) async {
-    if (isScopedStorage) {
+    if (_isScopedStorage) {
       DocumentFile docFile = await _getChildScoped(filename);
       return MyFile.android(docFile);
     }
@@ -77,6 +78,45 @@ class SavePath {
       displayName: filename,
     );
     return createdFile!;
+  }
+
+  /// Compresses the entire [savePath] directory and saves it to the
+  /// [outputPath] file
+  /// ```dart
+  /// final outputPath = '$outputDir/export.zip';
+  /// savePath!.zipTo(outputPath);
+  /// ```
+  Future<void> zipTo(String outputPath) async {
+    if (_isScopedStorage) {
+      final archive = await _archiveFromScoped();
+      final zipBytes = ZipEncoder().encode(archive);
+      if (zipBytes == null) return;
+      File(outputPath).writeAsBytes(zipBytes);
+    } else {
+      ZipFileEncoder().zipDirectory(Directory(path!), filename: outputPath);
+    }
+  }
+
+  Future<Archive> _archiveFromScoped() async {
+    Stream<DocumentFile> files = listFiles(uri!, columns: [
+      DocumentFileColumn.displayName,
+      DocumentFileColumn.size,
+    ]);
+
+    final archive = Archive();
+
+    await for (DocumentFile file in files) {
+      if (file.isDirectory == true) continue;
+      Uint8List? content = await file.getContent();
+      if (content == null) continue;
+
+      // These properties cannot be null because we've just given the
+      // [DocumentFileColumn] to [listFiles]
+      final archivedFile = ArchiveFile(file.name!, file.size!, content);
+      archive.addFile(archivedFile);
+    }
+
+    return archive;
   }
 }
 
