@@ -46,7 +46,7 @@ class SavePath {
     final dir = Directory(path!);
     final files = dir.list();
     // Can cast Stream<File?> to Stream<File> because we've just filtered all the null values
-    final filtered = files.map(_entityToFile).where(_isNotNull) as Stream<File>;
+    Stream<File> filtered = files.map(_entityToFile).where(_isNotNull).cast();
     return filtered.map(MyFile.normal);
   }
 
@@ -59,39 +59,14 @@ class SavePath {
 
   Future<MyFile> getChild(String filename) async {
     if (isScopedStorage) {
-      DocumentFile docFile = await getChildFile(filename);
+      DocumentFile docFile = await _getChildScoped(filename);
       return MyFile.android(docFile);
     }
     File file = File('$path/$filename');
     return MyFile.normal(file);
   }
 
-  // Old methods
-
-  Future<String> getScopedFile(String filename) async {
-    final file = await getChildFile(filename); // This is where it pauses
-    final content = await file.getContent();
-    return utf8.decode(content!);
-  }
-
-  Future<void> writeScopedFile(String filename, String content) async {
-    final file = await getChildFile(filename);
-    final bytes = Uint8List.fromList(utf8.encode(content));
-    await file.writeToFileAsBytes(bytes: bytes);
-  }
-
-  Future<bool> scopedExists(String filename) async {
-    final scopedStorageFile = await getChildFile(filename);
-    final exists = await scopedStorageFile.exists();
-    return exists!;
-  }
-
-  void deleteScoped(String filename) async {
-    final file = await getChildFile(filename);
-    file.delete();
-  }
-
-  Future<DocumentFile> getChildFile(String filename) async {
+  Future<DocumentFile> _getChildScoped(String filename) async {
     final file = await child(uri!, filename);
     if (file != null) {
       return file;
@@ -115,10 +90,10 @@ class MyFile {
   final File? _file;
   final DocumentFile? _docFile;
 
-  bool get isScopedStorage => _file == null;
+  bool get _isScopedStorage => _file == null;
 
   String get name {
-    if (isScopedStorage) {
+    if (_isScopedStorage) {
       // Name is only null if the file is obtained without [DocumentFileColumn.displayName]
       return _docFile!.name!;
     }
@@ -128,7 +103,7 @@ class MyFile {
   }
 
   Future<void> rename(String filename) async {
-    if (isScopedStorage) {
+    if (_isScopedStorage) {
       await _docFile!.renameTo(filename);
     } else {
       await _renameNormal(filename);
@@ -144,7 +119,7 @@ class MyFile {
 
   Future<String> readAsString() async {
     try {
-      if (isScopedStorage) {
+      if (_isScopedStorage) {
         final content = await _docFile!.getContent();
         return utf8.decode(content!);
       }
@@ -155,7 +130,7 @@ class MyFile {
   }
 
   Future<void> writeFile(String text) async {
-    if (isScopedStorage) {
+    if (_isScopedStorage) {
       await _writeScopedFile(text);
     } else {
       await _writeNormalFile(text);
