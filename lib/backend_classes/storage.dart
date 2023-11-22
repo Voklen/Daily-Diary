@@ -34,7 +34,8 @@ class SettingsStorage {
   SettingsStorage(this.path);
 
   final SavePath path;
-  late var settingsMap = _getMap();
+  late final Future<MyFile> _file = path.getChild('config.toml');
+  late Future<Map<String, dynamic>> settingsMap = _getMap();
 
   Future<Map<String, dynamic>> _getMap() async {
     try {
@@ -45,16 +46,10 @@ class SettingsStorage {
     }
   }
 
-  String get _file {
-    return '${path.path}/config.toml';
-  }
-
   Future<TomlDocument> get _document async {
-    if (path.isScopedStorage) {
-      String content = await path.getScopedFile('config.toml');
-      return TomlDocument.parse(content);
-    }
-    return TomlDocument.load(_file);
+    MyFile file = await _file;
+    String content = await file.readAsString();
+    return TomlDocument.parse(content);
   }
 
   Future<dynamic> _getFromFile(String key) async {
@@ -66,6 +61,16 @@ class SettingsStorage {
       // If the file/key has not been made, we just want the default
       // If the file/key is corrupt, settings can be easily set again
     }
+  }
+
+  Future<void> _writeToFile(String key, dynamic value) async {
+    var map = await settingsMap;
+    map[key] = value;
+    settingsMap = Future(() => map);
+
+    String tomlString = TomlDocument.fromMap(map).toString();
+    MyFile file = await _file;
+    return file.writeFile(tomlString);
   }
 
   Future<ThemeMode?> getTheme() async {
@@ -131,21 +136,6 @@ class SettingsStorage {
 
   Future<void> setDateFormat(String dateFormat) async {
     await _writeToFile('date_format', dateFormat);
-  }
-
-  Future<void> _writeToFile(String key, dynamic value) async {
-    var map = await settingsMap;
-    map[key] = value;
-    settingsMap = Future(() => map);
-
-    //TODO
-    String asToml = TomlDocument.fromMap(map).toString();
-
-    if (path.isScopedStorage) {
-      await path.writeScopedFile('config.toml', asToml);
-    } else {
-      await File(_file).writeAsString(asToml);
-    }
   }
 }
 
