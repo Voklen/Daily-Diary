@@ -49,7 +49,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
           body: Padding(
             padding: const EdgeInsets.all(12.0),
             child: FutureBuilder(
-              future: widget.entryFile.file.readFile(),
+              future: widget.entryFile.file.readAsString(),
               builder: ((context, AsyncSnapshot<String> file) {
                 return FractionallySizedBox(
                   widthFactor: 1.0,

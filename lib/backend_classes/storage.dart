@@ -15,42 +15,14 @@ class DiaryStorage {
 
   String get filename => Filename.dateToFilename(date);
 
-  File get file {
-    return File('${path.path}/$filename');
-  }
+  Future<MyFile> get storageFile => path.getChild(filename);
 
   Future<String> readFile() async {
-    try {
-      if (path.isScopedStorage) {
-        return path.getScopedFile(filename);
-      }
-      return await file.readAsString();
-    } catch (error) {
-      return '';
-    }
+    return (await storageFile).readAsString();
   }
 
-  void writeFile(String text) async {
-    if (path.isScopedStorage) {
-      if (text.isNotEmpty) {
-        path.writeScopedFile(filename, text);
-        return;
-      }
-      if (await path.scopedExists(filename)) {
-        path.deleteScoped(filename);
-        return;
-      }
-      return;
-    }
-
-    if (text.isNotEmpty) {
-      file.writeAsStringSync(text);
-      return;
-    }
-    if (file.existsSync()) {
-      file.deleteSync();
-      return;
-    }
+  Future<void> writeFile(String text) async {
+    return (await storageFile).writeFile(text);
   }
 
   void recalculateDate() {

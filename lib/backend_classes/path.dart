@@ -57,6 +57,15 @@ class SavePath {
     return null;
   }
 
+  Future<MyFile> getChild(String filename) async {
+    if (isScopedStorage) {
+      DocumentFile docFile = await getChildFile(filename);
+      return MyFile.android(docFile);
+    }
+    File file = File('$path/$filename');
+    return MyFile.normal(file);
+  }
+
   // Old methods
 
   Future<String> getScopedFile(String filename) async {
@@ -83,12 +92,15 @@ class SavePath {
   }
 
   Future<DocumentFile> getChildFile(String filename) async {
-    final file = await findFile(uri!, filename);
+    final file = await child(uri!, filename);
     if (file != null) {
       return file;
     }
-    DocumentFile? createdFile =
-        await createFile(uri!, mimeType: '', displayName: filename);
+    DocumentFile? createdFile = await createFile(
+      uri!,
+      mimeType: '',
+      displayName: filename,
+    );
     return createdFile!;
   }
 }
@@ -130,7 +142,7 @@ class MyFile {
     return _file!.rename(newPath);
   }
 
-  Future<String> readFile() async {
+  Future<String> readAsString() async {
     try {
       if (isScopedStorage) {
         final content = await _docFile!.getContent();
@@ -139,6 +151,39 @@ class MyFile {
       return _file!.readAsString();
     } catch (error) {
       return '';
+    }
+  }
+
+  Future<void> writeFile(String text) async {
+    if (isScopedStorage) {
+      await _writeScopedFile(text);
+    } else {
+      await _writeNormalFile(text);
+    }
+  }
+
+  Future<void> _writeScopedFile(String text) async {
+    if (text.isNotEmpty) {
+      final bytes = Uint8List.fromList(utf8.encode(text));
+      await _docFile!.writeToFileAsBytes(bytes: bytes);
+      return;
+    }
+    // If the text to be written is empty, we want to delete the file to not
+    // have empty entry files everywhere
+    if (await _docFile!.exists() == true) {
+      await _docFile!.delete();
+    }
+  }
+
+  Future<void> _writeNormalFile(String text) async {
+    if (text.isNotEmpty) {
+      _file!.writeAsStringSync(text);
+      return;
+    }
+    // If the text to be written is empty, we want to delete the file to not
+    // have empty entry files everywhere
+    if (_file!.existsSync()) {
+      _file!.deleteSync();
     }
   }
 }
