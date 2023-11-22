@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
+import 'package:daily_diary/backend_classes/filenames.dart';
 
 import 'package:path_provider/path_provider.dart' as path_prov;
 import 'package:shared_storage/shared_storage.dart';
@@ -127,6 +128,35 @@ class MyFile {
     var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
     var newPath = path.substring(0, lastSeparator + 1) + newFilename;
     return _file!.rename(newPath);
+  }
+
+  Future<String> readFile() async {
+    try {
+      if (isScopedStorage) {
+        final content = await _docFile!.getContent();
+        return utf8.decode(content!);
+      }
+      return _file!.readAsString();
+    } catch (error) {
+      return '';
+    }
+  }
+}
+
+class EntryFile {
+  EntryFile._internal(this.file, this.entryDate);
+
+  final MyFile file;
+  final DateTime entryDate;
+
+  static EntryFile? create(MyFile newFile) {
+    DateTime? date = Filename.filenameToDate(newFile.name);
+    if (date == null) return null;
+    return EntryFile._internal(newFile, date);
+  }
+
+  int compareTo(EntryFile b) {
+    return entryDate.compareTo(b.entryDate);
   }
 }
 

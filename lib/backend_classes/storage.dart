@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 
-import 'package:shared_storage/shared_storage.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
@@ -203,73 +202,12 @@ class PreviousEntriesStorage {
 
   final SavePath path;
 
-  Future<List<DateTime>> getFiles() async {
-    Stream<DateTime> datesStream;
-    if (path.isScopedStorage) {
-      datesStream = await _getFilesScopedStorage();
-    } else {
-      datesStream = _getFilesNormal();
-    }
-    List<DateTime> datesList = await datesStream.toList();
-    datesList.sort((b, a) => a.compareTo(b));
-    return datesList;
-  }
-
-  Stream<DateTime> _getFilesNormal() {
-    final directory = Directory(path.path!);
-    final files = directory.list();
-    final filesAsDateTime = files.map(toFilenameFromFileEntity);
-    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
-    return filesWithoutNull.cast<DateTime>();
-  }
-
-  Future<Stream<DateTime>> _getFilesScopedStorage() async {
-    Uri uri = path.uri!;
-    if (await canRead(uri) == true) {
-      //TODO handle lack of permissions
-    }
-    final files = listFiles(uri, columns: [DocumentFileColumn.displayName]);
-    final filesAsDateTime = files.map(toFilenameFromDocumentFile);
-    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
-    return filesWithoutNull.cast<DateTime>();
-  }
-
-  DateTime? toFilenameFromFileEntity(FileSystemEntity file) {
-    return toFilename(file.path);
-  }
-
-  DateTime? toFilenameFromDocumentFile(DocumentFile file) {
-    return toFilename(file.name!);
-  }
-
-  DateTime? toFilename(String path) {
-    int filenameStart = path.lastIndexOf('/') + 1;
-    String filename = path.substring(filenameStart);
-    try {
-      return Filename.filenameToDate(filename);
-    } on FormatException {
-      // Empty strings will be filtered after this map
-      return null;
-    }
-  }
-}
-
-class PreviousEntryStorage {
-  const PreviousEntryStorage(this.filename, this.path);
-
-  final String filename;
-  final SavePath path;
-
-  Future<String> readFile() async {
-    try {
-      if (path.isScopedStorage) {
-        return await path.getScopedFile(filename);
-      }
-      final file = File('${path.path}/$filename');
-      final contents = await file.readAsString();
-      return contents;
-    } catch (error) {
-      return '';
-    }
+  Future<List<EntryFile>> getFiles() async {
+    Stream<MyFile> files = await path.list();
+    Stream<EntryFile?> asEntryFiles = files.map(EntryFile.create);
+    Stream<EntryFile> withoutNull = asEntryFiles.where((s) => s != null).cast();
+    List<EntryFile> asList = await withoutNull.toList();
+    asList.sort((b, a) => a.compareTo(b));
+    return asList;
   }
 }

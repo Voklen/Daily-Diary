@@ -1,19 +1,19 @@
+import 'package:daily_diary/backend_classes/path.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
-import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 class ViewOnlyScreen extends StatefulWidget {
   const ViewOnlyScreen({
     super.key,
     required this.title,
-    required this.storage,
+    required this.entryFile,
   });
 
   final String title;
-  final PreviousEntryStorage storage;
+  final EntryFile entryFile;
 
   @override
   State<ViewOnlyScreen> createState() => _ViewOnlyScreenState();
@@ -49,7 +49,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
           body: Padding(
             padding: const EdgeInsets.all(12.0),
             child: FutureBuilder(
-              future: widget.storage.readFile(),
+              future: widget.entryFile.file.readFile(),
               builder: ((context, AsyncSnapshot<String> file) {
                 return FractionallySizedBox(
                   widthFactor: 1.0,

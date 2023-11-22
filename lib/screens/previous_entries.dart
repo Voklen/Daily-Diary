@@ -1,8 +1,8 @@
+import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/screens/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
-import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
@@ -12,8 +12,8 @@ class PreviousEntriesScreen extends StatelessWidget {
 
   final entries = PreviousEntriesStorage(savePath!);
 
-  Widget _listBuilder(context, AsyncSnapshot<List<DateTime>> snapshot) {
-    List<DateTime>? datesList = snapshot.data;
+  Widget _listBuilder(context, AsyncSnapshot<List<EntryFile>> snapshot) {
+    List<EntryFile>? datesList = snapshot.data;
     if (datesList == null) {
       return const Scaffold();
     }
@@ -23,7 +23,7 @@ class PreviousEntriesScreen extends StatelessWidget {
     return ListView.builder(
       itemCount: datesList.length,
       itemBuilder: (_, index) => PreviousEntry(
-        date: datesList[index],
+        file: datesList[index],
       ),
     );
   }
@@ -46,12 +46,13 @@ class PreviousEntriesScreen extends StatelessWidget {
 }
 
 class PreviousEntry extends StatelessWidget {
-  const PreviousEntry({super.key, required this.date});
+  const PreviousEntry({super.key, required this.file});
 
-  final DateTime date;
+  final EntryFile file;
 
   @override
   Widget build(BuildContext context) {
+    DateTime date = file.entryDate;
     if (date.isSameDate(DateTime.now())) {
       return Container();
     }
@@ -62,9 +63,7 @@ class PreviousEntry extends StatelessWidget {
           context,
           MaterialPageRoute<void>(
             builder: (context) {
-              String filename = Filename.dateToFilename(date);
-              final storage = PreviousEntryStorage(filename, savePath!);
-              return ViewOnlyScreen(title: humanDate, storage: storage);
+              return ViewOnlyScreen(title: humanDate, entryFile: file);
             },
           ),
         );
