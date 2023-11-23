@@ -58,7 +58,7 @@ class _SavePathSettingState extends State<SavePathSetting> {
   }
 
   Future<SavePath?> _askForPathAndroid() async {
-    _removePreviousPermissions();
+    savePath!.removeScopedPermissions();
 
     // Ask user for path and permissions
     Uri? uri = await saf.openDocumentTree();
@@ -73,16 +73,6 @@ class _SavePathSettingState extends State<SavePathSetting> {
     preferences.setString('save_path', asString);
     preferences.setBool('is_android_scoped', true);
     return SavePath.android(uri);
-  }
-
-  Future<void> _removePreviousPermissions() async {
-    SavePath? path = savePath;
-    if (path == null) return;
-
-    Uri? previousPath = path.uri;
-    if (previousPath == null) return;
-
-    await saf.releasePersistableUriPermission(previousPath);
   }
 
   @override

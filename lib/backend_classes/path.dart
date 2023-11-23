@@ -12,21 +12,21 @@ import 'package:shared_storage/shared_storage.dart';
 
 class SavePath {
   // Due to the constructors only one can ever be null at any time
-  const SavePath.normal(String this.path) : uri = null;
+  const SavePath.normal(String this._path) : _uri = null;
 
-  const SavePath.android(Uri this.uri) : path = null;
+  const SavePath.android(Uri this._uri) : _path = null;
 
-  final String? path;
-  final Uri? uri;
+  final String? _path;
+  final Uri? _uri;
 
-  bool get _isScopedStorage => path == null;
+  bool get _isScopedStorage => _path == null;
 
   String get string {
     if (_isScopedStorage) {
-      String fullString = Uri.decodeFull(uri!.path);
+      String fullString = Uri.decodeFull(_uri!.path);
       return fullString.split(':').last;
     } else {
-      return path!.replaceFirst('/storage/emulated/0/', '');
+      return _path!.replaceFirst('/storage/emulated/0/', '');
     }
   }
 
@@ -36,15 +36,15 @@ class SavePath {
   }
 
   Future<Stream<MyFile>> _listScoped() async {
-    if (await canRead(uri!) == true) {
+    if (await canRead(_uri!) == true) {
       //TODO handle lack of permissions
     }
-    final files = listFiles(uri!, columns: [DocumentFileColumn.displayName]);
+    final files = listFiles(_uri!, columns: [DocumentFileColumn.displayName]);
     return files.map(MyFile.android);
   }
 
   Future<Stream<MyFile>> _listNormal() async {
-    final dir = Directory(path!);
+    final dir = Directory(_path!);
     final files = dir.list();
     // Can cast Stream<File?> to Stream<File> because we've just filtered all the null values
     Stream<File> filtered = files.map(_entityToFile).where(_isNotNull).cast();
@@ -63,17 +63,17 @@ class SavePath {
       DocumentFile docFile = await _getChildScoped(filename);
       return MyFile.android(docFile);
     }
-    File file = File('$path/$filename');
+    File file = File('$_path/$filename');
     return MyFile.normal(file);
   }
 
   Future<DocumentFile> _getChildScoped(String filename) async {
-    final file = await child(uri!, filename);
+    final file = await child(_uri!, filename);
     if (file != null) {
       return file;
     }
     DocumentFile? createdFile = await createFile(
-      uri!,
+      _uri!,
       mimeType: '',
       displayName: filename,
     );
@@ -93,12 +93,12 @@ class SavePath {
       if (zipBytes == null) return;
       File(outputPath).writeAsBytes(zipBytes);
     } else {
-      ZipFileEncoder().zipDirectory(Directory(path!), filename: outputPath);
+      ZipFileEncoder().zipDirectory(Directory(_path!), filename: outputPath);
     }
   }
 
   Future<Archive> _archiveFromScoped() async {
-    Stream<DocumentFile> files = listFiles(uri!, columns: [
+    Stream<DocumentFile> files = listFiles(_uri!, columns: [
       DocumentFileColumn.displayName,
       DocumentFileColumn.size,
     ]);
@@ -117,6 +117,12 @@ class SavePath {
     }
 
     return archive;
+  }
+
+  Future<void> removeScopedPermissions() async {
+    if (_isScopedStorage) {
+      await releasePersistableUriPermission(_uri!);
+    }
   }
 }
 
