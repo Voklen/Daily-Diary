@@ -73,6 +73,10 @@
   "@cancel": {
     "description": "Cancel action"
   },
+  "accept": "Continue",
+  "@accept": {
+    "description": "Continue action"
+  },
   "unsavedChanges": "You have unsaved changes",
   "@unsavedChanges": {
     "description": "Dialog when attempting to close with unsaved changes on desktop"

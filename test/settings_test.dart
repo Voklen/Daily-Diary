@@ -77,6 +77,8 @@ void main() {
       MaterialApp(
         home: const Scaffold(),
         navigatorKey: navigatorKey,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
       ),
     );
 

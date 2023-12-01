@@ -16,6 +16,7 @@
   "exportEntries": "Exportar entradas del diario",
   "resetSettings": "Reiniciar ajustes",
   "cancel": "Cancelar",
+  "accept": "Aceptar",
   "unsavedChanges": "Tiene cambios sin guardar",
   "save": "Guardar cambios",
   "discardChanges": "Descartar"

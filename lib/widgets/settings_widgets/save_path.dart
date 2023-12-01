@@ -113,11 +113,11 @@ To see them again either reset this setting back to the default or copy the file
       actions: <Widget>[
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancel'),
+          child: Text(locale(context).cancel),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          child: const Text('Continue'),
+          child: Text(locale(context).accept),
         ),
       ],
     ),
