@@ -1,0 +1,3 @@
+‣ Stop the "Entries from previous days" message from showing before files are loaded
+‣ Improve performance of opening previous entries
+‣ Add link to source code
