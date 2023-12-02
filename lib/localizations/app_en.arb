@@ -77,6 +77,14 @@
   "@accept": {
     "description": "Continue action"
   },
+  "openRepo": "See source code",
+  "@openRepo": {
+    "description": "Button linking to the source code"
+  },
+  "unableToOpenLink": "Unable to open link",
+  "@unableToOpenLink": {
+    "description": "A message when a link fails to open"
+  },
   "unsavedChanges": "You have unsaved changes",
   "@unsavedChanges": {
     "description": "Dialog when attempting to close with unsaved changes on desktop"
