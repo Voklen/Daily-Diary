@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
@@ -7,8 +6,6 @@ import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
-
-import 'package:shared_storage/shared_storage.dart' as saf;
 
 class DateFormatSetting extends StatefulWidget implements SettingTile {
   const DateFormatSetting({super.key});
@@ -123,72 +120,25 @@ class RenameFiles {
   static final SavePath path = savePath!;
 
   Future<void> rewriteExistingFiles() async {
-    if (path.isScopedStorage) {
-      await _getFilesScopedStorage();
-    } else {
-      await _getFilesNormal();
-    }
+    Stream<MyFile> files = await path.list();
+    await files.forEach(_renameFile);
   }
 
-  Future<void> _getFilesNormal() async {
-    final directory = Directory(path.path!);
-    final files = directory.list();
-    await files.forEach(renameFileEntity);
-  }
-
-  Future<void> _getFilesScopedStorage() async {
-    Uri uri = path.uri!;
-    if (await saf.canRead(uri) == true) {
-      //TODO handle lack of permissions
-    }
-    final files =
-        saf.listFiles(uri, columns: [saf.DocumentFileColumn.displayName]);
-    await files.forEach(renameDocumentFile);
-  }
-
-  void renameFileEntity(FileSystemEntity file) {
-    var oldFilename = file.path;
-    String? newFilename = getNewFilename(oldFilename);
+  void _renameFile(MyFile file) {
+    var oldFilename = file.name;
+    String? newFilename = _getNewFilename(oldFilename);
     if (newFilename != null) {
-      String newPath = changeFilenameInPath(file.path, newFilename);
-      file.rename(newPath);
+      file.rename(newFilename);
     }
   }
 
-  void renameDocumentFile(saf.DocumentFile file) {
-    String oldFilename = file.name!;
-    String? newFilename = getNewFilename(oldFilename);
-    if (newFilename != null) {
-      file.renameTo(newFilename);
-    }
-  }
+  String? _getNewFilename(String oldFilename) {
+    DateTime? date = Filename.filenameToDate(oldFilename);
+    if (date == null) return null;
 
-  String changeFilenameInPath(String path, String replacement) {
-    int filenameStart = path.lastIndexOf('/') + 1;
-    return path.replaceRange(filenameStart, null, replacement);
-  }
-
-  String? getNewFilename(String oldFilename) {
-    DateTime? date = dateFromFilename(oldFilename);
-    if (date == null) {
-      return null;
-    }
     String newFilename =
         Filename.dateToFilename(date, dateFormat: newDateFormat);
-    if (newFilename == oldFilename) {
-      return null;
-    }
+    if (newFilename == oldFilename) return null;
     return newFilename;
-  }
-
-  DateTime? dateFromFilename(String path) {
-    int filenameStart = path.lastIndexOf('/') + 1;
-    String filename = path.substring(filenameStart);
-    try {
-      return Filename.filenameToDate(filename);
-    } on FormatException {
-      // Invalid files will be ignored
-      return null;
-    }
   }
 }

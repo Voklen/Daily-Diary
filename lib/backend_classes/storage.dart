@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 
-import 'package:shared_storage/shared_storage.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
@@ -16,42 +15,14 @@ class DiaryStorage {
 
   String get filename => Filename.dateToFilename(date);
 
-  File get file {
-    return File('${path.path}/$filename');
-  }
+  Future<MyFile> get storageFile => path.getChild(filename);
 
   Future<String> readFile() async {
-    try {
-      if (path.isScopedStorage) {
-        return path.getScopedFile(filename);
-      }
-      return await file.readAsString();
-    } catch (error) {
-      return '';
-    }
+    return (await storageFile).readAsString();
   }
 
-  void writeFile(String text) async {
-    if (path.isScopedStorage) {
-      if (text.isNotEmpty) {
-        path.writeScopedFile(filename, text);
-        return;
-      }
-      if (await path.scopedExists(filename)) {
-        path.deleteScoped(filename);
-        return;
-      }
-      return;
-    }
-
-    if (text.isNotEmpty) {
-      file.writeAsStringSync(text);
-      return;
-    }
-    if (file.existsSync()) {
-      file.deleteSync();
-      return;
-    }
+  Future<void> writeFile(String text) async {
+    return (await storageFile).writeFile(text);
   }
 
   void recalculateDate() {
@@ -63,7 +34,8 @@ class SettingsStorage {
   SettingsStorage(this.path);
 
   final SavePath path;
-  late var settingsMap = _getMap();
+  late final Future<MyFile> _file = path.getChild('config.toml');
+  late Future<Map<String, dynamic>> settingsMap = _getMap();
 
   Future<Map<String, dynamic>> _getMap() async {
     try {
@@ -74,16 +46,10 @@ class SettingsStorage {
     }
   }
 
-  String get _file {
-    return '${path.path}/config.toml';
-  }
-
   Future<TomlDocument> get _document async {
-    if (path.isScopedStorage) {
-      String content = await path.getScopedFile('config.toml');
-      return TomlDocument.parse(content);
-    }
-    return TomlDocument.load(_file);
+    MyFile file = await _file;
+    String content = await file.readAsString();
+    return TomlDocument.parse(content);
   }
 
   Future<dynamic> _getFromFile(String key) async {
@@ -95,6 +61,16 @@ class SettingsStorage {
       // If the file/key has not been made, we just want the default
       // If the file/key is corrupt, settings can be easily set again
     }
+  }
+
+  Future<void> _writeToFile(String key, dynamic value) async {
+    var map = await settingsMap;
+    map[key] = value;
+    settingsMap = Future(() => map);
+
+    String tomlString = TomlDocument.fromMap(map).toString();
+    MyFile file = await _file;
+    return file.writeFile(tomlString);
   }
 
   Future<ThemeMode?> getTheme() async {
@@ -161,21 +137,6 @@ class SettingsStorage {
   Future<void> setDateFormat(String dateFormat) async {
     await _writeToFile('date_format', dateFormat);
   }
-
-  Future<void> _writeToFile(String key, dynamic value) async {
-    var map = await settingsMap;
-    map[key] = value;
-    settingsMap = Future(() => map);
-
-    //TODO
-    String asToml = TomlDocument.fromMap(map).toString();
-
-    if (path.isScopedStorage) {
-      await path.writeScopedFile('config.toml', asToml);
-    } else {
-      await File(_file).writeAsString(asToml);
-    }
-  }
 }
 
 extension HexColor on Color {
@@ -203,73 +164,12 @@ class PreviousEntriesStorage {
 
   final SavePath path;
 
-  Future<List<DateTime>> getFiles() async {
-    Stream<DateTime> datesStream;
-    if (path.isScopedStorage) {
-      datesStream = await _getFilesScopedStorage();
-    } else {
-      datesStream = _getFilesNormal();
-    }
-    List<DateTime> datesList = await datesStream.toList();
-    datesList.sort((b, a) => a.compareTo(b));
-    return datesList;
-  }
-
-  Stream<DateTime> _getFilesNormal() {
-    final directory = Directory(path.path!);
-    final files = directory.list();
-    final filesAsDateTime = files.map(toFilenameFromFileEntity);
-    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
-    return filesWithoutNull.cast<DateTime>();
-  }
-
-  Future<Stream<DateTime>> _getFilesScopedStorage() async {
-    Uri uri = path.uri!;
-    if (await canRead(uri) == true) {
-      //TODO handle lack of permissions
-    }
-    final files = listFiles(uri, columns: [DocumentFileColumn.displayName]);
-    final filesAsDateTime = files.map(toFilenameFromDocumentFile);
-    final filesWithoutNull = filesAsDateTime.where((s) => s != null);
-    return filesWithoutNull.cast<DateTime>();
-  }
-
-  DateTime? toFilenameFromFileEntity(FileSystemEntity file) {
-    return toFilename(file.path);
-  }
-
-  DateTime? toFilenameFromDocumentFile(DocumentFile file) {
-    return toFilename(file.name!);
-  }
-
-  DateTime? toFilename(String path) {
-    int filenameStart = path.lastIndexOf('/') + 1;
-    String filename = path.substring(filenameStart);
-    try {
-      return Filename.filenameToDate(filename);
-    } on FormatException {
-      // Empty strings will be filtered after this map
-      return null;
-    }
-  }
-}
-
-class PreviousEntryStorage {
-  const PreviousEntryStorage(this.filename, this.path);
-
-  final String filename;
-  final SavePath path;
-
-  Future<String> readFile() async {
-    try {
-      if (path.isScopedStorage) {
-        return await path.getScopedFile(filename);
-      }
-      final file = File('${path.path}/$filename');
-      final contents = await file.readAsString();
-      return contents;
-    } catch (error) {
-      return '';
-    }
+  Future<List<EntryFile>> getFiles() async {
+    Stream<MyFile> files = await path.list();
+    Stream<EntryFile?> asEntryFiles = files.map(EntryFile.create);
+    Stream<EntryFile> withoutNull = asEntryFiles.where((s) => s != null).cast();
+    List<EntryFile> asList = await withoutNull.toList();
+    asList.sort((b, a) => a.compareTo(b));
+    return asList;
   }
 }

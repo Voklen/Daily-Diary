@@ -5,6 +5,7 @@ import 'package:daily_diary/widgets/settings_widgets/app_color.dart';
 import 'package:daily_diary/widgets/settings_widgets/date_format.dart';
 import 'package:daily_diary/widgets/settings_widgets/export_files.dart';
 import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
+import 'package:daily_diary/widgets/settings_widgets/links.dart';
 import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
@@ -52,7 +53,11 @@ class _SettingsListState extends State<SettingsList> {
     List<Widget> children = widget.children.map(_modifyChild).toList();
 
     // Buttons that are not settings (cannot be reset) are appended here
-    children.addAll([const ExportData(), buttonToShowResetButtons()]);
+    children.addAll([
+      buttonToShowResetButtons(),
+      const ExportData(),
+      const RepoLink(),
+    ]);
     return ListView(children: children);
   }
 

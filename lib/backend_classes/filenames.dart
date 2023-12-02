@@ -29,10 +29,19 @@ class Filename {
     if (matches == null) return null;
 
     // The groups cannot be null because the regex has 3 groups and so all must exist
-    int year = int.parse(matches.group(order.year)!);
-    int month = int.parse(matches.group(order.month)!);
-    int day = int.parse(matches.group(order.day)!);
-    return DateTime(year, month, day);
+    String year = matches.group(order.year)!;
+    String month = matches.group(order.month)!;
+    String day = matches.group(order.day)!;
+    try {
+      return DateTime(
+        int.parse(year),
+        int.parse(month),
+        int.parse(day),
+      );
+    } on FormatException {
+      // Invalid files will be ignored
+      return null;
+    }
   }
 }
 

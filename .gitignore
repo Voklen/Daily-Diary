@@ -33,6 +33,9 @@ migrate_working_dir/
 .pub/
 /build/
 
+# Localization
+/untranslated.txt
+
 # Symbolication related
 app.*.symbols
 
