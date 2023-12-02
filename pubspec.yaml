@@ -19,7 +19,7 @@ dependencies:
   toml: ^0.14.0
   shared_preferences: ^2.0.15
   file_picker: ^6.0.0
-  flutter_window_close: ^0.2.2
+  flutter_window_close: ^1.0.0
   shared_storage: ^0.8.0
   archive: ^3.3.7
   flex_color_picker: ^3.3.0
