@@ -1,9 +1,8 @@
-import 'package:daily_diary/backend_classes/path.dart';
-import 'package:daily_diary/screens/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/localization.dart';
+import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
 
@@ -13,17 +12,17 @@ class PreviousEntriesScreen extends StatelessWidget {
   final entries = PreviousEntriesStorage(savePath!);
 
   Widget _listBuilder(context, AsyncSnapshot<List<EntryFile>> snapshot) {
-    List<EntryFile>? datesList = snapshot.data;
-    if (datesList == null) {
+    List<EntryFile>? entryFiles = snapshot.data;
+    if (entryFiles == null) {
       return const Scaffold();
     }
-    if (datesList.isEmpty) {
+    if (entryFiles.isEmpty) {
       return const NoEntriesYet();
     }
     return ListView.builder(
-      itemCount: datesList.length,
+      itemCount: entryFiles.length,
       itemBuilder: (_, index) => PreviousEntry(
-        file: datesList[index],
+        file: entryFiles[index],
       ),
     );
   }
@@ -53,9 +52,6 @@ class PreviousEntry extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime date = file.entryDate;
-    if (date.isSameDate(DateTime.now())) {
-      return Container();
-    }
     final String humanDate = locale(context).entryDate(date);
     return ElevatedButton(
       onPressed: () {

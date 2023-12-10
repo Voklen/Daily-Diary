@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
+import 'package:daily_diary/screens/home.dart';
 
 import 'package:toml/toml.dart';
 
@@ -168,8 +169,14 @@ class PreviousEntriesStorage {
     Stream<MyFile> files = await path.list();
     Stream<EntryFile?> asEntryFiles = files.map(EntryFile.create);
     Stream<EntryFile> withoutNull = asEntryFiles.where((s) => s != null).cast();
-    List<EntryFile> asList = await withoutNull.toList();
+    Stream<EntryFile> withoutToday = withoutNull.where(_isNotToday);
+    List<EntryFile> asList = await withoutToday.toList();
     asList.sort((b, a) => a.compareTo(b));
     return asList;
   }
+}
+
+bool _isNotToday(EntryFile date) {
+  bool isToday = date.entryDate.isSameDate(DateTime.now());
+  return !isToday;
 }
