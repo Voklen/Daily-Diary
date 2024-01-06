@@ -105,7 +105,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     if (exiting) {
       return;
     }
-    if (state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.inactive) {
       _updateStorage();
     }
     resetIfNewDay();
