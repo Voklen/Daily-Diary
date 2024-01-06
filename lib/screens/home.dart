@@ -78,6 +78,7 @@ class EntryEditor extends StatefulWidget {
 class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   final _textController = TextEditingController();
   bool exiting = false;
+  bool loaded = false;
 
   @override
   initState() {
@@ -89,6 +90,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     widget.storage.readFile().then((value) {
       setState(() {
         _textController.text = value;
+        loaded = true;
       });
     });
   }
@@ -116,6 +118,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   }
 
   void _updateStorage() {
+    if (!loaded) return;
     UnsavedChangesAlert.disable();
     widget.storage.writeFile(_textController.text);
   }
