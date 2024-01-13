@@ -19,11 +19,21 @@ class DiaryStorage {
   Future<MyFile> get storageFile => path.getChild(filename);
 
   Future<String> readFile() async {
-    return (await storageFile).readAsString();
+    try {
+      MyFile file = await storageFile;
+      return await file.readAsString();
+    } on Exception {
+      return '';
+    }
   }
 
   Future<void> writeFile(String text) async {
-    return (await storageFile).writeFile(text);
+    try {
+      MyFile file = await storageFile;
+      return await file.writeFile(text);
+    } on Exception {
+      return;
+    }
   }
 
   void recalculateDate() {
