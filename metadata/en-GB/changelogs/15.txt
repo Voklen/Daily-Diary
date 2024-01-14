@@ -1,0 +1,3 @@
+‣ Switch to material 3 (but change the code to make it look mostly like material 2)
+‣ Fix bug where the app does not save if you close by swiping up (thanks @mgolden356)
+‣ Fix bug where it deletes a note if you exit too fast (thanks again @mgolden356)
