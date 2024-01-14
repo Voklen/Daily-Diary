@@ -77,7 +77,7 @@ class EntryEditor extends StatefulWidget {
 
 class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   final _textController = TextEditingController();
-  bool exiting = false;
+  bool loaded = false;
 
   @override
   initState() {
@@ -89,6 +89,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     widget.storage.readFile().then((value) {
       setState(() {
         _textController.text = value;
+        loaded = true;
       });
     });
   }
@@ -102,10 +103,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   @override
   didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    if (exiting) {
-      return;
-    }
-    if (state == AppLifecycleState.paused) {
+    if (state == AppLifecycleState.inactive) {
       _updateStorage();
     }
     resetIfNewDay();
@@ -116,6 +114,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
   }
 
   void _updateStorage() {
+    if (!loaded) return;
     UnsavedChangesAlert.disable();
     widget.storage.writeFile(_textController.text);
   }
@@ -150,14 +149,6 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     }
   }
 
-  Future<bool> saveBeforeExit() async {
-    exiting = true;
-    if (Platform.isAndroid || Platform.isIOS) {
-      _updateStorage();
-    }
-    return true;
-  }
-
   void resetIfNewDay() {
     DateTime startWriting = widget.storage.date;
     DateTime now = DateTime.now();
@@ -173,26 +164,23 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: saveBeforeExit,
-      child: RawKeyboardListener(
-        autofocus: true,
-        focusNode: FocusNode(),
-        onKey: keyPressed,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: TextField(
-            controller: _textController,
-            onChanged: _textChanged,
-            expands: true,
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            spellCheckConfiguration: _getSpellChecker(widget.settings),
-            textCapitalization: TextCapitalization.sentences,
-            style: TextStyle(fontSize: widget.settings.fontSize),
-            decoration: InputDecoration.collapsed(
-              hintText: locale(context).startTyping,
-            ),
+    return RawKeyboardListener(
+      autofocus: true,
+      focusNode: FocusNode(),
+      onKey: keyPressed,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: TextField(
+          controller: _textController,
+          onChanged: _textChanged,
+          expands: true,
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          spellCheckConfiguration: _getSpellChecker(widget.settings),
+          textCapitalization: TextCapitalization.sentences,
+          style: TextStyle(fontSize: widget.settings.fontSize),
+          decoration: InputDecoration.collapsed(
+            hintText: locale(context).startTyping,
           ),
         ),
       ),

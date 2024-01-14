@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/backend_classes/localization.dart';
@@ -8,12 +9,13 @@ import 'package:flutter_window_close/flutter_window_close.dart';
 /// On mobile using this class will have no effect
 class QuitHandler {
   static void enable(BuildContext context, void Function() saveAndQuit) {
+    if (Platform.isAndroid || Platform.isIOS) return;
     FlutterWindowClose.setWindowShouldCloseHandler(
-      () => show(context, saveAndQuit),
+      () => _show(context, saveAndQuit),
     );
   }
 
-  static Future<bool> show(
+  static Future<bool> _show(
     BuildContext context,
     void Function() saveAndQuit,
   ) async {
@@ -54,6 +56,7 @@ class UnsavedChangesAlert extends StatelessWidget {
   }
 
   static void disable() {
+    if (Platform.isAndroid || Platform.isIOS) return;
     FlutterWindowClose.setWindowShouldCloseHandler(() async => true);
   }
 
