@@ -19,11 +19,10 @@ class PreviousEntriesScreen extends StatelessWidget {
     if (entryFiles.isEmpty) {
       return const NoEntriesYet();
     }
-    return ListView.builder(
-      itemCount: entryFiles.length,
-      itemBuilder: (_, index) => PreviousEntry(
-        file: entryFiles[index],
-      ),
+    List<Widget> entryWidgets =
+        entryFiles.map((e) => PreviousEntry(file: e)).toList();
+    return ListView(
+      children: entryWidgets,
     );
   }
 
@@ -49,23 +48,28 @@ class PreviousEntry extends StatelessWidget {
 
   final EntryFile file;
 
+  void onPressed(BuildContext context, String humanDate) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return ViewOnlyScreen(title: humanDate, entryFile: file);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime date = file.entryDate;
     final String humanDate = locale(context).entryDate(date);
+
     return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (context) {
-              return ViewOnlyScreen(title: humanDate, entryFile: file);
-            },
-          ),
-        );
-      },
+      onPressed: () => onPressed(context, humanDate),
       style: ElevatedButton.styleFrom(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
       child: SizedBox(
         width: double.infinity,
