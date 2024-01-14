@@ -16,7 +16,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   path_provider: ^2.0.11
-  toml: ^0.14.0
+  toml: ^0.15.0
   shared_preferences: ^2.0.15
   file_picker: ^6.0.0
   flutter_window_close: ^1.0.0
