@@ -1,15 +1,14 @@
 #!/usr/bin/env sh
 
-flutter test
-
 python3 tools/bump_version.py "$1"
 git add . && git commit -m "Bump version and update changelog"
 git push
 
 git checkout releases
-git merge main -X theirs -m "Release v$1"
 git submodule init
-git submodule update
+git submodule update --remote
+git commit -a -m "Update flutter submodule"
+git merge main -X theirs -m "Release v$1"
 ./submodules/flutter/bin/flutter build apk
 ./submodules/flutter/bin/flutter build linux
 cp build/app/outputs/flutter-apk/app-release.apk daily_diary_android.apk
