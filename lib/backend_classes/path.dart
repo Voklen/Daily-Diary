@@ -39,7 +39,7 @@ class SavePath {
     if (await canRead(_uri!) == true) {
       //TODO handle lack of permissions
     }
-    final files = listFiles(_uri!, columns: [DocumentFileColumn.displayName]);
+    final files = listFiles(_uri, columns: [DocumentFileColumn.displayName]);
     return files.map(MyFile.android);
   }
 
@@ -73,7 +73,7 @@ class SavePath {
       return file;
     }
     DocumentFile? createdFile = await createFile(
-      _uri!,
+      _uri,
       mimeType: '',
       displayName: filename,
     );
@@ -160,7 +160,7 @@ class MyFile {
     var path = _file!.path;
     var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
     var newPath = path.substring(0, lastSeparator + 1) + newFilename;
-    return _file!.rename(newPath);
+    return _file.rename(newPath);
   }
 
   Future<String> readAsString() async {
@@ -192,7 +192,7 @@ class MyFile {
     // If the text to be written is empty, we want to delete the file to not
     // have empty entry files everywhere
     if (await _docFile!.exists() == true) {
-      await _docFile!.delete();
+      await _docFile.delete();
     }
   }
 
@@ -204,7 +204,7 @@ class MyFile {
     // If the text to be written is empty, we want to delete the file to not
     // have empty entry files everywhere
     if (_file!.existsSync()) {
-      _file!.deleteSync();
+      _file.deleteSync();
     }
   }
 }
