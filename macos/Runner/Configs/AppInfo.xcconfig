@@ -11,4 +11,4 @@ PRODUCT_NAME = daily_diary
 PRODUCT_BUNDLE_IDENTIFIER = com.voklen.dailyDiary
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.voklen. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.voklen. All rights reserved.
