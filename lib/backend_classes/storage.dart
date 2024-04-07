@@ -101,13 +101,10 @@ class SettingsStorage {
     switch (theme) {
       case ThemeMode.light:
         await _writeToFile('theme', 'light');
-        break;
       case ThemeMode.system:
         await _writeToFile('theme', 'system');
-        break;
       case ThemeMode.dark:
         await _writeToFile('theme', 'dark');
-        break;
     }
   }
 
