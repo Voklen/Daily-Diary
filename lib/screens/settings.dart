@@ -121,7 +121,7 @@ class _SettingsListElementState extends State<SettingsListElement> {
             child: IconButton(
               icon: const Icon(Icons.restore),
               onPressed: () async {
-                child = await child.newDefault();
+                child = await child.newDefault(context);
                 setState(() {});
               },
             ),
@@ -138,5 +138,5 @@ class _SettingsListElementState extends State<SettingsListElement> {
 abstract class SettingTile extends Widget {
   const SettingTile({super.key});
 
-  Future<SettingTile> newDefault();
+  Future<SettingTile> newDefault(BuildContext context);
 }

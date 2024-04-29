@@ -1,17 +1,18 @@
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 import 'package:flex_color_picker/flex_color_picker.dart';
+import 'package:provider/provider.dart';
 
 class ColorSetting extends StatefulWidget implements SettingTile {
   const ColorSetting({super.key});
 
   @override
-  Future<ColorSetting> newDefault() async {
-    await App.settingsNotifier.setColorSchemeToDefault();
+  Future<ColorSetting> newDefault(BuildContext context) async {
+    await context.read<ColorSchemeProvider>().setToDefault();
     return ColorSetting(
       key: UniqueKey(),
     );
@@ -23,13 +24,13 @@ class ColorSetting extends StatefulWidget implements SettingTile {
 
 class _ColorSettingState extends State<ColorSetting> {
   void _setColorScheme(Color colorScheme) async {
-    await App.settingsNotifier.setColorScheme(colorScheme);
+    await context.read<ColorSchemeProvider>().setColorScheme(colorScheme);
     setState(() {});
   }
 
   void _showColorPicker() {
     ColorPicker(
-        color: App.settingsNotifier.value.colorScheme,
+        color: context.read<ColorSchemeProvider>().colorScheme,
         onColorChanged: _setColorScheme,
         enableOpacity: false,
         pickersEnabled: const {
@@ -46,7 +47,7 @@ class _ColorSettingState extends State<ColorSetting> {
     return ListTile(
       title: Text(locale(context).colorScheme),
       trailing: ColorIndicator(
-        App.settingsNotifier.value.colorScheme,
+        context.watch<ColorSchemeProvider>().colorScheme,
         key: UniqueKey(),
       ),
       onTap: _showColorPicker,

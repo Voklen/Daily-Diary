@@ -6,26 +6,26 @@ import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
+import 'package:provider/provider.dart';
 
 class DateFormatSetting extends StatefulWidget implements SettingTile {
   const DateFormatSetting({super.key});
 
   @override
-  Future<DateFormatSetting> newDefault() async {
-    String defaultDateFormat = Settings().dateFormat;
-    final renameFiles = RenameFiles(defaultDateFormat);
-    await renameFiles.rewriteExistingFiles();
+  Future<DateFormatSetting> newDefault(BuildContext context) async {
+    String defaultDateFormat = DateFormatProvider.defaultValue;
+    final dateFormatProvider = context.read<DateFormatProvider>();
+    final renameFiles = RenameFiles(
+        oldDateFormat: dateFormatProvider.dateFormat,
+        newDateFormat: defaultDateFormat);
+    final rewriteFilesFuture = renameFiles.rewriteExistingFiles();
 
-    await App.settingsNotifier.setDateFormatToDefault();
-    _dateFormatController.text = App.settingsNotifier.value.dateFormat;
+    await dateFormatProvider.setToDefault();
+    await rewriteFilesFuture;
     return DateFormatSetting(
       key: UniqueKey(),
     );
   }
-
-  static final _dateFormatController = TextEditingController(
-    text: App.settingsNotifier.value.dateFormat,
-  );
 
   @override
   State<DateFormatSetting> createState() => _DateFormatSettingState();
@@ -34,13 +34,25 @@ class DateFormatSetting extends StatefulWidget implements SettingTile {
 class _DateFormatSettingState extends State<DateFormatSetting> {
   bool _askToPressEnter = false;
 
+  final _dateFormatController = TextEditingController(text: '');
+
+  @override
+  void initState() {
+    _dateFormatController.text = context.read<DateFormatProvider>().dateFormat;
+    super.initState();
+  }
+
   void _setDateFormat() async {
-    final String newDateFormat = DateFormatSetting._dateFormatController.text;
+    final String newDateFormat = _dateFormatController.text;
     if (_validator(newDateFormat) != null) return;
 
-    final renameFiles = RenameFiles(newDateFormat);
+    final dateFormatProvider = context.read<DateFormatProvider>();
+    final renameFiles = RenameFiles(
+      oldDateFormat: dateFormatProvider.dateFormat,
+      newDateFormat: newDateFormat,
+    );
     await renameFiles.rewriteExistingFiles();
-    App.settingsNotifier.setDateFormat(newDateFormat);
+    dateFormatProvider.setDateFormat(newDateFormat);
     _checkIfAskToPressEnter(newDateFormat);
   }
 
@@ -76,7 +88,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
   }
 
   void _checkIfAskToPressEnter(String value) {
-    if (value == App.settingsNotifier.value.dateFormat) {
+    if (value == context.read<DateFormatProvider>().dateFormat) {
       setState(() {
         _askToPressEnter = false;
       });
@@ -99,7 +111,7 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
           autovalidateMode: AutovalidateMode.always,
           validator: _validator,
           onChanged: _checkIfAskToPressEnter,
-          controller: DateFormatSetting._dateFormatController,
+          controller: _dateFormatController,
           onEditingComplete: _setDateFormat,
           decoration: InputDecoration(
             helperText: _askToPressEnter ? 'Press enter to save' : null,
@@ -113,9 +125,10 @@ class _DateFormatSettingState extends State<DateFormatSetting> {
 }
 
 class RenameFiles {
-  const RenameFiles(this.newDateFormat);
+  const RenameFiles({required this.oldDateFormat, required this.newDateFormat});
 
   final String newDateFormat;
+  final String oldDateFormat;
 
   static final SavePath path = savePath!;
 
@@ -133,11 +146,10 @@ class RenameFiles {
   }
 
   String? _getNewFilename(String oldFilename) {
-    DateTime? date = Filename.filenameToDate(oldFilename);
+    DateTime? date = Filename.filenameToDate(oldFilename, oldDateFormat);
     if (date == null) return null;
 
-    String newFilename =
-        Filename.dateToFilename(date, dateFormat: newDateFormat);
+    String newFilename = Filename.dateToFilename(date, newDateFormat);
     if (newFilename == oldFilename) return null;
     return newFilename;
   }

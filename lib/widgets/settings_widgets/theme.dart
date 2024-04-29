@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/localization.dart';
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
+
+import 'package:provider/provider.dart';
 
 class ThemeSetting extends StatefulWidget implements SettingTile {
   const ThemeSetting({super.key});
 
   @override
-  Future<ThemeSetting> newDefault() async {
-    await App.settingsNotifier.setThemeToDefault();
+  Future<ThemeSetting> newDefault(BuildContext context) async {
+    await context.read<ThemeProvider>().setToDefault();
     return ThemeSetting(
       key: UniqueKey(),
     );
@@ -20,10 +22,10 @@ class ThemeSetting extends StatefulWidget implements SettingTile {
 }
 
 class _ThemeSettingState extends State<ThemeSetting> {
-  List<bool> _selections = _getTheme();
+  late List<bool> _selections = _getTheme();
 
-  static List<bool> _getTheme() {
-    switch (App.settingsNotifier.value.theme) {
+  List<bool> _getTheme() {
+    switch (context.read<ThemeProvider>().theme) {
       case ThemeMode.light:
         return [true, false, false];
       case ThemeMode.system:
@@ -34,13 +36,14 @@ class _ThemeSettingState extends State<ThemeSetting> {
   }
 
   void _setTheme(int index) {
+    final readProvider = context.read<ThemeProvider>();
     switch (index) {
       case 0:
-        App.settingsNotifier.setTheme(ThemeMode.light);
+        readProvider.setTheme(ThemeMode.light);
       case 1:
-        App.settingsNotifier.setTheme(ThemeMode.system);
+        readProvider.setTheme(ThemeMode.system);
       case 2:
-        App.settingsNotifier.setTheme(ThemeMode.dark);
+        readProvider.setTheme(ThemeMode.dark);
     }
   }
 

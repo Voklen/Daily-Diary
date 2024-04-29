@@ -215,8 +215,8 @@ class EntryFile {
   final MyFile file;
   final DateTime entryDate;
 
-  static EntryFile? create(MyFile newFile) {
-    DateTime? date = Filename.filenameToDate(newFile.name);
+  static EntryFile? create(MyFile newFile, String dateFormat) {
+    DateTime? date = Filename.filenameToDate(newFile.name, dateFormat);
     if (date == null) return null;
     return EntryFile._internal(newFile, date);
   }

@@ -1,9 +1,9 @@
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/screens/settings.dart';
+import 'package:provider/provider.dart';
 
 class ViewOnlyScreen extends StatefulWidget {
   const ViewOnlyScreen({
@@ -31,40 +31,37 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Settings>(
-      valueListenable: App.settingsNotifier,
-      builder: (_, Settings currentSettings, __) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.title),
-            actions: <Widget>[
-              IconButton(
-                onPressed: _openSettings,
-                icon: const Icon(
-                  Icons.settings,
-                ),
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: FutureBuilder(
-              future: widget.entryFile.file.readAsString(),
-              builder: ((context, AsyncSnapshot<String> file) {
-                return FractionallySizedBox(
-                  widthFactor: 1.0,
-                  child: SingleChildScrollView(
-                    child: Text(
-                      file.data ?? '',
-                      style: TextStyle(fontSize: currentSettings.fontSize),
-                    ),
-                  ),
-                );
-              }),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(
+            onPressed: _openSettings,
+            icon: const Icon(
+              Icons.settings,
             ),
           ),
-        );
-      },
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: FutureBuilder(
+          future: widget.entryFile.file.readAsString(),
+          builder: ((context, AsyncSnapshot<String> file) {
+            return FractionallySizedBox(
+              widthFactor: 1.0,
+              child: SingleChildScrollView(
+                child: Text(
+                  file.data ?? '',
+                  style: TextStyle(
+                    fontSize: context.watch<FontSizeProvider>().fontSize,
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
     );
   }
 }

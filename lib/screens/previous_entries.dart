@@ -1,3 +1,4 @@
+import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/main.dart';
@@ -5,6 +6,7 @@ import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
 import 'package:daily_diary/screens/view_only.dart';
+import 'package:provider/provider.dart';
 
 class PreviousEntriesScreen extends StatelessWidget {
   PreviousEntriesScreen({super.key});
@@ -35,7 +37,9 @@ class PreviousEntriesScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: FutureBuilder(
-          future: entries.getFiles(),
+          future: entries.getFiles(
+            context.watch<DateFormatProvider>().dateFormat,
+          ),
           builder: _listBuilder,
         ),
       ),

@@ -24,6 +24,7 @@ dependencies:
   archive: ^3.3.7
   flex_color_picker: ^3.3.0
   url_launcher: ^6.2.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

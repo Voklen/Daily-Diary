@@ -17,7 +17,7 @@ class SavePathSetting extends StatefulWidget implements SettingTile {
   const SavePathSetting({super.key});
 
   @override
-  Future<SavePathSetting> newDefault() async {
+  Future<SavePathSetting> newDefault(BuildContext context) async {
     newSavePath = await resetPathToDefault();
     return const SavePathSetting();
   }

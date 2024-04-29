@@ -9,12 +9,13 @@ import 'package:daily_diary/screens/home.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
-  DiaryStorage(this.path);
+  DiaryStorage(this.path, this.dateFormat);
 
   final SavePath path;
+  final String dateFormat;
   DateTime date = DateTime.now();
 
-  String get filename => Filename.dateToFilename(date);
+  String get filename => Filename.dateToFilename(date, dateFormat);
 
   Future<MyFile> get storageFile => path.getChild(filename);
 
@@ -172,9 +173,10 @@ class PreviousEntriesStorage {
 
   final SavePath path;
 
-  Future<List<EntryFile>> getFiles() async {
+  Future<List<EntryFile>> getFiles(String dateFormat) async {
+    createEntry(MyFile newFile) => EntryFile.create(newFile, dateFormat);
     Stream<MyFile> files = await path.list();
-    Stream<EntryFile?> asEntryFiles = files.map(EntryFile.create);
+    Stream<EntryFile?> asEntryFiles = files.map(createEntry);
     Stream<EntryFile> withoutNull = asEntryFiles.where((s) => s != null).cast();
     Stream<EntryFile> withoutToday = withoutNull.where(_isNotToday);
     List<EntryFile> asList = await withoutToday.toList();
