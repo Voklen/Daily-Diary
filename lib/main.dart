@@ -67,6 +67,7 @@ class SettingsProvider extends StatelessWidget {
   static Future<SettingsProvider> create({
     required SettingsStorage storage,
     required Widget child,
+    Key? key,
   }) async {
     final theme = await ThemeProvider.create(storage);
     final fontSize = await FontSizeProvider.create(storage);
@@ -74,6 +75,7 @@ class SettingsProvider extends StatelessWidget {
     final spellChecking = await SpellCheckingProvider.create(storage);
     final dateFormat = await DateFormatProvider.create(storage);
     return SettingsProvider._create(
+      key: key,
       theme: theme,
       fontSize: fontSize,
       colorScheme: colorScheme,

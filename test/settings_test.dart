@@ -14,7 +14,7 @@ import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-import 'SettingsStorageMock.dart';
+import 'mock_settings_storage.dart';
 
 void main() {
   savePath = const SavePath.normal('');

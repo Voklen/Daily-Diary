@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 
-import 'SettingsStorageMock.dart';
+import 'mock_settings_storage.dart';
 
 void main() {
   savePath = const SavePath.normal('');
