@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:daily_diary/backend_classes/localization.dart';
-import 'package:daily_diary/backend_classes/settings_notifier.dart';
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
-
-import 'package:provider/provider.dart';
 
 const alertColor = Color.fromARGB(255, 240, 88, 50);
 
@@ -12,8 +10,8 @@ class SpellCheckToggle extends StatefulWidget implements SettingTile {
   const SpellCheckToggle({super.key});
 
   @override
-  Future<SpellCheckToggle> newDefault(BuildContext context) async {
-    await context.read<SpellCheckingProvider>().setToDefault();
+  Future<SpellCheckToggle> newDefault() async {
+    await App.settingsNotifier.setCheckSpellingToDefault();
     return SpellCheckToggle(
       key: UniqueKey(),
     );
@@ -30,24 +28,24 @@ class _SpellCheckToggleState extends State<SpellCheckToggle> {
       return;
     }
     setState(() {
-      context.read<SpellCheckingProvider>().setCheckSpelling(checked);
+      App.settingsNotifier.setCheckSpelling(checked);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<SpellCheckingProvider>();
     return Column(
       children: [
         ListTile(
           title: Text(locale(context).checkSpelling),
           trailing: Checkbox(
-            value: provider.checkSpelling,
+            value: App.settingsNotifier.value.checkSpelling,
             onChanged: _onChanged,
           ),
         ),
         Visibility(
-          visible: provider.originalValue != provider.checkSpelling,
+          visible:
+              startupCheckSpelling != App.settingsNotifier.value.checkSpelling,
           child: const Text(
             'Restart app for changes to take effect',
             style: TextStyle(color: alertColor),

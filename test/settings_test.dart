@@ -12,66 +12,45 @@ import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
-
-import 'mock_settings_storage.dart';
 
 void main() {
   savePath = const SavePath.normal('');
   newSavePath = savePath;
 
   testWidgets('Theme setting', (WidgetTester tester) async {
-    final themeProvider = await ThemeProvider.create(MockSettingsStorage());
-    await tester.pumpWidget(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => themeProvider)],
-      child: const TestApp(ThemeSetting()),
-    ));
-    // final provider =
-    //     Provider.of<ThemeProvider>(tester.element(find.byType(ThemeSetting)));
+    await tester.pumpWidget(const TestApp(ThemeSetting()));
 
     await tester.tap(find.text('Dark'));
-    expect(themeProvider.theme, ThemeMode.dark);
+    expect(App.settingsNotifier.value.theme, ThemeMode.dark);
     await tester.tap(find.text('System'));
-    expect(themeProvider.theme, ThemeMode.system);
+    expect(App.settingsNotifier.value.theme, ThemeMode.system);
     await tester.tap(find.text('Light'));
-    expect(themeProvider.theme, ThemeMode.light);
+    expect(App.settingsNotifier.value.theme, ThemeMode.light);
   });
 
   testWidgets('Font setting', (WidgetTester tester) async {
-    final fontProvider = await FontSizeProvider.create(MockSettingsStorage());
-    await tester.pumpWidget(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => fontProvider)],
-      child: const TestApp(FontSetting()),
-    ));
+    await tester.pumpWidget(const TestApp(FontSetting()));
 
     await tester.enterText(find.byType(TextField), '30');
-    expect(fontProvider.fontSize, 30);
+    expect(App.settingsNotifier.value.fontSize, 30);
     await tester.enterText(find.byType(TextField), '2');
-    expect(fontProvider.fontSize, 2);
+    expect(App.settingsNotifier.value.fontSize, 2);
   });
 
   testWidgets('Spell check setting', (WidgetTester tester) async {
-    final spellCheckingProvider =
-        await SpellCheckingProvider.create(MockSettingsStorage());
-    await tester.pumpWidget(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => spellCheckingProvider)],
-      child: const TestApp(SpellCheckToggle()),
-    ));
+    await tester.pumpWidget(const TestApp(SpellCheckToggle()));
 
-    expect(spellCheckingProvider.checkSpelling, true);
+    expect(App.settingsNotifier.value.checkSpelling, true);
     await tester.tap(find.byType(Checkbox));
     await tester.pump();
-    expect(spellCheckingProvider.checkSpelling, false);
+    expect(App.settingsNotifier.value.checkSpelling, false);
     await tester.tap(find.byType(Checkbox));
     await tester.pump();
-    expect(spellCheckingProvider.checkSpelling, true);
+    expect(App.settingsNotifier.value.checkSpelling, true);
   });
 
   testWidgets('Settings reset button display', (WidgetTester tester) async {
-    await tester.pumpWidget(await SettingsProvider.create(
-      storage: MockSettingsStorage(),
-      child: const TestApp(SettingsScreen()),
-    ));
+    await tester.pumpWidget(const TestApp(SettingsScreen()));
 
     await tester.drag(find.byType(ListView), const Offset(0.0, -300));
     await tester.pump();
@@ -126,14 +105,9 @@ void main() {
     expect(find.text('Cancel'), findsNothing);
     expect(await resultFuture, true);
   });
-  //
+
   testWidgets('Date format Setting', (WidgetTester tester) async {
-    final dateFormatProvider =
-        await DateFormatProvider.create(MockSettingsStorage());
-    await tester.pumpWidget(MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => dateFormatProvider)],
-      child: const TestApp(DateFormatSetting()),
-    ));
+    await tester.pumpWidget(const TestApp(DateFormatSetting()));
 
     await tester.enterText(find.byType(TextFormField), '%Y-%D-%M-.md');
     await tester.pump();
@@ -167,10 +141,7 @@ void main() {
     await tester.pump();
     expect(find.text('Cannot end in a space or a dot'), findsOneWidget);
 
-    await tester.enterText(
-      find.byType(TextFormField),
-      DateFormatProvider.defaultValue,
-    );
+    await tester.enterText(find.byType(TextFormField), Settings().dateFormat);
     await tester.pump();
     expect(find.text('Press enter to save'), findsNothing);
   });

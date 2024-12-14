@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/localization.dart';
 import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
@@ -10,7 +11,6 @@ import 'package:daily_diary/screens/settings.dart';
 import 'package:daily_diary/screens/previous_entries.dart';
 
 import 'package:flutter_window_close/flutter_window_close.dart';
-import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.child});
@@ -65,9 +65,11 @@ class EntryEditor extends StatefulWidget {
   const EntryEditor({
     super.key,
     required this.storage,
+    required this.settings,
   });
 
   final DiaryStorage storage;
+  final Settings settings;
 
   @override
   State<EntryEditor> createState() => _EntryEditorState();
@@ -82,6 +84,7 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     super.initState();
 
     UnsavedChangesAlert.disable();
+    _loadSettings();
     WidgetsBinding.instance.addObserver(this);
     widget.storage.readFile().then((value) {
       setState(() {
@@ -106,6 +109,10 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     resetIfNewDay();
   }
 
+  void _loadSettings() {
+    App.settingsNotifier.setFontSizeFromFile();
+  }
+
   void _updateStorage() {
     if (!loaded) return;
     UnsavedChangesAlert.disable();
@@ -121,11 +128,11 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     Navigator.of(context).pop(true);
   }
 
-  SpellCheckConfiguration? _getSpellChecker(BuildContext context) {
+  SpellCheckConfiguration? _getSpellChecker(Settings currentSettings) {
     if (Platform.isLinux) {
       return null;
     }
-    if (!context.watch<SpellCheckingProvider>().checkSpelling) {
+    if (!currentSettings.checkSpelling) {
       return null;
     }
     return SpellCheckConfiguration(
@@ -171,10 +178,9 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
           expands: true,
           maxLines: null,
           keyboardType: TextInputType.multiline,
-          spellCheckConfiguration: _getSpellChecker(context),
+          spellCheckConfiguration: _getSpellChecker(widget.settings),
           textCapitalization: TextCapitalization.sentences,
-          style:
-              TextStyle(fontSize: context.watch<FontSizeProvider>().fontSize),
+          style: TextStyle(fontSize: widget.settings.fontSize),
           decoration: InputDecoration.collapsed(
             hintText: locale(context).startTyping,
           ),

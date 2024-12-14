@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:daily_diary/backend_classes/settings_notifier.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:daily_diary/main.dart';
@@ -18,7 +17,7 @@ void main() {
   });
 
   test('Normal', () async {
-    final storage = DiaryStorage(savePath!, DateFormatProvider.defaultValue);
+    final storage = DiaryStorage(savePath!);
     const testText = 'This is a test diary\n a newline here\nwow, another';
     storage.writeFile(testText);
     String result = await storage.readFile();
@@ -27,10 +26,7 @@ void main() {
   });
 
   test('Unicode', () async {
-    final storage = DiaryStorage(
-      const SavePath.normal('test_data/'),
-      DateFormatProvider.defaultValue,
-    );
+    final storage = DiaryStorage(const SavePath.normal('test_data/'));
     const testText = 'This is a اختبر diary\n a newline here\nа вот еще один';
     storage.writeFile(testText);
     String result = await storage.readFile();
