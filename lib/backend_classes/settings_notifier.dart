@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
+import 'package:flutter/material.dart';
 
 class Settings {
   ThemeMode theme = ThemeMode.system;

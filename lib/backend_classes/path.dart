@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:flutter/material.dart';
-
-import 'package:daily_diary/main.dart';
-import 'package:daily_diary/backend_classes/filenames.dart';
 
 import 'package:archive/archive_io.dart';
+import 'package:daily_diary/backend_classes/filenames.dart';
+import 'package:daily_diary/main.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as path_prov;
 import 'package:shared_storage/shared_storage.dart';
 
@@ -36,8 +35,8 @@ class SavePath {
   }
 
   Future<Stream<MyFile>> _listScoped() async {
-    if (await canRead(_uri!) == true) {
-      //TODO handle lack of permissions
+    if (await canRead(_uri!) != true) {
+      throw Exception('Lack of permissions to read the directory');
     }
     final files = listFiles(_uri, columns: [DocumentFileColumn.displayName]);
     return files.map(MyFile.android);
@@ -90,7 +89,6 @@ class SavePath {
     if (_isScopedStorage) {
       final archive = await _archiveFromScoped();
       final zipBytes = ZipEncoder().encode(archive);
-      if (zipBytes == null) return;
       File(outputPath).writeAsBytes(zipBytes);
     } else {
       ZipFileEncoder().zipDirectory(Directory(_path!), filename: outputPath);
