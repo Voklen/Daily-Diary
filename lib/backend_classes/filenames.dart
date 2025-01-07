@@ -17,9 +17,9 @@ class Filename {
     final order = _Order.fromFormat(dateFormat);
 
     final regexPattern = dateFormat
-        .replaceAll('%Y', r'(\\d{4})') 
-        .replaceAll('%M', r'(\\d{2})') 
-        .replaceAll('%D', r'(\\d{2})'); 
+        .replaceAll('%Y', r'(\d{4})') 
+        .replaceAll('%M', r'(\d{2})') 
+        .replaceAll('%D', r'(\d{2})'); 
     final regex = RegExp(regexPattern);
     final match = regex.firstMatch(filename); 
 
