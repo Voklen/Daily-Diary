@@ -2,94 +2,63 @@ import 'package:daily_diary/main.dart';
 
 class Filename {
   static String dateToFilename(DateTime date, {String? dateFormat}) {
-    String filename = dateFormat ?? App.settingsNotifier.value.dateFormat;
-    filename = filename.replaceAll('%Y', _twoDigits(date.year));
-    filename = filename.replaceAll('%M', _twoDigits(date.month));
-    filename = filename.replaceAll('%D', _twoDigits(date.day));
-    return filename;
+    final format = dateFormat ?? App.settingsNotifier.value.dateFormat;
+    return format
+        .replaceAll('%Y', _twoDigits(date.year)) 
+        .replaceAll('%M', _twoDigits(date.month)) 
+        .replaceAll('%D', _twoDigits(date.day)); 
   }
 
-  static String _twoDigits(int n) {
-    if (n >= 10) return '$n';
-    return '0$n';
-  }
+ 
+  static String _twoDigits(int n) => n >= 10 ? '$n' : '0$n';
 
   static DateTime? filenameToDate(String filename) {
-    String dateFormat = App.settingsNotifier.value.dateFormat;
-    _Order order = _Order(dateFormat);
+    final dateFormat = App.settingsNotifier.value.dateFormat;
+    final order = _Order.fromFormat(dateFormat);
 
-    String regexString = dateFormat
-        .replaceFirst('%Y', r'(\d+)')
-        .replaceFirst('%M', r'(\d+)')
-        .replaceFirst('%D', r'(\d+)');
-    RegExp regex = RegExp(regexString);
+    final regexPattern = dateFormat
+        .replaceAll('%Y', r'(\\d{4})') 
+        .replaceAll('%M', r'(\\d{2})') 
+        .replaceAll('%D', r'(\\d{2})'); 
+    final regex = RegExp(regexPattern);
+    final match = regex.firstMatch(filename); 
 
-    // Find all matches of the pattern in the expression
-    final RegExpMatch? matches = regex.firstMatch(filename);
-    if (matches == null) return null;
+    if (match == null) return null; 
 
-    // The groups cannot be null because the regex has 3 groups and so all must exist
-    String year = matches.group(order.year)!;
-    String month = matches.group(order.month)!;
-    String day = matches.group(order.day)!;
     try {
+      // Parse the matched groups into a DateTime object
       return DateTime(
-        int.parse(year),
-        int.parse(month),
-        int.parse(day),
+        int.parse(match.group(order.year)!), // Year group
+        int.parse(match.group(order.month)!), // Month group
+        int.parse(match.group(order.day)!), // Day group
       );
-    } on FormatException {
-      // Invalid files will be ignored
-      return null;
+    } catch (_) {
+      return null; // Return null for invalid dates
     }
   }
 }
 
 class _Order {
-  late int year;
-  late int month;
-  late int day;
+  final int year; 
+  final int month; 
+  final int day; 
 
-  _Order(String dateFormat) {
-    int yearLocation = dateFormat.indexOf('%Y');
-    int monthLocation = dateFormat.indexOf('%M');
-    int dayLocation = dateFormat.indexOf('%D');
+  _Order._(this.year, this.month, this.day);
 
-    if (yearLocation < monthLocation && monthLocation < dayLocation) {
-      year = 1;
-      month = 2;
-      day = 3;
-      return;
-    }
-    if (yearLocation < dayLocation && dayLocation < monthLocation) {
-      year = 1;
-      day = 2;
-      month = 3;
-      return;
-    }
-    if (monthLocation < yearLocation && yearLocation < dayLocation) {
-      month = 1;
-      year = 2;
-      day = 3;
-      return;
-    }
-    if (monthLocation < dayLocation && dayLocation < yearLocation) {
-      month = 1;
-      day = 2;
-      year = 3;
-      return;
-    }
-    if (dayLocation < yearLocation && yearLocation < monthLocation) {
-      day = 1;
-      year = 2;
-      month = 3;
-      return;
-    }
-    if (dayLocation < monthLocation && monthLocation < yearLocation) {
-      day = 1;
-      month = 2;
-      year = 3;
-      return;
-    }
+  factory _Order.fromFormat(String format) {
+    final positions = {
+      '%Y': format.indexOf('%Y'),
+      '%M': format.indexOf('%M'),
+      '%D': format.indexOf('%D'),
+    };
+
+    final sorted = positions.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+
+    return _Order._(
+      sorted.indexWhere((e) => e.key == '%Y') + 1,
+      sorted.indexWhere((e) => e.key == '%M') + 1,
+      sorted.indexWhere((e) => e.key == '%D') + 1,
+    );
   }
 }
