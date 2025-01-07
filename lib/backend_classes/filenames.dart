@@ -4,12 +4,11 @@ class Filename {
   static String dateToFilename(DateTime date, {String? dateFormat}) {
     final format = dateFormat ?? App.settingsNotifier.value.dateFormat;
     return format
-        .replaceAll('%Y', _twoDigits(date.year)) 
-        .replaceAll('%M', _twoDigits(date.month)) 
-        .replaceAll('%D', _twoDigits(date.day)); 
+        .replaceAll('%Y', _twoDigits(date.year))
+        .replaceAll('%M', _twoDigits(date.month))
+        .replaceAll('%D', _twoDigits(date.day));
   }
 
- 
   static String _twoDigits(int n) => n >= 10 ? '$n' : '0$n';
 
   static DateTime? filenameToDate(String filename) {
@@ -17,13 +16,13 @@ class Filename {
     final order = _Order.fromFormat(dateFormat);
 
     final regexPattern = dateFormat
-        .replaceAll('%Y', r'(\d{4})') 
-        .replaceAll('%M', r'(\d{2})') 
-        .replaceAll('%D', r'(\d{2})'); 
+        .replaceAll('%Y', r'(\d{4})')
+        .replaceAll('%M', r'(\d{2})')
+        .replaceAll('%D', r'(\d{2})');
     final regex = RegExp(regexPattern);
-    final match = regex.firstMatch(filename); 
+    final match = regex.firstMatch(filename);
 
-    if (match == null) return null; 
+    if (match == null) return null;
 
     try {
       // Parse the matched groups into a DateTime object
@@ -39,9 +38,9 @@ class Filename {
 }
 
 class _Order {
-  final int year; 
-  final int month; 
-  final int day; 
+  final int year;
+  final int month;
+  final int day;
 
   _Order._(this.year, this.month, this.day);
 

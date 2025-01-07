@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
 
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/screens/home.dart';
-
+import 'package:flutter/material.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {

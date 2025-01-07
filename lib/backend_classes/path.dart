@@ -33,6 +33,7 @@ class SavePath {
     if (_isScopedStorage) return _listScoped();
     return _listNormal();
   }
+
   Future<Stream<MyFile>> _listScoped() async {
     if (await canRead(_uri!) != true) {
       throw Exception('Lack of permissions to read the directory');
