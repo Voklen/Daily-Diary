@@ -33,10 +33,9 @@ class SavePath {
     if (_isScopedStorage) return _listScoped();
     return _listNormal();
   }
-
   Future<Stream<MyFile>> _listScoped() async {
-    if (await canRead(_uri!) == true) {
-      //TODO handle lack of permissions
+    if (await canRead(_uri!) != true) {
+      throw Exception('Lack of permissions to read the directory');
     }
     final files = listFiles(_uri, columns: [DocumentFileColumn.displayName]);
     return files.map(MyFile.android);
