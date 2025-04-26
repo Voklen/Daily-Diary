@@ -11,11 +11,11 @@ class Filename {
 
   static String _twoDigits(int n) => n >= 10 ? '$n' : '0$n';
 
-  static DateTime? filenameToDate(String filename) {
-    final dateFormat = App.settingsNotifier.value.dateFormat;
-    final order = _Order.fromFormat(dateFormat);
+  static DateTime? filenameToDate(String filename, {String? dateFormat}) {
+    final format = dateFormat ?? App.settingsNotifier.value.dateFormat;
+    final order = _Order.fromFormat(format);
 
-    final regexPattern = dateFormat
+    final regexPattern = format
         .replaceAll('%Y', r'(\d{4})')
         .replaceAll('%M', r'(\d{2})')
         .replaceAll('%D', r'(\d{2})');
