@@ -54,7 +54,7 @@ class _ViewOnlyScreenState extends State<ViewOnlyScreen> {
                 return FractionallySizedBox(
                   widthFactor: 1.0,
                   child: SingleChildScrollView(
-                    child: Text(
+                    child: SelectableText(
                       file.data ?? '',
                       style: TextStyle(fontSize: currentSettings.fontSize),
                     ),
