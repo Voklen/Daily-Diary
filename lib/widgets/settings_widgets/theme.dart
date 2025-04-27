@@ -37,13 +37,10 @@ class _ThemeSettingState extends State<ThemeSetting> {
     switch (index) {
       case 0:
         App.settingsNotifier.setTheme(ThemeMode.light);
-        break;
       case 1:
         App.settingsNotifier.setTheme(ThemeMode.system);
-        break;
       case 2:
         App.settingsNotifier.setTheme(ThemeMode.dark);
-        break;
     }
   }
 

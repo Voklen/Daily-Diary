@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/material.dart';
 
 import 'package:daily_diary/backend_classes/filenames.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/screens/home.dart';
-
+import 'package:flutter/material.dart';
 import 'package:toml/toml.dart';
 
 class DiaryStorage {
@@ -101,13 +100,10 @@ class SettingsStorage {
     switch (theme) {
       case ThemeMode.light:
         await _writeToFile('theme', 'light');
-        break;
       case ThemeMode.system:
         await _writeToFile('theme', 'system');
-        break;
       case ThemeMode.dark:
         await _writeToFile('theme', 'dark');
-        break;
     }
   }
 
@@ -165,9 +161,9 @@ extension HexColor on Color {
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
-      '${red.toRadixString(16).padLeft(2, '0')}'
-      '${green.toRadixString(16).padLeft(2, '0')}'
-      '${blue.toRadixString(16).padLeft(2, '0')}';
+      '${(r * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+      '${(g * 255).toInt().toRadixString(16).padLeft(2, '0')}'
+      '${(b * 255).toInt().toRadixString(16).padLeft(2, '0')}';
 }
 
 class PreviousEntriesStorage {

@@ -1,5 +1,5 @@
 - [ ] New changelog
-- [ ] ./tools/compile.sh <version>
+- [ ] ./tools/release.sh <version>
 
 - [ ] Release on GitHub
     - [ ] Set GitHub tag and title to version number (with 'v' at the start)

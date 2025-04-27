@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/path.dart';
 import 'package:daily_diary/backend_classes/storage.dart';
+import 'package:daily_diary/main.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   //TODO Use something other than global variables in main.dart for savePath

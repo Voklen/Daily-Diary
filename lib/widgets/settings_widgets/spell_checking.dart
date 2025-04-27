@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:daily_diary/main.dart';
 import 'package:daily_diary/backend_classes/localization.dart';
+import 'package:daily_diary/main.dart';
 import 'package:daily_diary/screens/settings.dart';
 
 const alertColor = Color.fromARGB(255, 240, 88, 50);

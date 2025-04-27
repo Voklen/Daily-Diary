@@ -140,11 +140,13 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
     );
   }
 
-  void keyPressed(RawKeyEvent key) {
-    if (key.isKeyPressed(LogicalKeyboardKey.keyS) && key.isControlPressed) {
+  void keyPressed(KeyEvent key) {
+    if (key.logicalKey == LogicalKeyboardKey.keyS &&
+        HardwareKeyboard.instance.isControlPressed) {
       _updateStorage();
     }
-    if (key.isKeyPressed(LogicalKeyboardKey.keyQ) && key.isControlPressed) {
+    if (key.logicalKey == LogicalKeyboardKey.keyQ &&
+        HardwareKeyboard.instance.isControlPressed) {
       FlutterWindowClose.closeWindow();
     }
   }
@@ -164,10 +166,10 @@ class _EntryEditorState extends State<EntryEditor> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return RawKeyboardListener(
+    return KeyboardListener(
       autofocus: true,
       focusNode: FocusNode(),
-      onKey: keyPressed,
+      onKeyEvent: keyPressed,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: TextField(

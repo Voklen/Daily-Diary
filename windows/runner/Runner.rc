@@ -93,7 +93,7 @@ BEGIN
             VALUE "FileDescription", "daily_diary" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "daily_diary" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2022 com.voklen. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.voklen. All rights reserved." "\0"
             VALUE "OriginalFilename", "daily_diary.exe" "\0"
             VALUE "ProductName", "daily_diary" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
