@@ -10,8 +10,7 @@ import 'package:daily_diary/widgets/settings_widgets/font_size.dart';
 import 'package:daily_diary/widgets/settings_widgets/save_path.dart';
 import 'package:daily_diary/widgets/settings_widgets/spell_checking.dart';
 import 'package:daily_diary/widgets/settings_widgets/theme.dart';
-
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:daily_diary/generated_localizations/app_localizations.dart';
 
 void main() {
   savePath = const SavePath.normal('');

@@ -1,4 +1,9 @@
+# Options
+synthetic-package: false
+
+# File paths
 arb-dir: lib/localizations
+output-dir: lib/generated_localizations
 template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 untranslated-messages-file: untranslated.txt

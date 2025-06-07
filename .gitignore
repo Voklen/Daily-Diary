@@ -37,6 +37,7 @@ migrate_working_dir/
 
 # Localization
 /untranslated.txt
+/lib/generated_localizations
 
 # Symbolication related
 app.*.symbols

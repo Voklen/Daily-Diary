@@ -2,7 +2,7 @@ name: daily_diary
 description: A diary that starts with a blank page every day (while saving the previous ones)
 publish_to: 'none'
 
-version: 1.4.4+16
+version: 1.4.5+17
 
 environment:
   sdk: ^3.6.0

@@ -1,0 +1,1 @@
+Allow text in previous entries to be selected, thanks to @VLNTNO for the suggestion.
